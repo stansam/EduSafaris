@@ -1,0 +1,106 @@
+{% extends "auth/base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow auth-card">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <h2 class="h3 mb-3 font-weight-normal">Reset Password</h2>
+                        <p class="text-muted">Enter your email address and we'll send you a link to reset your password</p>
+                    </div>
+
+                    <form method="POST" novalidate>
+                        {{ form.hidden_tag() }}
+                        
+                        <!-- Email Field -->
+                        <div class="mb-4">
+                            {{ form.email.label(class="form-label") }}
+                            {{ form.email(class="form-control" + (" is-invalid" if form.email.errors else ""), id="email", placeholder="Enter your email address", autofocus=true) }}
+                            {% if form.email.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.email.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <small class="form-text text-muted">We'll send reset instructions to this email</small>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid mb-3">
+                            {{ form.submit(class="btn btn-primary btn-lg", id="submitBtn") }}
+                        </div>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <div class="text-center">
+                        <p class="mb-2">
+                            <a href="{{ url_for('auth.login') }}" class="text-decoration-none">
+                                <i class="fas fa-arrow-left"></i> Back to Sign In
+                            </a>
+                        </p>
+                        <p class="mb-0">Don't have an account? 
+                            <a href="{{ url_for('auth.register') }}" class="text-decoration-none">Create one here</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Help Text -->
+            <div class="text-center mt-4">
+                <small class="text-muted">
+                    <i class="fas fa-info-circle"></i>
+                    If you don't receive an email within a few minutes, check your spam folder or try again.
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Client-side validation and UX enhancements
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        const emailField = document.getElementById('email');
+        const submitBtn = document.getElementById('submitBtn');
+        
+        // Real-time validation
+        emailField.addEventListener('input', validateEmail);
+        
+        // Form submission handling
+        form.addEventListener('submit', function(e) {
+            if (!validateForm()) {
+                e.preventDefault();
+            } else {
+                // Show loading state
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Sending...';
+                submitBtn.disabled = true;
+            }
+        });
+        
+        function validateEmail() {
+            const email = emailField.value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email.length > 0 && !emailRegex.test(email)) {
+                emailField.classList.add('is-invalid');
+                return false;
+            } else {
+                emailField.classList.remove('is-invalid');
+                return true;
+            }
+        }
+        
+        function validateForm() {
+            const emailValid = validateEmail();
+            const emailFilled = emailField.value.trim().length > 0;
+            
+            return emailValid && emailFilled;
+        }
+    });
+</script>
+{% endblock %}

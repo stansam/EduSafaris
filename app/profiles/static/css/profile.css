@@ -1,0 +1,202 @@
+/* Profile-specific styles */
+.profile-sidebar {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.profile-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.profile-nav .nav-pills .nav-link {
+    color: #6c757d;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    padding: 12px 15px;
+    transition: all 0.3s ease;
+}
+
+.profile-nav .nav-pills .nav-link:hover {
+    background-color: #e9ecef;
+    color: #495057;
+}
+
+.profile-nav .nav-pills .nav-link.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.profile-nav .nav-pills .nav-link i {
+    margin-right: 8px;
+    width: 16px;
+}
+
+.profile-content {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 10px 10px 0 0 !important;
+}
+
+.image-preview {
+    margin-top: 15px;
+    padding: 15px;
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    text-align: center;
+    background-color: #f8f9fa;
+}
+
+.image-preview img {
+    object-fit: cover;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.password-strength {
+    margin-top: 10px;
+}
+
+.password-strength .progress {
+    background-color: #e9ecef;
+}
+
+.strength-weak {
+    background-color: #dc3545 !important;
+}
+
+.strength-medium {
+    background-color: #ffc107 !important;
+}
+
+.strength-strong {
+    background-color: #28a745 !important;
+}
+
+.table-borderless td {
+    border: none;
+    padding: 8px 15px;
+}
+
+.table-borderless td:first-child {
+    width: 150px;
+    font-weight: 500;
+}
+
+.badge {
+    font-size: 0.875em;
+    padding: 6px 12px;
+}
+
+.input-group .btn {
+    border-left: none;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #495057;
+}
+
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    padding: 12px 15px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+.btn {
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,123,255,0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .profile-sidebar {
+        margin-bottom: 20px;
+    }
+    
+    .profile-nav .nav-pills {
+        flex-direction: row;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    
+    .profile-nav .nav-pills .nav-item {
+        flex: 0 0 auto;
+    }
+    
+    .profile-img {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+/* Animation for form submission */
+.form-submitting {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.form-submitting .btn {
+    position: relative;
+}
+
+.form-submitting .btn::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    margin: auto;
+    border: 2px solid transparent;
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 1s ease infinite;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

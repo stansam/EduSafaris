@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+        }
+        .content {
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 0 0 10px 10px;
+        }
+        .button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #666;
+        }
+        .welcome {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Welcome to Your App!</h1>
+    </div>
+    
+    <div class="content">
+        <p>Hello {{ user.username }},</p>
+        
+        <div class="welcome">
+            <strong>Thank you for joining us!</strong> We're excited to have you as part of our community.
+        </div>
+        
+        <p>To complete your registration and start using all features of your account, please verify your email address by clicking the button below:</p>
+        
+        <p style="text-align: center;">
+            <a href="{{ verify_url }}" class="button">Verify My Email</a>
+        </p>
+        
+        <p>Or copy and paste this link into your browser:</p>
+        <p style="word-break: break-all; background: #e9ecef; padding: 10px; border-radius: 5px;">
+            {{ verify_url }}
+        </p>
+        
+        <p><strong>Why verify your email?</strong></p>
+        <ul>
+            <li>Secure your account with password reset capability</li>
+            <li>Receive important notifications about your account</li>
+            <li>Access all premium features</li>
+            <li>Get the latest updates and news</li>
+        </ul>
+        
+        <p>This verification link will expire in 24 hours. If you didn't create an account with us, you can safely ignore this email.</p>
+        
+        <p>If you have any questions or need help, please don't hesitate to contact our support team.</p>
+        
+        <p>Welcome aboard!<br>Your App Team</p>
+    </div>
+    
+    <div class="footer">
+        <p>This is an automated message, please do not reply to this email.</p>
+        <p>© 2024 Your App. All rights reserved.</p>
+    </div>
+</body>
+</html>

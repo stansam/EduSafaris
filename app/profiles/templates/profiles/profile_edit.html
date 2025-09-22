@@ -1,0 +1,149 @@
+{% extends "profiles/base.html" %}
+
+{% block page_title %}Edit Profile{% endblock %}
+
+{% block profile_content %}
+<div class="card">
+    <div class="card-header">
+        <h4 class="mb-0">Edit Profile</h4>
+    </div>
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data" id="profileForm">
+            {{ form.hidden_tag() }}
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {{ form.first_name.label(class="form-label") }}
+                        {{ form.first_name(class="form-control" + (" is-invalid" if form.first_name.errors else "")) }}
+                        {% if form.first_name.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.first_name.errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {{ form.last_name.label(class="form-label") }}
+                        {{ form.last_name(class="form-control" + (" is-invalid" if form.last_name.errors else "")) }}
+                        {% if form.last_name.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.last_name.errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {{ form.phone.label(class="form-label") }}
+                        {{ form.phone(class="form-control" + (" is-invalid" if form.phone.errors else "")) }}
+                        {% if form.phone.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.phone.errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {{ form.school.label(class="form-label") }}
+                        {{ form.school(class="form-control" + (" is-invalid" if form.school.errors else "")) }}
+                        {% if form.school.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.school.errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                {{ form.bio.label(class="form-label") }}
+                {{ form.bio(class="form-control" + (" is-invalid" if form.bio.errors else ""), rows="3") }}
+                {% if form.bio.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.bio.errors %}{{ error }}{% endfor %}
+                    </div>
+                {% endif %}
+                <small class="form-text text-muted">Tell us about yourself (max 500 characters)</small>
+            </div>
+            
+            {% if current_user.role in ['teacher', 'parent'] %}
+            <hr>
+            <h5>Emergency Contact Information</h5>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {{ form.emergency_contact.label(class="form-label") }}
+                        {{ form.emergency_contact(class="form-control" + (" is-invalid" if form.emergency_contact.errors else "")) }}
+                        {% if form.emergency_contact.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.emergency_contact.errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {{ form.emergency_phone.label(class="form-label") }}
+                        {{ form.emergency_phone(class="form-control" + (" is-invalid" if form.emergency_phone.errors else "")) }}
+                        {% if form.emergency_phone.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.emergency_phone.errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            <hr>
+            <h5>Profile Picture</h5>
+            
+            <div class="form-group">
+                <div class="current-avatar mb-3">
+                    {% if current_user.profile_picture %}
+                        <img src="{{ url_for('static', filename='uploads/profiles/' + current_user.profile_picture) }}" 
+                             alt="Current Profile Picture" class="rounded-circle" id="currentAvatar" width="100" height="100">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='images/default-avatar.png') }}" 
+                             alt="Default Avatar" class="rounded-circle" id="currentAvatar" width="100" height="100">
+                    {% endif %}
+                </div>
+                
+                {{ form.profile_picture.label(class="form-label") }}
+                {{ form.profile_picture(class="form-control" + (" is-invalid" if form.profile_picture.errors else ""), id="profilePicture") }}
+                {% if form.profile_picture.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.profile_picture.errors %}{{ error }}{% endfor %}
+                    </div>
+                {% endif %}
+                <small class="form-text text-muted">Upload a new profile picture (JPG, JPEG, PNG, or GIF)</small>
+            </div>
+            
+            <div class="image-preview" id="imagePreview" style="display: none;">
+                <h6>Preview:</h6>
+                <img id="previewImg" class="rounded-circle" width="100" height="100" alt="Preview">
+            </div>
+            
+            <hr>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+                <a href="{{ url_for('profiles.profile_view') }}" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

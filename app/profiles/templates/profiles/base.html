@@ -1,0 +1,88 @@
+{% extends "base_global.html" %}
+
+{% block title %}
+    {% if self.page_title() %}{{ self.page_title() }} - {% endif %}Profile - Edu Safaris
+{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('profiles.static', filename='profile.css') }}">
+{% endblock %}
+
+{% block navbar_items %}
+    {{ super() }}
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('profiles.profile_view') }}">My Profile</a>
+    </li>
+    {% if current_user.role == 'admin' %}
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('profiles.admin_users_list') }}">Manage Users</a>
+    </li>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="profile-sidebar">
+                    <div class="profile-avatar text-center mb-3">
+                        {% if current_user.profile_picture %}
+                            <img src="{{ url_for('static', filename='uploads/profiles/' + current_user.profile_picture) }}" 
+                                 alt="Profile Picture" class="rounded-circle profile-img">
+                        {% else %}
+                            <img src="{{ url_for('static', filename='images/default-avatar.png') }}" 
+                                 alt="Default Avatar" class="rounded-circle profile-img">
+                        {% endif %}
+                        <h5 class="mt-2">{{ current_user.first_name }} {{ current_user.last_name }}</h5>
+                        <p class="text-muted">{{ current_user.role.title() }}</p>
+                    </div>
+                    
+                    <nav class="profile-nav">
+                        <ul class="nav nav-pills flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.endpoint == 'profiles.profile_view' %}active{% endif %}" 
+                                   href="{{ url_for('profiles.profile_view') }}">
+                                    <i class="fas fa-user"></i> View Profile
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.endpoint == 'profiles.profile_edit' %}active{% endif %}" 
+                                   href="{{ url_for('profiles.profile_edit') }}">
+                                    <i class="fas fa-edit"></i> Edit Profile
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.endpoint == 'profiles.change_password' %}active{% endif %}" 
+                                   href="{{ url_for('profiles.change_password') }}">
+                                    <i class="fas fa-lock"></i> Change Password
+                                </a>
+                            </li>
+                            {% if current_user.role == 'admin' %}
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.endpoint == 'profiles.admin_users_list' %}active{% endif %}" 
+                                   href="{{ url_for('profiles.admin_users_list') }}">
+                                    <i class="fas fa-users"></i> Manage Users
+                                </a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            
+            <div class="col-md-9">
+                <div class="profile-content">
+                    {% block profile_content %}{% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for('profiles.static', filename='profile.js') }}"></script>
+{% endblock %}
+
+{% block page_title %}{% endblock %}

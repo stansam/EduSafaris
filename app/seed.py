@@ -1,8 +1,4 @@
-#!/usr/bin/env python3
-"""
-Database seeding script for Edu Safaris
-Fixed version with improved error handling and data consistency
-"""
+from flask import current_app
 import os
 import sys
 from datetime import datetime, date, timedelta
@@ -19,10 +15,10 @@ def create_user_if_not_exists(email, user_data):
     if not user:
         user = User(**user_data)
         db.session.add(user)
-        db.session.flush()  # Get ID without committing
-        print(f"Created user: {email}")
+        db.session.flush()  
+        current_app.logger(f"Created user: {email}")
     else:
-        print(f"User already exists: {email}")
+        current_app.logger(f"User already exists: {email}")
     return user
 
 def create_vendor_if_not_exists(business_name, vendor_data):
@@ -32,9 +28,9 @@ def create_vendor_if_not_exists(business_name, vendor_data):
         vendor = Vendor(**vendor_data)
         db.session.add(vendor)
         db.session.flush()  # Get ID without committing
-        print(f"Created vendor: {business_name}")
+        current_app.logger(f"Created vendor: {business_name}")
     else:
-        print(f"Vendor already exists: {business_name}")
+        current_app.logger(f"Vendor already exists: {business_name}")
     return vendor
 
 def create_trip_if_not_exists(title, trip_data):
@@ -44,9 +40,9 @@ def create_trip_if_not_exists(title, trip_data):
         trip = Trip(**trip_data)
         db.session.add(trip)
         db.session.flush()  # Get ID without committing
-        print(f"Created trip: {title}")
+        current_app.logger(f"Created trip: {title}")
     else:
-        print(f"Trip already exists: {title}")
+        current_app.logger(f"Trip already exists: {title}")
     return trip
 
 def seed_database():
@@ -55,7 +51,7 @@ def seed_database():
         app = create_app()
         
         with app.app_context():
-            print("Starting database seeding...")
+            app.logger("Starting database seeding...")
             
             # Create admin user
             admin_email = os.environ.get('ADMIN_EMAIL', 'admin@edusafaris.com')
@@ -271,7 +267,7 @@ def seed_database():
                 )
                 db.session.add(participant1)
                 db.session.flush()
-                print("Created sample participant Emma Thompson")
+                app.logger("Created sample participant Emma Thompson")
             
             # Create sample booking
             booking1 = Booking.query.filter_by(
@@ -292,7 +288,7 @@ def seed_database():
                     vendor_id=vendor.id
                 )
                 db.session.add(booking1)
-                print("Created sample transportation booking")
+                app.logger("Created sample transportation booking")
             
             # Create sample consent form
             if participant1:
@@ -311,7 +307,7 @@ def seed_database():
                         parent_id=parent.id
                     )
                     db.session.add(consent1)
-                    print("Created sample consent form")
+                    app.logger("Created sample consent form")
             
             # Create sample payment
             if participant1:
@@ -331,7 +327,7 @@ def seed_database():
                         participant_id=participant1.id
                     )
                     db.session.add(payment1)
-                    print("Created sample payment")
+                    app.logger("Created sample payment")
             
             # Create sample advertisement
             ad1 = Advertisement.query.filter_by(title='Spring Break Science Adventure').first()
@@ -353,7 +349,7 @@ def seed_database():
                     trip_id=trip1.id
                 )
                 db.session.add(ad1)
-                print("Created sample advertisement")
+                app.logger("Created sample advertisement")
             
             # Create sample notification
             notification1 = Notification.query.filter_by(
@@ -372,25 +368,25 @@ def seed_database():
                     related_data={'welcome': True}
                 )
                 db.session.add(notification1)
-                print("Created welcome notification")
+                app.logger("Created welcome notification")
             
             # Final commit
             db.session.commit()
             
-            print("\n" + "="*50)
-            print("Database seeding completed successfully!")
-            print("="*50)
-            print("\nSample users created:")
-            print(f"- Admin: {admin_email} / {admin_password}")
-            print("- Teacher: teacher@school.edu / teacher123")
-            print("- Parent: parent@example.com / parent123")
-            print("- Vendor: vendor@buscompany.com / vendor123")
-            print("- Hotel: hotel@educationinn.com / hotel123")
-            print("\nSample trips and data have been created.")
-            print("You can now start the application and test with these accounts.")
+            app.logger("\n" + "="*50)
+            app.logger("Database seeding completed successfully!")
+            app.logger("="*50)
+            app.logger("\nSample users created:")
+            app.logger(f"- Admin: {admin_email} / {admin_password}")
+            app.logger("- Teacher: teacher@school.edu / teacher123")
+            app.logger("- Parent: parent@example.com / parent123")
+            app.logger("- Vendor: vendor@buscompany.com / vendor123")
+            app.logger("- Hotel: hotel@educationinn.com / hotel123")
+            app.logger("\nSample trips and data have been created.")
+            app.logger("You can now start the application and test with these accounts.")
             
     except Exception as e:
-        print(f"Error during database seeding: {str(e)}")
+        app.logger(f"Error during database seeding: {str(e)}")
         db.session.rollback()
         sys.exit(1)
 
