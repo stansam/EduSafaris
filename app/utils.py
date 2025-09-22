@@ -1,6 +1,3 @@
-"""
-Utility functions for the Edu Safaris application
-"""
 import os
 import smtplib
 import requests

@@ -57,7 +57,7 @@
             <div class="col-md-6">
                 <img src="{{ url_for('static', filename='images/students-learning.jpg') }}" 
                      alt="Students Learning" class="img-fluid rounded" 
-                     onerror="this.src='https://via.placeholder.com/500x300?text=Students+Learning'">
+                     onerror="this.src='{{url_for('static', filename='images/placeholder.jpeg')}}'">
             </div>
         </div>
     </div>

@@ -1,14 +1,43 @@
-"""
-Flask Application Factory for Edu Safaris
-"""
 import os
 from flask import Flask, render_template, request
 from flask_login import current_user
+import logging
+from logging.handlers import RotatingFileHandler
 
 def create_app(config_name=None):
     """Create and configure Flask application"""
     app = Flask(__name__)
-    
+
+    # ------------ Logging setup ------------------------------
+
+    # Creation of logs folder 
+    log_dir = "logs"
+    os.makedirs(log_dir, exist_ok=True)
+
+    # Formatter
+    formatter = logging.Formatter(
+        "[%(asctime)s] [%(levelname)s] [%(name)s] %(message)s",
+        "%Y-%m-%d %H:%M:%S"
+    )
+
+    # File handler (resets after certain file size, to prevent infinite growth)
+    file_handler = RotatingFileHandler(
+        os.path.join(log_dir, "app.log"), maxBytes=10*1024*1024, backupCount=5
+    )
+    file_handler.setLevel(logging.DEBUG)
+    file_handler.setFormatter(formatter)
+
+    # Stream handler (console)
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.DEBUG)
+    console_handler.setFormatter(formatter)
+
+    # Attach handlers to app.logger
+    app.logger.setLevel(logging.DEBUG)
+    app.logger.addHandler(file_handler)
+    app.logger.addHandler(console_handler)
+    # --------------- End logging setup ------------------
+
     # Load configuration
     if config_name is None:
         config_name = os.environ.get('FLASK_ENV', 'development')
@@ -40,204 +69,26 @@ def create_app(config_name=None):
         return User.query.get(int(user_id))
     
     # Register blueprints
+    from app.blueprints import register_blueprints
     register_blueprints(app)
-    
+
     # Register Jinja filters and globals
+    from app.temp_vars import register_jinja_extensions
     register_jinja_extensions(app)
     
     # Register error handlers
+    from app.errors import register_error_handlers
     register_error_handlers(app)
     
     # Register CLI commands
+    from app.cli import register_cli_commands
     register_cli_commands(app)
-    
+
     # Add SocketIO event handlers
+    from app.sockets import register_socketio_events
     register_socketio_events(socketio)
     
     return app
-
-def register_blueprints(app):
-    """Register application blueprints"""
-    
-    # Main/Home blueprint
-    from app.main import main_bp
-    app.register_blueprint(main_bp)
-    
-    # Authentication blueprint
-    from app.auth import auth_bp
-    app.register_blueprint(auth_bp, url_prefix='/auth')
-    
-    # Profiles blueprint
-    from app.profiles import profiles_bp
-    app.register_blueprint(profiles_bp, url_prefix='/profiles')
-    
-    # Trips blueprint
-    from app.trips import trips_bp
-    app.register_blueprint(trips_bp, url_prefix='/trips')
-    
-    # Admin blueprint
-    from app.admin import admin_bp
-    app.register_blueprint(admin_bp, url_prefix='/admin')
-    
-    # Vendor blueprint
-    from app.vendor import vendor_bp
-    app.register_blueprint(vendor_bp, url_prefix='/vendor')
-    
-    # API blueprint
-    from app.api import api_bp
-    app.register_blueprint(api_bp, url_prefix='/api')
-
-def register_jinja_extensions(app):
-    """Register Jinja2 filters and global functions"""
-    
-    @app.template_filter('currency')
-    def currency_filter(amount, currency='USD'):
-        """Format currency for display"""
-        from app.utils import format_currency
-        return format_currency(amount, currency)
-    
-    @app.template_filter('phone')
-    def phone_filter(phone):
-        """Format phone number for display"""
-        from app.utils import format_phone
-        return format_phone(phone)
-    
-    @app.template_filter('datetime')
-    def datetime_filter(datetime_obj, format='%Y-%m-%d %H:%M'):
-        """Format datetime for display"""
-        if datetime_obj:
-            return datetime_obj.strftime(format)
-        return ''
-    
-    @app.template_filter('date')
-    def date_filter(date_obj, format='%Y-%m-%d'):
-        """Format date for display"""
-        if date_obj:
-            return date_obj.strftime(format)
-        return ''
-    
-    @app.template_global()
-    def get_active_ads(placement=None):
-        """Get active advertisements for current user"""
-        from app.models import Advertisement
-        return Advertisement.get_active_ads_for_user(current_user, placement)
-    
-    @app.template_global()
-    def get_unread_notifications():
-        """Get unread notifications for current user"""
-        if current_user.is_authenticated:
-            from app.models import Notification
-            return Notification.query.filter_by(
-                recipient_id=current_user.id,
-                is_read=False
-            ).order_by(Notification.created_at.desc()).limit(5).all()
-        return []
-
-def register_error_handlers(app):
-    """Register error handlers"""
-    
-    @app.errorhandler(404)
-    def not_found_error(error):
-        return render_template('errors/404.html'), 404
-    
-    @app.errorhandler(403)
-    def forbidden_error(error):
-        return render_template('errors/403.html'), 403
-    
-    @app.errorhandler(500)
-    def internal_error(error):
-        from app.extensions import db
-        db.session.rollback()
-        return render_template('errors/500.html'), 500
-    
-    @app.errorhandler(413)
-    def file_too_large_error(error):
-        return render_template('errors/413.html'), 413
-
-def register_cli_commands(app):
-    """Register CLI commands"""
-    
-    @app.cli.command()
-    def init_db():
-        """Initialize the database"""
-        from app.extensions import db
-        db.create_all()
-        print('Database initialized.')
-    
-    @app.cli.command()
-    def seed_db():
-        """Seed the database with initial data"""
-        from app.seed import seed_database
-        seed_database()
-        print('Database seeded with initial data.')
-    
-    @app.cli.command()
-    def create_admin():
-        """Create admin user"""
-        from app.models import User
-        from app.extensions import db
-        
-        email = os.environ.get('ADMIN_EMAIL', 'admin@edusafaris.com')
-        password = os.environ.get('ADMIN_PASSWORD', 'admin123')
-        
-        # Check if admin already exists
-        admin = User.query.filter_by(email=email).first()
-        if admin:
-            print(f'Admin user {email} already exists.')
-            return
-        
-        # Create admin user
-        admin = User(
-            email=email,
-            first_name='Admin',
-            last_name='User',
-            role='admin',
-            is_active=True,
-            is_verified=True
-        )
-        admin.password = password
-        
-        db.session.add(admin)
-        db.session.commit()
-        
-        print(f'Admin user created: {email}')
-
-def register_socketio_events(socketio):
-    """Register SocketIO event handlers"""
-    
-    @socketio.on('connect')
-    def handle_connect(auth):
-        print(f'Client connected: {request.sid}')
-    
-    @socketio.on('disconnect')
-    def handle_disconnect():
-        print(f'Client disconnected: {request.sid}')
-    
-    @socketio.on('join_trip')
-    def handle_join_trip(data):
-        """Join a trip room for real-time updates"""
-        from flask_socketio import join_room
-        trip_id = data.get('trip_id')
-        if trip_id:
-            join_room(f'trip_{trip_id}')
-            print(f'Client {request.sid} joined trip room {trip_id}')
-    
-    @socketio.on('leave_trip')
-    def handle_leave_trip(data):
-        """Leave a trip room"""
-        from flask_socketio import leave_room
-        trip_id = data.get('trip_id')
-        if trip_id:
-            leave_room(f'trip_{trip_id}')
-            print(f'Client {request.sid} left trip room {trip_id}')
-    
-    @socketio.on('location_update')
-    def handle_location_update(data):
-        """Handle real-time location updates"""
-        from flask_socketio import emit
-        trip_id = data.get('trip_id')
-        if trip_id:
-            emit('location_update', data, room=f'trip_{trip_id}', include_self=False)
 
 # Import models to ensure they are registered with SQLAlchemy
 from app import models
