@@ -69,19 +69,19 @@ def create_app(config_name=None):
         return User.query.get(int(user_id))
     
     # Register blueprints
-    from app.blueprints import register_blueprints
+    from app.config_dir.blueprints import register_blueprints
     register_blueprints(app)
 
     # Register Jinja filters and globals
-    from app.temp_vars import register_jinja_extensions
+    from app.config_dir.temp_vars import register_jinja_extensions
     register_jinja_extensions(app)
     
     # Register error handlers
-    from app.errors import register_error_handlers
+    from app.config_dir.errors import register_error_handlers
     register_error_handlers(app)
     
     # Register CLI commands
-    from app.cli import register_cli_commands
+    from app.config_dir.cli import register_cli_commands
     register_cli_commands(app)
 
     # Add SocketIO event handlers

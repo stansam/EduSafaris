@@ -7,3 +7,4 @@ migrations/
 instance/
 *.zip
 favicon_io/
+venv_ac.py
