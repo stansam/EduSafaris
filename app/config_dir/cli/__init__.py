@@ -35,8 +35,8 @@ def register_cli_commands(app):
         # Create admin user
         admin = User(
             email=email,
-            first_name='Admin',
-            last_name='User',
+            first_name='Cindy',
+            last_name='Cheptoo',
             role='admin',
             is_active=True,
             is_verified=True

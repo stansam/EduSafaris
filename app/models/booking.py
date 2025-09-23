@@ -21,7 +21,7 @@ class Booking(BaseModel):
     final_amount = db.Column(Numeric(10, 2))
     
     # Dates
-    booking_date = db.Column(db.DateTime, default=datetime.utcnow)
+    booking_date = db.Column(db.DateTime, default=datetime.now)
     confirmed_date = db.Column(db.DateTime)
     completed_date = db.Column(db.DateTime)
     
@@ -57,7 +57,7 @@ class Booking(BaseModel):
     def confirm_booking(self, final_amount=None):
         """Confirm the booking"""
         self.status = 'confirmed'
-        self.confirmed_date = datetime.utcnow()
+        self.confirmed_date = datetime.now()
         if final_amount:
             self.final_amount = final_amount
         db.session.commit()
@@ -65,14 +65,14 @@ class Booking(BaseModel):
     def complete_booking(self):
         """Mark booking as completed"""
         self.status = 'completed'
-        self.completed_date = datetime.utcnow()
+        self.completed_date = datetime.now()
         db.session.commit()
     
     def add_review(self, rating, review_text):
         """Add rating and review"""
         self.rating = rating
         self.review = review_text
-        self.review_date = datetime.utcnow()
+        self.review_date = datetime.now()
         db.session.commit()
         
         # Update vendor's average rating

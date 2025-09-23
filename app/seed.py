@@ -16,9 +16,9 @@ def create_user_if_not_exists(email, user_data):
         user = User(**user_data)
         db.session.add(user)
         db.session.flush()  
-        current_app.logger(f"Created user: {email}")
+        current_app.logger.info(f"Created user: {email}")
     else:
-        current_app.logger(f"User already exists: {email}")
+        current_app.logger.info(f"User already exists: {email}")
     return user
 
 def create_vendor_if_not_exists(business_name, vendor_data):
@@ -28,9 +28,9 @@ def create_vendor_if_not_exists(business_name, vendor_data):
         vendor = Vendor(**vendor_data)
         db.session.add(vendor)
         db.session.flush()  # Get ID without committing
-        current_app.logger(f"Created vendor: {business_name}")
+        current_app.logger.info(f"Created vendor: {business_name}")
     else:
-        current_app.logger(f"Vendor already exists: {business_name}")
+        current_app.logger.info(f"Vendor already exists: {business_name}")
     return vendor
 
 def create_trip_if_not_exists(title, trip_data):
@@ -40,9 +40,9 @@ def create_trip_if_not_exists(title, trip_data):
         trip = Trip(**trip_data)
         db.session.add(trip)
         db.session.flush()  # Get ID without committing
-        current_app.logger(f"Created trip: {title}")
+        current_app.logger.info(f"Created trip: {title}")
     else:
-        current_app.logger(f"Trip already exists: {title}")
+        current_app.logger.info(f"Trip already exists: {title}")
     return trip
 
 def seed_database():
@@ -51,7 +51,7 @@ def seed_database():
         app = create_app()
         
         with app.app_context():
-            app.logger("Starting database seeding...")
+            app.logger.info("Starting database seeding...")
             
             # Create admin user
             admin_email = os.environ.get('ADMIN_EMAIL', 'admin@edusafaris.com')
@@ -59,6 +59,7 @@ def seed_database():
             
             admin_data = {
                 'email': admin_email,
+                'password': admin_password,
                 'first_name': 'Admin',
                 'last_name': 'User',
                 'role': 'admin',
@@ -67,12 +68,13 @@ def seed_database():
                 'phone': '+1-555-0100'
             }
             admin = create_user_if_not_exists(admin_email, admin_data)
-            if admin.password != admin_password:  
-                admin.password = admin_password
+            # if admin.password != admin_password:  
+            #     admin.password = admin_password
             
             # Create sample teacher
             teacher_data = {
                 'email': 'teacher@school.edu',
+                'password': 'teacher123',
                 'first_name': 'Sarah',
                 'last_name': 'Johnson',
                 'role': 'teacher',
@@ -84,12 +86,13 @@ def seed_database():
                 'emergency_phone': '+1-555-0102'
             }
             teacher = create_user_if_not_exists('teacher@school.edu', teacher_data)
-            if not hasattr(teacher, '_password') or not teacher._password:
-                teacher.password = 'teacher123'
+            # if not hasattr(teacher, '_password') or not teacher._password:
+            #     teacher.password = 'teacher123'
             
             # Create sample parent
             parent_data = {
                 'email': 'parent@example.com',
+                'password': 'parent123',
                 'first_name': 'Michael',
                 'last_name': 'Davis',
                 'role': 'parent',
@@ -100,12 +103,13 @@ def seed_database():
                 'emergency_phone': '+1-555-0104'
             }
             parent = create_user_if_not_exists('parent@example.com', parent_data)
-            if not hasattr(parent, '_password') or not parent._password:
-                parent.password = 'parent123'
+            # if not hasattr(parent, '_password') or not parent._password:
+            #     parent.password = 'parent123'
             
             # Create sample vendor user
             vendor_user_data = {
                 'email': 'vendor@buscompany.com',
+                'password': 'vendor123',
                 'first_name': 'Robert',
                 'last_name': 'Wilson',
                 'role': 'vendor',
@@ -114,12 +118,13 @@ def seed_database():
                 'phone': '+1-555-0105'
             }
             vendor_user = create_user_if_not_exists('vendor@buscompany.com', vendor_user_data)
-            if not hasattr(vendor_user, '_password') or not vendor_user._password:
-                vendor_user.password = 'vendor123'
+            # if not hasattr(vendor_user, '_password') or not vendor_user._password:
+            #     vendor_user.password = 'vendor123'
             
             # Create hotel vendor user
             hotel_user_data = {
                 'email': 'hotel@educationinn.com',
+                'password': 'hotel123',
                 'first_name': 'Jennifer',
                 'last_name': 'Martinez',
                 'role': 'vendor',
@@ -128,8 +133,8 @@ def seed_database():
                 'phone': '+1-555-0107'
             }
             hotel_user = create_user_if_not_exists('hotel@educationinn.com', hotel_user_data)
-            if not hasattr(hotel_user, '_password') or not hotel_user._password:
-                hotel_user.password = 'hotel123'
+            # if not hasattr(hotel_user, '_password') or not hotel_user._password:
+            #     hotel_user.password = 'hotel123'
             
             # Commit users to ensure IDs are available
             db.session.commit()
@@ -267,7 +272,7 @@ def seed_database():
                 )
                 db.session.add(participant1)
                 db.session.flush()
-                app.logger("Created sample participant Emma Thompson")
+                app.logger.info("Created sample participant Emma Thompson")
             
             # Create sample booking
             booking1 = Booking.query.filter_by(
@@ -288,7 +293,7 @@ def seed_database():
                     vendor_id=vendor.id
                 )
                 db.session.add(booking1)
-                app.logger("Created sample transportation booking")
+                app.logger.info("Created sample transportation booking")
             
             # Create sample consent form
             if participant1:
@@ -307,7 +312,7 @@ def seed_database():
                         parent_id=parent.id
                     )
                     db.session.add(consent1)
-                    app.logger("Created sample consent form")
+                    app.logger.info("Created sample consent form")
             
             # Create sample payment
             if participant1:
@@ -327,7 +332,7 @@ def seed_database():
                         participant_id=participant1.id
                     )
                     db.session.add(payment1)
-                    app.logger("Created sample payment")
+                    app.logger.info("Created sample payment")
             
             # Create sample advertisement
             ad1 = Advertisement.query.filter_by(title='Spring Break Science Adventure').first()
@@ -349,7 +354,7 @@ def seed_database():
                     trip_id=trip1.id
                 )
                 db.session.add(ad1)
-                app.logger("Created sample advertisement")
+                app.logger.info("Created sample advertisement")
             
             # Create sample notification
             notification1 = Notification.query.filter_by(
@@ -368,25 +373,25 @@ def seed_database():
                     related_data={'welcome': True}
                 )
                 db.session.add(notification1)
-                app.logger("Created welcome notification")
+                app.logger.info("Created welcome notification")
             
             # Final commit
             db.session.commit()
             
-            app.logger("\n" + "="*50)
-            app.logger("Database seeding completed successfully!")
-            app.logger("="*50)
-            app.logger("\nSample users created:")
-            app.logger(f"- Admin: {admin_email} / {admin_password}")
-            app.logger("- Teacher: teacher@school.edu / teacher123")
-            app.logger("- Parent: parent@example.com / parent123")
-            app.logger("- Vendor: vendor@buscompany.com / vendor123")
-            app.logger("- Hotel: hotel@educationinn.com / hotel123")
-            app.logger("\nSample trips and data have been created.")
-            app.logger("You can now start the application and test with these accounts.")
+            app.logger.info("\n" + "="*50)
+            app.logger.info("Database seeding completed successfully!")
+            app.logger.info("="*50)
+            app.logger.info("\nSample users created:")
+            app.logger.info(f"- Admin: {admin_email} / {admin_password}")
+            app.logger.info("- Teacher: teacher@school.edu / teacher123")
+            app.logger.info("- Parent: parent@example.com / parent123")
+            app.logger.info("- Vendor: vendor@buscompany.com / vendor123")
+            app.logger.info("- Hotel: hotel@educationinn.com / hotel123")
+            app.logger.info("\nSample trips and data have been created.")
+            app.logger.info("You can now start the application and test with these accounts.")
             
     except Exception as e:
-        app.logger(f"Error during database seeding: {str(e)}")
+        app.logger.error(f"Error during database seeding: {str(e)}")
         db.session.rollback()
         sys.exit(1)
 

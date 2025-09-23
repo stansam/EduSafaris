@@ -3,9 +3,10 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize all auth functionality
     initPasswordToggle();
-    initPasswordStrength();
     initFormValidation();
+    initPasswordStrengthChecker();
 });
+
 
 /**
  * Toggle password visibility
@@ -47,66 +48,69 @@ function initPasswordToggle() {
 /**
  * Password strength checker
  */
-function checkPasswordStrength(password) {
+function initPasswordStrengthChecker() {
+    // Check if password strength elements exist
+    const passwordInput = document.getElementById('password');
     const strengthBar = document.getElementById('strengthBar');
     const strengthLevel = document.getElementById('strengthLevel');
     const strengthText = document.getElementById('strengthText');
     
-    if (!strengthBar || !strengthLevel) return;
+    if (passwordInput && strengthBar && strengthLevel) {
+        // Initialize password strength with custom configuration
+        const passwordStrengthAPI = initPasswordStrength('password', {
+            minLength: 8,
+            showDetails: true,
+            customMessages: {
+                weak: 'Weak',
+                fair: 'Fair', 
+                good: 'Good',
+                strong: 'Strong',
+                veryStrong: 'Very Strong'
+            }
+        });
+        
+        // Store the API for later use
+        window.passwordStrengthAPI = passwordStrengthAPI;
+        
+        // Listen for password strength changes to integrate with form validation
+        passwordInput.addEventListener('passwordStrengthChanged', function(event) {
+            const { score, level, percentage } = event.detail;
+            
+            // Add visual feedback to the password field based on strength
+            if (percentage >= 60) {
+                passwordInput.classList.remove('is-invalid');
+                passwordInput.classList.add('is-valid');
+            } else if (passwordInput.value.length > 0) {
+                passwordInput.classList.remove('is-valid');
+                // Don't add is-invalid here as it might conflict with other validation
+            }
+        });
+    }
+}
+
+function checkPasswordStrength(password) {
+    // Use the password strength API if available
+    if (window.passwordStrengthAPI) {
+        return window.passwordStrengthAPI.checkPassword(password);
+    }
     
+    // Fallback basic strength check
     let strength = 0;
-    let level = 'Very Weak';
-    let color = 'strength-weak';
-    
-    // Length check
     if (password.length >= 8) strength += 25;
-    if (password.length >= 12) strength += 15;
-    
-    // Character variety checks
     if (/[a-z]/.test(password)) strength += 15;
     if (/[A-Z]/.test(password)) strength += 15;
-    if (/[0-9]/.test(password)) strength += 15;
-    if (/[^A-Za-z0-9]/.test(password)) strength += 15;
+    if (/\d/.test(password)) strength += 15;
+    if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`]/.test(password)) strength += 30;
     
-    // Determine strength level
-    if (password.length === 0) {
-        strength = 0;
-        level = 'Enter password';
-        color = '';
-    } else if (strength < 30) {
-        level = 'Very Weak';
-        color = 'strength-weak';
-    } else if (strength < 50) {
-        level = 'Weak';
-        color = 'strength-weak';
-    } else if (strength < 70) {
-        level = 'Fair';
-        color = 'strength-fair';
-    } else if (strength < 90) {
-        level = 'Good';
-        color = 'strength-good';
-    } else {
-        level = 'Strong';
-        color = 'strength-strong';
-    }
+    let level = 'Weak';
+    if (strength >= 80) level = 'Very Strong';
+    else if (strength >= 60) level = 'Strong';
+    else if (strength >= 40) level = 'Good';
+    else if (strength >= 20) level = 'Fair';
     
-    // Update UI
-    strengthBar.style.width = strength + '%';
-    strengthBar.className = 'progress-bar ' + color;
-    strengthLevel.textContent = level;
-    
-    // Update text color
-    if (strengthText) {
-        strengthText.className = 'form-text ' + (
-            color === 'strength-weak' ? 'text-danger' :
-            color === 'strength-fair' ? 'text-warning' :
-            color === 'strength-good' ? 'text-info' :
-            color === 'strength-strong' ? 'text-success' : 'text-muted'
-        );
-    }
-    
-    return strength;
+    return { score: strength, level, percentage: Math.min(strength, 100) };
 }
+
 
 /**
  * Enhanced form validation
@@ -124,12 +128,12 @@ function initFormValidation() {
         });
         
         // Real-time validation for specific fields
-        const emailFields = form.querySelectorAll('input[type="email"]');
+        const emailFields = form.querySelectorAll('input[id="email"]');
         emailFields.forEach(field => {
             field.addEventListener('blur', () => validateEmail(field));
         });
         
-        const passwordFields = form.querySelectorAll('input[type="password"]');
+        const passwordFields = form.querySelectorAll('input[id="password"]');
         passwordFields.forEach(field => {
             field.addEventListener('input', () => {
                 if (field.id === 'password') {
@@ -167,10 +171,21 @@ function validatePassword(field) {
     if (password && password.length < minLength) {
         showFieldError(field, `Password must be at least ${minLength} characters long`);
         return false;
-    } else {
-        clearFieldError(field);
-        return true;
     }
+    
+    // Check password strength if API is available
+    if (password && window.passwordStrengthAPI) {
+        const strength = window.passwordStrengthAPI.checkPassword(password);
+        
+        // Require at least "Fair" strength for form submission
+        if (strength.percentage < 40) {
+            showFieldError(field, 'Password is too weak. Please make it stronger.');
+            return false;
+        }
+    }
+    
+    clearFieldError(field);
+    return true;
 }
 
 /**

@@ -63,8 +63,8 @@ class Emergency(BaseModel):
         
         action_entry = {
             'action': action,
-            'timestamp': (timestamp or datetime.utcnow()).isoformat(),
-            'recorded_at': datetime.utcnow().isoformat()
+            'timestamp': (timestamp or datetime.now()).isoformat(),
+            'recorded_at': datetime.now().isoformat()
         }
         
         # SQLAlchemy requires reassignment for JSON columns to detect changes
@@ -88,7 +88,7 @@ class Emergency(BaseModel):
     def resolve_emergency(self, resolution_details):
         """Mark emergency as resolved"""
         self.status = 'resolved'
-        self.resolved_date = datetime.utcnow()
+        self.resolved_date = datetime.now()
         self.resolution_details = resolution_details
         
         self.add_response_action(f'Emergency resolved: {resolution_details}')
@@ -103,7 +103,7 @@ class Emergency(BaseModel):
     @property
     def duration_minutes(self):
         """Calculate duration of emergency in minutes"""
-        end_time = self.resolved_date or datetime.utcnow()
+        end_time = self.resolved_date or datetime.now()
         return int((end_time - self.created_at).total_seconds() / 60)
     
     @classmethod

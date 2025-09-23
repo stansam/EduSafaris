@@ -1,0 +1,41 @@
+{% extends "base_global.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('parent_comm.static', filename='css/parent_comm.css') }}">
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+<script src="{{ url_for('parent_comm.static', filename='js/parent_comm.js') }}"></script>
+{% endblock %}
+
+{% block navbar_brand %}
+<a class="navbar-brand" href="{{ url_for('parent_comm.parent_trips') }}">
+    Edu Safaris - Parent Portal
+</a>
+{% endblock %}
+
+{% block navbar_items %}
+<li class="nav-item">
+    <a class="nav-link {% if active_tab == 'trips' %}active{% endif %}" 
+       href="{{ url_for('parent_comm.parent_trips') }}">
+        My Trips
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link {% if active_tab == 'notifications' %}active{% endif %}" 
+       href="{{ url_for('parent_comm.notifications') }}">
+        Notifications
+        <span id="notification-badge" class="badge badge-danger" style="display: none;"></span>
+    </a>
+</li>
+{% if current_user.role in ['teacher', 'admin'] %}
+<li class="nav-item">
+    <a class="nav-link" href="{{ url_for('parent_comm.send_notification') }}">
+        Send Notification
+    </a>
+</li>
+{% endif %}
+{% endblock %}

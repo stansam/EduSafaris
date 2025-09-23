@@ -72,6 +72,7 @@ class Vendor(BaseModel):
     
     def update_rating(self):
         """Recalculate average rating based on bookings"""
+        from app.models import Booking
         completed_bookings = self.bookings.filter(
             db.and_(Booking.status == 'completed', Booking.rating.isnot(None))
         ).all()
@@ -87,6 +88,7 @@ class Vendor(BaseModel):
         db.session.commit()
     
     def is_available(self, start_date, end_date):
+        from app.models import Booking, Trip
         """Check if vendor is available for given date range"""
         # Check for conflicting bookings
         conflicting_bookings = self.bookings.join(Trip).filter(
@@ -105,6 +107,7 @@ class Vendor(BaseModel):
     
     def get_revenue_for_period(self, start_date, end_date):
         """Calculate revenue for a given period"""
+        from app.models import Booking, Trip
         bookings = self.bookings.join(Trip).filter(
             db.and_(
                 Booking.status == 'completed',

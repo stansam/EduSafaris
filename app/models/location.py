@@ -23,7 +23,7 @@ class Location(BaseModel):
     postal_code = db.Column(db.String(20))
     
     # Tracking Information
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.now, nullable=False)
     location_type = db.Column(db.String(50))  # 'checkin', 'waypoint', 'accommodation', 'activity', 'emergency'
     
     # Status

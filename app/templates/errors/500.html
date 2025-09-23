@@ -1,0 +1,223 @@
+{% extends "base_global.html" %}
+
+{% block title %}Server Error - 500{% endblock %}
+
+{% block content %}
+<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-dark bg-opacity-10">
+    <div class="row w-100 justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-lg border-0 border-start border-warning border-5">
+                <div class="card-body text-center p-5">
+                    <div class="error-icon mb-4">
+                        <i class="fas fa-exclamation-triangle fa-6x text-warning blink-animation"></i>
+                    </div>
+                    <h1 class="display-1 fw-bold text-warning mb-3">500</h1>
+                    <h2 class="h4 mb-3 text-dark">Internal Server Error</h2>
+                    <p class="text-muted mb-4">
+                        Something went wrong on our end. We're working to fix this issue. Please try again later.
+                    </p>
+                    
+                    <div class="alert alert-danger d-flex align-items-center mb-4" role="alert">
+                        <i class="fas fa-bug me-2"></i>
+                        <div>
+                            <strong>Error occurred:</strong> The server encountered an unexpected condition.
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="progress" style="height: 5px;">
+                            <div class="progress-bar bg-warning progress-bar-striped progress-bar-animated" 
+                                 role="progressbar" style="width: 100%"></div>
+                        </div>
+                        <small class="text-muted mt-2 d-block">Our team has been notified</small>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-block">
+                        <button onclick="retryPage()" class="btn btn-warning me-2" id="retryBtn">
+                            <i class="fas fa-redo me-2"></i>Try Again
+                        </button>
+                        <button onclick="goBack()" class="btn btn-outline-warning me-2">
+                            <i class="fas fa-arrow-left me-2"></i>Go Back
+                        </button>
+                        <a href="{{ url_for('main.index') if url_for else '/' }}" class="btn btn-dark">
+                            <i class="fas fa-home me-2"></i>Home
+                        </a>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <button class="btn btn-link text-decoration-none" data-bs-toggle="collapse" data-bs-target="#errorDetails">
+                            <i class="fas fa-info-circle me-2"></i>Technical Details
+                        </button>
+                    </div>
+                    
+                    <div class="collapse mt-3" id="errorDetails">
+                        <div class="card card-body bg-light text-start">
+                            <h6 class="mb-3">What happened?</h6>
+                            <ul class="list-unstyled small">
+                                <li><i class="fas fa-circle text-danger me-2" style="font-size: 0.5rem;"></i>Database connection may have been reset</li>
+                                <li><i class="fas fa-circle text-warning me-2" style="font-size: 0.5rem;"></i>Transaction has been rolled back</li>
+                                <li><i class="fas fa-circle text-success me-2" style="font-size: 0.5rem;"></i>Error has been logged for investigation</li>
+                            </ul>
+                            <hr>
+                            <small class="text-muted">
+                                <i class="fas fa-clock me-1"></i>
+                                Error occurred at: <span id="errorTime"></span>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block head %}
+<style>
+    .blink-animation {
+        animation: blink 1.5s linear infinite;
+    }
+    
+    @keyframes blink {
+        0%, 50% { opacity: 1; }
+        51%, 100% { opacity: 0.5; }
+    }
+    
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+    }
+    
+    .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 1rem 2rem rgba(255,193,7,0.3) !important;
+    }
+    
+    .btn {
+        transition: all 0.3s ease;
+    }
+    
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+    }
+    
+    .progress {
+        animation: pulse-progress 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse-progress {
+        0%, 100% { opacity: 0.8; }
+        50% { opacity: 1; }
+    }
+    
+    .alert {
+        animation: slideIn 0.5s ease-out;
+        border-left: 4px solid #dc3545;
+    }
+    
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    
+    #retryBtn {
+        position: relative;
+    }
+    
+    #retryBtn:disabled {
+        cursor: not-allowed;
+    }
+    
+    .retry-cooldown {
+        animation: cooldown 3s linear;
+    }
+    
+    @keyframes cooldown {
+        from { width: 100%; }
+        to { width: 0%; }
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    let retryAttempts = 0;
+    const maxRetries = 3;
+    
+    function retryPage() {
+        const retryBtn = document.getElementById('retryBtn');
+        
+        if (retryAttempts >= maxRetries) {
+            retryBtn.innerHTML = '<i class="fas fa-times me-2"></i>Max Retries Reached';
+            retryBtn.disabled = true;
+            return;
+        }
+        
+        retryAttempts++;
+        retryBtn.disabled = true;
+        retryBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Retrying...';
+        
+        // Simulate retry attempt
+        setTimeout(() => {
+            // In a real scenario, this would reload the page or make an AJAX request
+            // For demo purposes, we'll just show the attempt
+            if (Math.random() > 0.7) { // 30% success rate for demo
+                window.location.reload();
+            } else {
+                retryBtn.innerHTML = `<i class="fas fa-redo me-2"></i>Try Again (${maxRetries - retryAttempts} left)`;
+                retryBtn.disabled = false;
+                
+                if (retryAttempts >= maxRetries) {
+                    retryBtn.innerHTML = '<i class="fas fa-times me-2"></i>Contact Support';
+                    retryBtn.onclick = () => alert('Please contact support at support@example.com');
+                }
+            }
+        }, 2000);
+    }
+    
+    function goBack() {
+        if (window.history.length > 1) {
+            window.history.back();
+        } else {
+            window.location.href = '/';
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set error time
+        document.getElementById('errorTime').textContent = new Date().toLocaleString();
+        
+        // Add glitch effect to error number
+        const errorNumber = document.querySelector('.display-1');
+        setInterval(() => {
+            if (Math.random() > 0.95) {
+                errorNumber.style.transform = 'skew(2deg)';
+                errorNumber.style.color = '#dc3545';
+                setTimeout(() => {
+                    errorNumber.style.transform = '';
+                    errorNumber.style.color = '';
+                }, 100);
+            }
+        }, 1000);
+        
+        // Auto-collapse details after 30 seconds
+        setTimeout(() => {
+            const errorDetails = document.getElementById('errorDetails');
+            if (errorDetails.classList.contains('show')) {
+                const collapseButton = document.querySelector('[data-bs-target="#errorDetails"]');
+                collapseButton.click();
+            }
+        }, 30000);
+        
+        // Console warning for developers
+        console.warn('Server Error 500: Check server logs for detailed error information');
+    });
+</script>
+{% endblock %}

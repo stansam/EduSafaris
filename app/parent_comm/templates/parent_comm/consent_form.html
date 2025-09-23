@@ -1,0 +1,133 @@
+{% extends "parent_comm/base.html" %}
+
+{% block title %}Consent Form - {{ trip.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Trip Participation Consent</h4>
+                </div>
+                <div class="card-body">
+                    <!-- Trip Information -->
+                    <div class="trip-info mb-4 p-3 bg-light rounded">
+                        <h5>{{ trip.title }}</h5>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <strong>Destination:</strong> {{ trip.destination }}<br>
+                                <strong>Duration:</strong> {{ trip.duration_days }} days
+                            </div>
+                            <div class="col-sm-6">
+                                <strong>Dates:</strong> {{ trip.start_date.strftime('%B %d, %Y') }} - {{ trip.end_date.strftime('%B %d, %Y') }}<br>
+                                <strong>Student:</strong> {{ participant.full_name }}
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if existing_consent and existing_consent.is_signed %}
+                        <div class="alert alert-success">
+                            <strong>Consent Already Signed</strong><br>
+                            This consent form was signed on {{ existing_consent.signed_date.strftime('%B %d, %Y at %I:%M %p') }}.
+                        </div>
+                    {% else %}
+                        <form method="POST" id="consent-form" novalidate>
+                            {{ form.hidden_tag() }}
+                            
+                            <div class="form-group">
+                                {{ form.student_name.label(class="form-label") }}
+                                {{ form.student_name(class="form-control", readonly=true) }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ form.medical_info.label(class="form-label") }}
+                                {{ form.medical_info(class="form-control", rows="4", placeholder="List any medical conditions, allergies, medications, or dietary restrictions...") }}
+                                <small class="form-text text-muted">{{ form.medical_info.description }}</small>
+                                {% for error in form.medical_info.errors %}
+                                    <div class="invalid-feedback d-block">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+
+                            <div class="form-group">
+                                {{ form.emergency_contact.label(class="form-label") }}
+                                {{ form.emergency_contact(class="form-control", placeholder="Emergency contact name and phone number") }}
+                                <small class="form-text text-muted">{{ form.emergency_contact.description }}</small>
+                                {% for error in form.emergency_contact.errors %}
+                                    <div class="invalid-feedback d-block">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+
+                            <!-- Signature Section -->
+                            <div class="form-group signature-section">
+                                <label class="form-label">Signature</label>
+                                <div class="signature-options">
+                                    <!-- Canvas Signature -->
+                                    <div class="signature-canvas-wrapper">
+                                        <h6>Digital Signature:</h6>
+                                        <div class="canvas-container">
+                                            <canvas id="signature-canvas" width="400" height="150"></canvas>
+                                            <div class="canvas-controls mt-2">
+                                                <button type="button" id="clear-canvas" class="btn btn-outline-secondary btn-sm">Clear</button>
+                                                <button type="button" id="save-signature" class="btn btn-outline-success btn-sm">Save Signature</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- OR Divider -->
+                                    <div class="signature-divider my-3">
+                                        <span>OR</span>
+                                    </div>
+
+                                    <!-- Typed Signature -->
+                                    <div class="signature-typed">
+                                        {{ form.signature_text.label(class="form-label") }}
+                                        {{ form.signature_text(class="form-control", placeholder="Type your full name") }}
+                                        <small class="form-text text-muted">{{ form.signature_text.description }}</small>
+                                    </div>
+                                </div>
+                                
+                                {{ form.signature_image() }}
+                                
+                                {% for error in form.signature_text.errors %}
+                                    <div class="invalid-feedback d-block">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+
+                            <!-- Consent Text -->
+                            <div class="consent-text mt-4 p-3 border rounded">
+                                <h6>Consent Agreement:</h6>
+                                <p>By signing this form, I give permission for <strong>{{ participant.full_name }}</strong> to participate in the educational trip "<strong>{{ trip.title }}</strong>" from {{ trip.start_date.strftime('%B %d, %Y') }} to {{ trip.end_date.strftime('%B %d, %Y') }}.</p>
+                                
+                                <p>I understand and agree that:</p>
+                                <ul>
+                                    <li>I have provided accurate medical and emergency contact information</li>
+                                    <li>I authorize emergency medical treatment if necessary</li>
+                                    <li>I understand the risks associated with this educational trip</li>
+                                    <li>I release the school and organizers from liability for ordinary negligence</li>
+                                </ul>
+                                
+                                <div class="form-check mt-3">
+                                    <input class="form-check-input" type="checkbox" id="consent-agreement" required>
+                                    <label class="form-check-label" for="consent-agreement">
+                                        I have read and agree to the terms above
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-actions mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg" id="submit-consent">
+                                    Submit Consent Form
+                                </button>
+                                <a href="{{ url_for('parent_comm.parent_trips') }}" class="btn btn-outline-secondary btn-lg ml-2">
+                                    Cancel
+                                </a>
+                            </div>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

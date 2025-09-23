@@ -8,36 +8,10 @@ def create_app(config_name=None):
     """Create and configure Flask application"""
     app = Flask(__name__)
 
-    # ------------ Logging setup ------------------------------
-
-    # Creation of logs folder 
-    log_dir = "logs"
-    os.makedirs(log_dir, exist_ok=True)
-
-    # Formatter
-    formatter = logging.Formatter(
-        "[%(asctime)s] [%(levelname)s] [%(name)s] %(message)s",
-        "%Y-%m-%d %H:%M:%S"
-    )
-
-    # File handler (resets after certain file size, to prevent infinite growth)
-    file_handler = RotatingFileHandler(
-        os.path.join(log_dir, "app.log"), maxBytes=10*1024*1024, backupCount=5
-    )
-    file_handler.setLevel(logging.DEBUG)
-    file_handler.setFormatter(formatter)
-
-    # Stream handler (console)
-    console_handler = logging.StreamHandler()
-    console_handler.setLevel(logging.DEBUG)
-    console_handler.setFormatter(formatter)
-
-    # Attach handlers to app.logger
-    app.logger.setLevel(logging.DEBUG)
-    app.logger.addHandler(file_handler)
-    app.logger.addHandler(console_handler)
-    # --------------- End logging setup ------------------
-
+    # Logging setup 
+    from app.utils.log import init_logs
+    init_logs()
+    
     # Load configuration
     if config_name is None:
         config_name = os.environ.get('FLASK_ENV', 'development')

@@ -1,0 +1,135 @@
+{% extends "base_global.html" %}
+
+{% block title %}Page Not Found - 404{% endblock %}
+
+{% block content %}
+<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-light">
+    <div class="row w-100 justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-lg border-0">
+                <div class="card-body text-center p-5">
+                    <div class="error-icon mb-4">
+                        <i class="fas fa-search fa-6x text-primary opacity-75"></i>
+                    </div>
+                    <h1 class="display-1 fw-bold text-primary mb-3">404</h1>
+                    <h2 class="h4 mb-3 text-dark">Oops! Page Not Found</h2>
+                    <p class="text-muted mb-4">
+                        The page you're looking for doesn't exist. It might have been moved, deleted, or you entered the wrong URL.
+                    </p>
+                    
+                    <div class="d-grid gap-2 d-md-block">
+                        <button onclick="goBack()" class="btn btn-outline-primary me-2">
+                            <i class="fas fa-arrow-left me-2"></i>Go Back
+                        </button>
+                        <a href="{{ url_for('main.index') if url_for else '/' }}" class="btn btn-primary">
+                            <i class="fas fa-home me-2"></i>Home Page
+                        </a>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <button class="btn btn-link text-decoration-none" data-bs-toggle="collapse" data-bs-target="#helpSection">
+                            <i class="fas fa-question-circle me-2"></i>Need Help?
+                        </button>
+                    </div>
+                    
+                    <div class="collapse mt-3" id="helpSection">
+                        <div class="card card-body bg-light">
+                            <p class="small mb-2">Try these suggestions:</p>
+                            <ul class="list-unstyled small text-start">
+                                <li><i class="fas fa-check text-success me-2"></i>Check the URL for typos</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Use the search function</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Contact support if needed</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block head %}
+<style>
+    .error-icon {
+        animation: float 3s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+    
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 1rem 2rem rgba(0,0,0,0.15) !important;
+    }
+    
+    .btn {
+        transition: all 0.3s ease;
+    }
+    
+    .btn:hover {
+        transform: translateY(-2px);
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function goBack() {
+        if (window.history.length > 1) {
+            window.history.back();
+        } else {
+            window.location.href = '/';
+        }
+    }
+    
+    // Add some interactive feedback
+    document.addEventListener('DOMContentLoaded', function() {
+        const buttons = document.querySelectorAll('.btn');
+        buttons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                // Add ripple effect
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}px;
+                    top: ${y}px;
+                    background: rgba(255,255,255,0.5);
+                    border-radius: 50%;
+                    transform: scale(0);
+                    animation: ripple 0.6s linear;
+                    pointer-events: none;
+                `;
+                
+                this.style.position = 'relative';
+                this.style.overflow = 'hidden';
+                this.appendChild(ripple);
+                
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+    });
+</script>
+
+<style>
+    @keyframes ripple {
+        to {
+            transform: scale(4);
+            opacity: 0;
+        }
+    }
+</style>
+{% endblock %}

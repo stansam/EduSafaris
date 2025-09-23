@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon/favicon-16x16.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicon/apple-touch-icon.png') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='favicon/site.webmanifest') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon/favicon.ico') }}">
+
+    <title>Vendor Registration</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .form-container {
+            padding: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #34495e;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        .specializations {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .specialization-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .btn {
+            background: #3498db;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background: #2980b9;
+        }
+        .section-title {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Become a Vendor</h1>
+            <p>Join our network of trusted service providers</p>
+        </div>
+        
+        <div class="form-container">
+            <form method="POST">
+                <div class="section-title">
+                    <h3>Business Information</h3>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="business_name">Business Name *</label>
+                        <input type="text" name="business_name" id="business_name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="business_type">Business Type *</label>
+                        <select name="business_type" id="business_type" required>
+                            <option value="">Select Type</option>
+                            {% for btype in business_types %}
+                            <option value="{{ btype }}">{{ btype.title() }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Business Description</label>
+                    <textarea name="description" id="description" placeholder="Describe your services and experience..."></textarea>
+                </div>
+                
+                <div class="section-title">
+                    <h3>Contact Information</h3>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="contact_email">Contact Email *</label>
+                        <input type="email" name="contact_email" id="contact_email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contact_phone">Contact Phone *</label>
+                        <input type="tel" name="contact_phone" id="contact_phone" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="website">Website</label>
+                    <input type="url" name="website" id="website" placeholder="https://">
+                </div>
+                
+                <div class="section-title">
+                    <h3>Address</h3>
+                </div>
+                
+                <div class="form-group">
+                    <label for="address_line1">Address Line 1 *</label>
+                    <input type="text" name="address_line1" id="address_line1" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="address_line2">Address Line 2</label>
+                    <input type="text" name="address_line2" id="address_line2">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="city">City *</label>
+                        <input type="text" name="city" id="city" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="state">State/Province *</label>
+                        <input type="text" name="state" id="state" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="postal_code">Postal Code *</label>
+                        <input type="text" name="postal_code" id="postal_code" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="country">Country *</label>
+                    <input type="text" name="country" id="country" value="United States" required>
+                </div>
+                
+                <div class="section-title">
+                    <h3>Business Details</h3>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="license_number">License Number</label>
+                        <input type="text" name="license_number" id="license_number">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="capacity">Maximum Capacity</label>
+                        <input type="number" name="capacity" id="capacity" min="1">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="insurance_details">Insurance Details</label>
+                    <textarea name="insurance_details" id="insurance_details" placeholder="Insurance provider, policy details..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Specializations</label>
+                    <div class="specializations">
+                        <div class="specialization-item">
+                            <input type="checkbox" name="specializations" value="student_groups" id="spec1">
+                            <label for="spec1">Student Groups</label>
+                        </div>
+                        <div class="specialization-item">
+                            <input type="checkbox" name="specializations" value="science_trips" id="spec2">
+                            <label for="spec2">Science Trips</label>
+                        </div>
+                        <div class="specialization-item">
+                            <input type="checkbox" name="specializations" value="historical_sites" id="spec3">
+                            <label for="spec3">Historical Sites</label>
+                        </div>
+                        <div class="specialization-item">
+                            <input type="checkbox" name="specializations" value="outdoor_education" id="spec4">
+                            <label for="spec4">Outdoor Education</label>
+                        </div>
+                        <div class="specialization-item">
+                            <input type="checkbox" name="specializations" value="cultural_exchange" id="spec5">
+                            <label for="spec5">Cultural Exchange</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-title">
+                    <h3>Pricing</h3>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="base_price">Base Price ($)</label>
+                        <input type="number" name="base_price" id="base_price" step="0.01" min="0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="price_per_person">Price Per Person ($)</label>
+                        <input type="number" name="price_per_person" id="price_per_person" step="0.01" min="0">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="pricing_notes">Pricing Notes</label>
+                    <textarea name="pricing_notes" id="pricing_notes" placeholder="Additional pricing information, discounts, packages..."></textarea>
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <button type="submit" class="btn">Register as Vendor</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

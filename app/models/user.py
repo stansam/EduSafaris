@@ -9,7 +9,7 @@ class User(UserMixin, BaseModel):
     
     # Basic Information
     email = db.Column(db.String(120), unique=True, nullable=False, index=True)
-    password_hash = db.Column(db.String(255), nullable=False)
+    _password_hash = db.Column("password_hash", db.String(255), nullable=False)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     phone = db.Column(db.String(20))
@@ -57,14 +57,14 @@ class User(UserMixin, BaseModel):
     
     @property
     def password(self):
-        raise AttributeError('Password is not a readable attribute')
+        raise AttributeError('Password is write-only.')
     
     @password.setter
     def password(self, password):
-        self.password_hash = generate_password_hash(password)
+        self._password_hash = generate_password_hash(password)
     
     def verify_password(self, password):
-        return check_password_hash(self.password_hash, password)
+        return check_password_hash(self._password_hash, password)
     
     @property
     def full_name(self):
@@ -81,6 +81,20 @@ class User(UserMixin, BaseModel):
     
     def is_parent(self):
         return self.role == 'parent'
+    
+    def get_dashboard_url(self):
+        from flask import url_for
+
+        if self.is_admin:
+            return url_for('admin.dashboard')
+        if self.is_teacher:
+            return url_for('trips.list_trips')
+        if self.is_vendor:
+            return url_for('vendor.vendor_directory')
+        if self.is_parent:
+            return url_for('parent')
+        else:
+            return url_for('student')
     
     def get_total_students(self):
         """Get total number of students for teacher"""
@@ -106,7 +120,7 @@ class User(UserMixin, BaseModel):
         for consent in self.consents:
             if consent.participant and consent.participant.trip:
                 trip = consent.participant.trip
-                if trip.start_date and trip.start_date > datetime.utcnow().date():
+                if trip.start_date and trip.start_date > datetime.now().date():
                     upcoming_count += 1
         return upcoming_count
     

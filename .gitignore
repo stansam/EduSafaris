@@ -8,3 +8,6 @@ instance/
 *.zip
 favicon_io/
 venv_ac.py
+*1.js
+*1.css
+*1.py

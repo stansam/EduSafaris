@@ -4,7 +4,7 @@ from flask_jwt_extended import create_access_token
 from app.auth import auth_bp
 from app.auth.forms import RegisterForm, LoginForm, RequestResetForm, ResetPasswordForm
 from app.models import User
-from app import db
+from app.extensions import db
 from app.utils import send_password_reset_email, send_verification_email
 import datetime
 from collections import defaultdict
@@ -44,9 +44,10 @@ def register():
             # Create new user
             user = User(
                 username=form.username.data,
+                password=form.password.data,
                 email=form.email.data.lower()
             )
-            user.set_password(form.password.data)
+            # user.set_password(form.password.data)
             
             db.session.add(user)
             db.session.commit()
@@ -87,7 +88,7 @@ def login():
             login_user(user, remember=form.remember_me.data)
             
             # Update last login time
-            user.last_login = datetime.datetime.utcnow()
+            user.last_login = datetime.datetime.now()
             db.session.commit()
             
             # Redirect to intended page or dashboard
@@ -222,7 +223,7 @@ def api_login():
         access_token = create_access_token(identity=str(user.id))
         
         # Update last login
-        user.last_login = datetime.datetime.utcnow()
+        user.last_login = datetime.datetime.now()
         db.session.commit()
         
         return jsonify({

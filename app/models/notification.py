@@ -54,7 +54,7 @@ class Notification(BaseModel):
     def mark_as_read(self):
         """Mark notification as read"""
         self.is_read = True
-        self.read_date = datetime.utcnow()
+        self.read_date = datetime.now()
         db.session.commit()
     
     def mark_as_sent(self, email=False, sms=False, push=False):
@@ -67,7 +67,7 @@ class Notification(BaseModel):
             self.push_sent = True
         
         if not self.sent_date:
-            self.sent_date = datetime.utcnow()
+            self.sent_date = datetime.now()
         
         db.session.commit()
     

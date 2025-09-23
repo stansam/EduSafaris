@@ -52,7 +52,7 @@ class Consent(BaseModel):
     def sign_consent(self, signer_name, signer_relationship, signer_email, signature_data=None, ip_address=None):
         """Sign the consent form"""
         self.is_signed = True
-        self.signed_date = datetime.utcnow()
+        self.signed_date = datetime.now()
         self.signer_name = signer_name
         self.signer_relationship = signer_relationship
         self.signer_email = signer_email

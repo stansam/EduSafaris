@@ -36,7 +36,7 @@ class Participant(BaseModel):
     # Status and Registration
     status = db.Column(db.Enum('registered', 'confirmed', 'cancelled', 'completed', 
                               name='participant_status'), default='registered', nullable=False)
-    registration_date = db.Column(db.DateTime, default=datetime.utcnow)
+    registration_date = db.Column(db.DateTime, default=datetime.now)
     confirmation_date = db.Column(db.DateTime)
     
     # Payment Information
@@ -86,7 +86,7 @@ class Participant(BaseModel):
     def confirm_participation(self):
         """Confirm participant's spot on the trip"""
         self.status = 'confirmed'
-        self.confirmation_date = datetime.utcnow()
+        self.confirmation_date = datetime.now()
         db.session.commit()
     
     def cancel_participation(self):

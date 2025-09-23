@@ -14,7 +14,7 @@ class Payment(BaseModel):
     # Status and Processing
     status = db.Column(db.Enum('pending', 'processing', 'completed', 'failed', 'refunded', 
                               name='payment_status'), default='pending', nullable=False)
-    payment_date = db.Column(db.DateTime, default=datetime.utcnow)
+    payment_date = db.Column(db.DateTime, default=datetime.now)
     processed_date = db.Column(db.DateTime)
     
     # External References
@@ -49,7 +49,7 @@ class Payment(BaseModel):
     def mark_completed(self, transaction_id=None, processor_response=None):
         """Mark payment as completed"""
         self.status = 'completed'
-        self.processed_date = datetime.utcnow()
+        self.processed_date = datetime.now()
         if transaction_id:
             self.transaction_id = transaction_id
         if processor_response:
@@ -59,7 +59,7 @@ class Payment(BaseModel):
     def mark_failed(self, failure_reason=None, processor_response=None):
         """Mark payment as failed"""
         self.status = 'failed'
-        self.processed_date = datetime.utcnow()
+        self.processed_date = datetime.now()
         if failure_reason:
             self.failure_reason = failure_reason
         if processor_response:
@@ -69,7 +69,7 @@ class Payment(BaseModel):
     def process_refund(self, refund_reason=None):
         """Process refund for this payment"""
         self.status = 'refunded'
-        self.refund_date = datetime.utcnow()
+        self.refund_date = datetime.now()
         if refund_reason:
             self.refund_reason = refund_reason
         db.session.commit()
