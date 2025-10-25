@@ -1,0 +1,22 @@
+{% extends "dash_base.html" %}
+
+{% block title %} My Children's Trips Dashboard {% endblock %}
+
+{% block styles %} 
+<link rel="stylesheet" href="{{url_for('parent_comm.static', filename='css/dash.css')}}">
+{% endblock %}
+
+{% block scripts %} 
+<script src="{{url_for('parent_comm.static', filename='js/dash.js')}}"></script>
+{% endblock %}
+
+{% block content %} 
+
+    <div class="dashboard-container">
+        {% include 'parent_comm/dashboard/header.html' %}
+    </div>
+
+{% endblock %}
+
+
+

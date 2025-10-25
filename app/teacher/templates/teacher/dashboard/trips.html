@@ -1,0 +1,27 @@
+<!-- Filters Section -->
+<div class="filters-section">
+    <div class="filters-grid">
+        <div class="filter-group">
+            <label class="filter-label">Status</label>
+            <select id="statusFilter" class="filter-select">
+                <option value="all">All Status</option>
+                <option value="draft">Draft</option>
+                <option value="published">Published</option>
+                <option value="in_progress">In Progress</option>
+                <option value="completed">Completed</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label class="filter-label">Search</label>
+            <input type="text" id="searchFilter" class="filter-input" placeholder="Search trips...">
+        </div>
+    </div>
+</div>
+
+<!-- Trips Grid -->
+<div id="tripsContainer" class="teach-trips-grid">
+    <!-- Trip cards will be inserted here dynamically -->
+</div>
+
+<!-- Pagination -->
+<div id="paginationContainer" class="pagination"></div>

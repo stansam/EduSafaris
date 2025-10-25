@@ -1,0 +1,151 @@
+.edu-remark-section {
+  padding: 100px 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.edu-remark-section::before {
+  content: '"';
+  position: absolute;
+  top: 20px;
+  left: 10%;
+  font-size: 20rem;
+  font-family: Georgia, serif;
+  color: rgba(243, 156, 18, 0.05);
+  line-height: 1;
+  z-index: 0;
+}
+
+.edu-remark-container {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.edu-remark-stars {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 32px;
+  animation: eduRemarkFadeIn 0.8s ease-out;
+}
+
+.edu-remark-star {
+  animation: eduRemarkStarPop 0.5s ease-out backwards;
+  filter: drop-shadow(0 2px 4px rgba(243, 156, 18, 0.3));
+}
+
+.edu-remark-star:nth-child(1) { animation-delay: 0.1s; }
+.edu-remark-star:nth-child(2) { animation-delay: 0.2s; }
+.edu-remark-star:nth-child(3) { animation-delay: 0.3s; }
+.edu-remark-star:nth-child(4) { animation-delay: 0.4s; }
+.edu-remark-star:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes eduRemarkStarPop {
+  0% {
+    transform: scale(0) rotate(-180deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) rotate(10deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.edu-remark-quote {
+  margin: 0 0 24px 0;
+  padding: 0;
+  border: none;
+  animation: eduRemarkFadeIn 0.8s ease-out 0.6s backwards;
+}
+
+.edu-remark-text {
+  font-size: 1.75rem;
+  line-height: 1.6;
+  color: #1a1a1a;
+  font-weight: 500;
+  margin: 0;
+  font-style: italic;
+}
+
+.edu-remark-author {
+  font-size: 1.1rem;
+  color: #6c757d;
+  margin: 0;
+  font-weight: 400;
+  animation: eduRemarkFadeIn 0.8s ease-out 0.8s backwards;
+}
+
+@keyframes eduRemarkFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hover effect on stars */
+.edu-remark-star {
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.edu-remark-star:hover {
+  transform: scale(1.2) rotate(15deg);
+}
+
+@media (max-width: 768px) {
+  .edu-remark-section {
+    padding: 60px 20px;
+  }
+  
+  .edu-remark-section::before {
+    font-size: 12rem;
+    left: 5%;
+  }
+  
+  .edu-remark-stars {
+    gap: 6px;
+  }
+  
+  .edu-remark-star {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .edu-remark-text {
+    font-size: 1.35rem;
+  }
+  
+  .edu-remark-author {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .edu-remark-stars {
+    gap: 4px;
+  }
+  
+  .edu-remark-star {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .edu-remark-text {
+    font-size: 1.15rem;
+  }
+  
+  .edu-remark-author {
+    font-size: 0.95rem;
+  }
+}

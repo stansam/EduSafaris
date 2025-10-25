@@ -11,7 +11,7 @@ class BaseConfig:
     """Base configuration with common settings"""
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-secret-key-change-in-production'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_RECORD_QUERIES = True
+    SQLALCHEMY_RECORD_QUERIES = False
     
     # Mail settings
     MAIL_SERVER = os.environ.get('MAIL_SERVER') or 'smtp.gmail.com'
@@ -20,6 +20,9 @@ class BaseConfig:
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     MAIL_DEFAULT_SENDER = os.environ.get('MAIL_USERNAME')
+
+    ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', 'admin@edusafaris.com')
+    ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'admin123')
     
     # JWT settings
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY') or SECRET_KEY
@@ -39,7 +42,7 @@ class BaseConfig:
     WTF_CSRF_TIME_LIMIT = None
     
     # SocketIO settings
-    SOCKETIO_ASYNC_MODE = 'eventlet'
+    SOCKETIO_ASYNC_MODE = os.environ.get('eventlet')
     
     # Payment settings
     MPESA_CONSUMER_KEY = os.environ.get('MPESA_CONSUMER_KEY')
@@ -54,7 +57,7 @@ class DevelopmentConfig(BaseConfig):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///edu_safaris_dev.db'
-    SQLALCHEMY_ECHO = True
+    SQLALCHEMY_ECHO = False
     
     # Development mail settings (console output)
     MAIL_SUPPRESS_SEND = False

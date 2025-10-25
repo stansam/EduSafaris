@@ -21,23 +21,36 @@ class Location(BaseModel):
     state = db.Column(db.String(100))
     country = db.Column(db.String(100))
     postal_code = db.Column(db.String(20))
-    
+    speed = db.Column(db.Float)
+    heading = db.Column(db.Float)
+
+    device_id = db.Column(db.String(50), nullable=False)  
+    device_type = db.Column(db.String(30), default='mobile')
+
     # Tracking Information
     timestamp = db.Column(db.DateTime, default=datetime.now, nullable=False)
+    server_timestamp = db.Column(db.DateTime, default=datetime.now, nullable=False)
     location_type = db.Column(db.String(50))  # 'checkin', 'waypoint', 'accommodation', 'activity', 'emergency'
     
     # Status
+    is_valid = db.Column(db.Boolean, default=True)
+    battery_level = db.Column(db.Integer)  # if applicable
+    signal_strength = db.Column(db.Integer)
+
     is_safe_zone = db.Column(db.Boolean, default=True)
     notes = db.Column(db.Text)
     
     # Foreign Keys
     trip_id = db.Column(db.Integer, db.ForeignKey('trips.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     
     # Indexes
     __table_args__ = (
         db.Index('idx_location_trip', 'trip_id'),
+        db.Index('idx_trip_location_device', 'device_id'),
         db.Index('idx_location_coordinates', 'latitude', 'longitude'),
         db.Index('idx_location_timestamp', 'timestamp'),
+        db.Index('idx_trip_location_trip_device', 'trip_id', 'device_id'),
         db.Index('idx_location_type', 'location_type'),
     )
     
@@ -89,6 +102,19 @@ class Location(BaseModel):
         distance = c * 6371  # Earth's radius in km
         
         return distance <= radius_km
+    
+    @classmethod
+    def get_latest_for_trip(cls, trip_id, limit=10):
+        """Get latest locations for a trip"""
+        return cls.query.filter_by(trip_id=trip_id, is_valid=True)\
+                       .order_by(cls.timestamp.desc())\
+                       .limit(limit).all()
+    
+    @classmethod
+    def get_latest_for_device(cls, trip_id, device_id):
+        """Get latest location for specific device"""
+        return cls.query.filter_by(trip_id=trip_id, device_id=device_id, is_valid=True)\
+                       .order_by(cls.timestamp.desc()).first()
     
     def serialize(self):
         return {

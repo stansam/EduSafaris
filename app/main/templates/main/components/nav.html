@@ -1,0 +1,48 @@
+<nav class="edusafaris-nav">
+    <div class="edusafaris-logo">
+        <div class="edusafaris-logo-icon">
+            <i class="fas fa-map-marker-alt"></i>
+        </div>
+        <div class="edusafaris-logo-text">Edu<span>Safaris</span></div>
+    </div>
+    <ul class="edusafaris-nav-links">
+        <li><a href="/explore-trips">Discover Trips</a></li>
+        <li><a href="/for-schools">For Schools</a></li>
+        <li><a href="/for-providers">For Providers</a></li>
+        <!-- <li><a href="#resources">Resources</a></li> -->
+    </ul>
+    {% if current_user.is_authenticated %}
+
+        <div class="edusafaris-user-menu">
+            <div class="edusafaris-user-info" onclick="toggleUserDropdown()">
+                <!-- <img src="/static/images/user-avatar.jpg" alt="User Avatar" class="edusafaris-user-avatar"> -->
+                 <i class="fas fa-user"></i>
+                <span class="edusafaris-user-name">John Doe</span>
+                <i class="fas fa-chevron-down edusafaris-dropdown-icon"></i>
+            </div>
+
+            <div class="edusafaris-user-dropdown" id="userDropdown">
+                <div class="edusafaris-user-meta">
+                <p class="edusafaris-user-email">{{current_user.email}}</p>
+                <p class="edusafaris-user-contact">{{current_user.phone}}</p>
+                </div>
+                <div class="edusafaris-user-links">
+                <a href="{{current_user.get_dashboard_url()}}" class="edusafaris-user-link">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="/logout" class="edusafaris-user-link">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+                </div>
+            </div>
+        </div>
+    
+    {% else %}
+
+    <div class="edusafaris-nav-actions">
+        <button class="edusafaris-signin-btn" onclick="signIn()">Sign In</button>
+        <button class="edusafaris-getstarted-btn" onclick="signUp()">Get Started</button>
+    </div>
+
+    {% endif %}
+</nav>

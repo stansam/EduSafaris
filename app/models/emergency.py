@@ -32,6 +32,7 @@ class Emergency(BaseModel):
     emergency_services_details = db.Column(db.Text)
     
     # Resolution
+    resolved = db.Column(db.Boolean, default=False)
     resolution_details = db.Column(db.Text)
     resolved_date = db.Column(db.DateTime)
     

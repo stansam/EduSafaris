@@ -31,14 +31,15 @@ class Trip(BaseModel):
     destination = db.Column(db.String(200), nullable=False)
     category = db.Column(db.String(50))  # e.g., 'science', 'history', 'cultural'
     grade_level = db.Column(db.String(20))  # e.g., 'K-2', '3-5', '6-8', '9-12'
-    
+    featured = db.Column(db.Boolean, default=False, nullable=False)
+
     # Foreign Keys
     organizer_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     
     # Relationships
-    participants = db.relationship('Participant', backref='trip', lazy='dynamic', cascade='all, delete-orphan')
+    participants = db.relationship('Participant', backref='trip', lazy='select', cascade='all, delete-orphan')
     bookings = db.relationship('Booking', backref='trip', lazy='dynamic', cascade='all, delete-orphan')
-    locations = db.relationship('Location', backref='trip', lazy='dynamic', cascade='all, delete-orphan')
+    locations = db.relationship('Location', backref='trip', lazy='select', cascade='all, delete-orphan')
     payments = db.relationship('Payment', backref='trip', lazy='dynamic')
     advertisements = db.relationship('Advertisement', backref='trip', lazy='dynamic')
     
@@ -48,6 +49,8 @@ class Trip(BaseModel):
         db.Index('idx_trip_status', 'status'),
         db.Index('idx_trip_organizer', 'organizer_id'),
         db.Index('idx_trip_destination', 'destination'),
+        db.Index('idx_trip_category', 'category'),
+        db.Index('idx_trip_price', 'price_per_student'),
     )
     
     @property
@@ -60,7 +63,7 @@ class Trip(BaseModel):
     @property
     def current_participants(self):
         """Get current number of participants"""
-        return self.participants.filter_by(status='confirmed').count()
+        return len([p for p in self.participants if p.status == 'confirmed'])
     
     @property
     def available_spots(self):
@@ -101,8 +104,8 @@ class Trip(BaseModel):
     
     def get_total_revenue(self):
         """Calculate total revenue from confirmed bookings"""
-        confirmed_participants = self.participants.filter_by(status='confirmed').count()
-        return float(confirmed_participants * self.price_per_student)
+        confirmed_participants = len([p for p in self.participants if p.status == 'confirmed'])
+        return float(float(confirmed_participants) * float(self.price_per_student))
     
     def get_confirmed_vendor_bookings(self):
         """Get all confirmed vendor bookings for this trip"""
@@ -114,6 +117,7 @@ class Trip(BaseModel):
             'title': self.title,
             'description': self.description,
             'destination': self.destination,
+            'itinerary': self.itinerary,
             'start_date': self.start_date.isoformat() if self.start_date else None,
             'end_date': self.end_date.isoformat() if self.end_date else None,
             'duration_days': self.duration_days,

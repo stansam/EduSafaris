@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduSafaris Modal Forms</title>
+    <style>
+        
+    </style>
+</head>
+<body>
+    <!-- Demo Page -->
+    <div class="demo-container">
+        <h1 class="demo-title">EduSafaris Modal Forms</h1>
+        <p class="demo-description">Click the buttons below to preview each modal form</p>
+        
+        <div class="demo-buttons">
+            <button class="demo-btn" onclick="openModal('createTripModal')">Create Trip</button>
+            <button class="demo-btn" onclick="openModal('editTripModal')">Edit Trip</button>
+            <button class="demo-btn" onclick="openModal('addParticipantModal')">Add Participant</button>
+            <button class="demo-btn" onclick="openModal('editParticipantModal')">Edit Participant</button>
+            <button class="demo-btn" onclick="openModal('consentFormModal')">View Consent</button>
+            <button class="demo-btn" onclick="openModal('sendNotificationModal')">Send Notification</button>
+        </div>
+    </div>
+
+    <!-- Create Trip Modal -->
+    <div class="edusafari-modal-overlay" id="createTripModal">
+        <div class="edusafari-modal edusafari-modal-wide">
+            <div class="edusafari-modal-header">
+                <h2 class="edusafari-modal-title">Create New Trip</h2>
+                <button class="edusafari-modal-close" onclick="closeModal('createTripModal')">&times;</button>
+            </div>
+            <div class="edusafari-modal-body">
+                <div class="edusafari-alert edusafari-alert-error" id="createTripAlert"></div>
+                
+                <form id="createTripForm">
+                    <!-- Basic Information -->
+                    <div class="edusafari-form-section">
+                        <h3 class="edusafari-section-title">Basic Information</h3>
+                        <div class="edusafari-form-grid edusafari-form-grid-2">
+                            <div class="edusafari-form-group full-width">
+                                <label class="edusafari-form-label">
+                                    Trip Title <span class="edusafari-required">*</span>
+                                </label>
+                                <input type="text" class="edusafari-form-input" name="title" required 
+                                       placeholder="e.g., Serengeti Wildlife Adventure">
+                            </div>
+                            
+                            <div class="edusafari-form-group full-width">
+                                <label class="edusafari-form-label">
+                                    Destination <span class="edusafari-required">*</span>
+                                </label>
+                                <input type="text" class="edusafari-form-input" name="destination" required 
+                                       placeholder="e.g., Serengeti National Park, Tanzania">
+                            </div>
+                            
+                            <div class="edusafari-form-group">
+                                <label class="edusafari-form-label">
+                                    Category <span class="edusafari-required">*</span>
+                                </label>
+                                <select class="edusafari-form-select" name="category" required>
+                                    <option value="">Select Category</option>
+                                    <option value="wildlife">Wildlife Safari</option>
+                                    <option value="cultural">Cultural Experience</option>
+                                    <option value="adventure">Adventure Trek</option>
+                                    <option value="educational">Educational Tour</option>
+                                    <option value="beach">Beach & Marine</option>
+                                    <option value="historical">Historical Sites</option>
+                                </select>
+                            </div>
+                            
+                            <div class="edusafari-form-group">
+                                <label class="edusafari-form-label">
+                                    Grade Level
+                                </label>
+                                <input type="text" class="edusafari-form-input" name="grade_level" 
+                                       placeholder="e.g., 9-12">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dates & Capacity -->
+                    <div class="edusafari-form-section">
+                        <h3 class="edusafari-section-title">Dates & Capacity</h3>
+                        <div class="edusafari-form-grid edusafari-form-grid-3">
+                            <div class="edusafari-form-group">
+                                <label class="edusafari-form-label">
+                                    Start Date <span class="edusafari-required">*</span>
+                                </label>
+                                <input type="date" class="edusafari-form-input" name="start_date" required>
+                            </div>
+                            
+                            <div class="edusafari-form-group">
+                                <label class="edusafari-form-label">
+                                    End Date <span class="edusafari-required">*</span>
+                                </label>
+                                <input type="date" class="edusafari-form-input" name="end_date" required>
+                            </div>
+                            
+                            <div class="edusafari-form-group">
+                                <label class="edusafari-form-label">
+                                    Registration Deadline
+                                </label>
+                                <input type="date" class="edusafari-form-input" name="registration_deadline">
+                            </div>
+                            
+                            <div class="edusafari-form-group">
+                                <label class="edusafari-form-label">
+                                    Max Participants <span class="edusafari-required">*</span>
+                                </label>
+                                <input type="number" class="edusafari-form-input" name="max_participants" 
+                                       required min="1" placeholder="30">
+                            </div>
+                            
+                            <div class="edusafari-form-group">
+                                <label class="edusafari-form-label">
+                                    Min Participants
+                                </label>
+                                <input type="number" class="edusafari-form-input" name="min_participants" 
+                                       min="1" placeholder="5">
+                            </div>
+                            
+                            <div class="edusafari-form-group">
+                                <label class="edusafari-form-label">
+                                    Price Per Student ($) <span class="edusafari-required">*</span>
+                                </label>
+                                <input type="number" class="edusafari-form-input" name="price_per_student" 
+                                       required min="0" step="0.01" placeholder="500.00">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Description & Itinerary -->
+                    <div class="edusafari-form-section">
+                        <h3 class="edusafari-section-title">Details</h3>
+                        <div class="edusafari-form-grid">
+                            <div class="edusafari-form-group">
+                                <label class="edusafari-form-label">Description</label>
+                                <textarea class="edusafari-form-textarea" name="description" 
+                                          placeholder="Describe the trip experience, learning objectives, and highlights..."></textarea>
+                            </div>
+                            
+                            <div class="edusafari-form-group">
+                                <label class="edusafari-form-label">Itinerary</label>
+                                <textarea class="edusafari-form-textarea" name="itinerary" 
+                                          placeholder="Day-by-day breakdown of activities..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Requirements -->
+                    <div class="edusafari-form-section">
+                        <h3 class="edusafari-section-title">Requirements</h3>
+                        <div class="edusafari-form-grid">
+                            <div class="edusafari-checkbox-group">
+                                <input type="checkbox" id="medicalInfoRequired" name="medical_info_required" 
+                                       checked value="true">
+                                <label for="medicalInfoRequired" class="edusafari-checkbox-label">
+                                    Require Medical Information
+                                </label>
+                            </div>
+                            
+                            <div class="edusafari-checkbox-group">
+                                <input type="checkbox" id="consentRequired" name="consent_required" 
+                                       checked value="true">
+                                <label for="consentRequired" class="edusafari-checkbox-label">
+                                    Require Parent/Guardian Consent
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="edusafari-modal-footer">
+                <button type="button" class="edusafari-modal-btn edusafari-modal-btn-cancel" 
+                        onclick="closeModal('createTripModal')">Cancel</button>
+                <button type="submit" form="createTripForm" 
+                        class="edusafari-modal-btn edusafari-modal-btn-submit">Create Trip</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Trip Modal (Similar structure with pre-filled data) -->
+    <div class="edusafari-modal-overlay" id="editTripModal">
+        <div class="edusafari-modal edusafari-modal-wide">
+            <div class="edusafari-modal-header">
+                <h2 class="edusafari-modal-title">Edit Trip</h2>
+                <button class="edusafari-modal-close" onclick="closeModal('editTripModal')">&times;</button>
+            </div>
+            <div class="edusafari-modal-body">
+                <div class="edusafari-alert edusafari-alert-error" id="editTripAlert"></div>
+                
+                <form id="editTripForm">
+                    <input type="hidden" name="trip_id" value="">
+                    
+                    <!-- Same structure as Create Trip Modal -->
+                    <div class="edusafari-form-section">
+                        <h3 class="edusafari-section-title">Basic Information</h3>
+                        <div class="edusafari-form-grid edusafari-form-grid-2">
+                            <div class="edusafari-form-group full-width">
+                                <label class="edusafari-form-label">
+                                    Trip Title <span class="edusafari-required">*</span>
+                                </label>
+                                <input type="text" class="edusafari-form-input" name="title" required 
+                                       value="Serengeti Wildlife Adventure">
+                            </div>
+                            
+                            <div class="edusafari-form-group full-width">
+                                <label class="edusafari-form-label">
+                                    Destination <span class="edusafari-required">*</span>
+                                </label>
+                                <input type="text" class="edusafari-form-input" name="destination" required 
+                                       value="Serengeti National Park, Tanzania">
+                            </div>
+                            
+                            <div class="edusafari-form-group">
+                                <label class="edusafari-form-label">Status</label>
+                                <select class="edusafari-form-select" name="status">
+                                    <option value="draft">Draft</option>
+                                    <option value="published" selected>Published</option>
+                                    <option value="in_progress">In Progress</option>
+                                    <option value="completed">Completed</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="edusafari-modal-footer">
+                <button type="button" class="edusafari-modal-btn edusafari-modal-btn-cancel" 
+                        onclick="closeModal('editTripModal')">Cancel</button>
+                <button type="submit" form="editTripForm" 
+                        class="edusafari-modal-btn edusafari-modal-btn-submit">Update Trip</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Participant Modal -->
+    <div class="edusafari-modal-overlay" id="addParticipantModal">
+        <div class="edusafari-modal edusafari-modal-wide">
+            <div class="edusafari-modal-header">
+                <h2 class="edusafari-modal-title">Add Participant</h2>
+                <button class="edusafari-modal-close" onclick="closeModal('addParticipantModal')">&times;</button>
+            </div>
+            <div class="edusafari-modal-body">
+                <div class="edusafari-alert edusafari-alert-error" id="addParticipantAlert"></div>
+                
+                <form id="addParticipantForm">
+                    <!-- Student Information -->
+                    <div class="edusafari-form-section">
+                        <h3 class="edusafari-section-title">Student Information</h3>
+                        <div class="edusafari-form-grid edusafari-form-grid-2">
+                            <div class="edusafari-form-group">
+                                <label class="edusafari-form-label">
+                                    First Name <span class="edusafari-required">*</span>
+                                </label>
+                                <input type="text" class="edusafari-form-input" name="first_name" required>
+                            </div>
+                            
+                            <div class="edusafari-form-group">
+                                <label class="edusafari-form-label">
+                                    Last Name <span class="edusafari-required">*</span>
+                                </label>
+                                <input type="text" class="edusafari-form-input" name="last_name" required>
+                            </div>
+                            
+                            <div class="edusafari-form-group">
+                                <label class="edusafari-form-label">Email</label>
+                                <input type="email" class="edusafari-form-input" name="email" 
+                                       placeholder="student@example.com">
+                            </div>
+                            
+                            <div class="edusafari-form-group">
+                                <label class="edusafari-form-label">Phone</label>
+                                <input type="tel" class="edusafari-form-input" name="phone" 
+                                       placeholder="+254 XXX XXX XXX">
+                            </div>
+                            
+                            <div class="edusafari-form-group">
+                                <label class="edusafari-form-label">Date of Birth</label>
+                                <input type="date" class="edusafari-form-input" name="date_of_birth">
+                            </div>
+                            
+                            <div class="edusafari-form-group">
+                                <label class="edusafari-form-label">Grade Level</label>
+                                <input type="text" class="edusafari-form-input" name="grade_level" 
+                                       placeholder="e.g., Grade 10">
+                            </div>
+                            
+                            <div class="edusafari-form-group full-width">
+                                <label class="edusafari-form-label">Student ID</label>
+                                <input type="text" class="edusafari-form-input" name="student_id" 
+                                       placeholder="Student ID Number">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Medical Information -->
+                    <div class="edusafari-form-section">
+                        <h3 class="edusafari-section-title">Medical Information</h3>
+                        <div class="edusafari-form-grid">
+                            <div class="edusafari-form-group">
+                                <label class="edusafari-form-label">Medical Conditions</label>
+                                <textarea class="edusafari-form-textarea" name="medical_conditions" 
+                                          style="min-height: 80px;"
+                                          placeholder="Any medical conditions we should be aware of..."></textarea>
+                            </div>
+                            
+                            <div class="edusafari-form-group">
+                                <label class="edusafari-form-label">Current Medications</label>
+                                <textarea class="edusafari-form-textarea" name="medications" 
+                                          style="min-height: 80px;"
+                                          placeholder="List any medications taken regularly..."></textarea>
+                            </div>
+                            
+                            <div class="edusafari-form-group">
+                                <label class="edusafari-form-

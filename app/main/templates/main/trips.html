@@ -1,0 +1,19 @@
+{% extends "main/base.html" %}
+{% block styles %} 
+<link rel="stylesheet" href="{{url_for('main.static', filename='main/css/trips/header.css')}}">
+<link rel="stylesheet" href="{{url_for('main.static', filename='main/css/trips/content.css')}}">
+<link rel="stylesheet" href="{{url_for('main.static', filename='main/css/trips/advanced_filters.css')}}">
+{% endblock %}
+
+{% block scripts %} 
+<script src="{{url_for('main.static', filename='main/js/trips/header.js')}}"></script>
+<script src="{{url_for('main.static', filename='main/js/trips/content.js')}}"></script>
+{% endblock %}
+
+{% block content %} 
+
+{% include 'main/trips/hero.html' %}
+{% include 'main/trips/filter.html' %}
+{% include 'main/trips/content.html' %}
+
+{% endblock %}

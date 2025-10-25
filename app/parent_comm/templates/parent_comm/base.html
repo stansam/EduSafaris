@@ -8,6 +8,7 @@
 {% block scripts %}
 {{ super() }}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 <script src="{{ url_for('parent_comm.static', filename='js/parent_comm.js') }}"></script>
 {% endblock %}
 

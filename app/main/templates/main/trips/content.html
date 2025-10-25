@@ -1,0 +1,347 @@
+<!-- Content Section -->
+<section class="content-section">
+    <div class="results-header">
+        <div class="results-count">6 trips found</div>
+        <div class="filter-dropdown sort-dropdown">
+            <button class="dropdown-button" id="sortBtn">
+                <span id="sortText">Most Popular</span>
+                <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"/>
+                </svg>
+            </button>
+            <div class="dropdown-menu" id="sortMenu">
+                <div class="dropdown-item selected" data-value="popular">Most Popular</div>
+                <div class="dropdown-item" data-value="price-low">Price: Low to High</div>
+                <div class="dropdown-item" data-value="price-high">Price: High to Low</div>
+                <div class="dropdown-item" data-value="duration">Duration</div>
+                <div class="dropdown-item" data-value="rating">Highest Rated</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="trips-grid" id="tripsGrid">
+        <!-- Trip Card 1 -->
+        <div class="trip-card">
+            <div class="trip-image">
+                <img src="https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=800" alt="Wildlife">
+                <div class="trip-category">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                    </svg>
+                    Wildlife
+                </div>
+                <div class="trip-rating">
+                    <span class="star-icon">★</span> 4.9
+                </div>
+            </div>
+            <div class="trip-content">
+                <h3 class="trip-title">African Wildlife Conservation Experience</h3>
+                <div class="trip-location">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    Kenya National Parks
+                </div>
+                <p class="trip-description">
+                    Experience wildlife conservation in action while learning about African ecosystems and biodiversity.
+                </p>
+                <div class="trip-details">
+                    <div class="trip-detail-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                        5 Days
+                    </div>
+                    <div class="trip-detail-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                        15-25 Students
+                    </div>
+                </div>
+                <div class="trip-footer">
+                    <div class="trip-price">
+                        <span class="price-label">Starting from</span>
+                        <span class="price-amount">$1,299/student</span>
+                    </div>
+                    <button class="view-details-btn">View Details</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trip Card 2 -->
+        <div class="trip-card">
+            <div class="trip-image">
+                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800" alt="Mountain">
+                <div class="trip-category">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                    </svg>
+                    Nature
+                </div>
+                <div class="trip-rating">
+                    <span class="star-icon">★</span> 4.8
+                </div>
+            </div>
+            <div class="trip-content">
+                <h3 class="trip-title">Mountain Ecosystem Field Study</h3>
+                <div class="trip-location">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    Rocky Mountain National Park
+                </div>
+                <p class="trip-description">
+                    Study mountain ecosystems, altitude effects, and climate change impacts in this hands-on field experience.
+                </p>
+                <div class="trip-details">
+                    <div class="trip-detail-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                        3 Days
+                    </div>
+                    <div class="trip-detail-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                        10-20 Students
+                    </div>
+                </div>
+                <div class="trip-footer">
+                    <div class="trip-price">
+                        <span class="price-label">Starting from</span>
+                        <span class="price-amount">$899/student</span>
+                    </div>
+                    <button class="view-details-btn">View Details</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trip Card 3 -->
+        <div class="trip-card">
+            <div class="trip-image">
+                <img src="https://images.unsplash.com/photo-1591825729269-caeb344f6df2?w=800" alt="Desert">
+                <div class="trip-category">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                    </svg>
+                    Adventure
+                </div>
+                <div class="trip-rating">
+                    <span class="star-icon">★</span> 4.7
+                </div>
+            </div>
+            <div class="trip-content">
+                <h3 class="trip-title">Desert Survival Skills Adventure</h3>
+                <div class="trip-location">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    Sahara Desert, Morocco
+                </div>
+                <p class="trip-description">
+                    Learn desert survival skills while exploring unique desert ecosystems and Berber culture.
+                </p>
+                <div class="trip-details">
+                    <div class="trip-detail-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                        4 Days
+                    </div>
+                    <div class="trip-detail-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                        12-18 Students
+                    </div>
+                </div>
+                <div class="trip-footer">
+                    <div class="trip-price">
+                        <span class="price-label">Starting from</span>
+                        <span class="price-amount">$1,599/student</span>
+                    </div>
+                    <button class="view-details-btn">View Details</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trip Card 4 -->
+        <div class="trip-card">
+            <div class="trip-image">
+                <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800" alt="Marine">
+                <div class="trip-category">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                    </svg>
+                    Marine
+                </div>
+                <div class="trip-rating">
+                    <span class="star-icon">★</span> 5
+                </div>
+            </div>
+            <div class="trip-content">
+                <h3 class="trip-title">Marine Biology Expedition</h3>
+                <div class="trip-location">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    Great Barrier Reef, Australia
+                </div>
+                <p class="trip-description">
+                    Dive into marine biology with snorkeling, research projects, and conservation activities.
+                </p>
+                <div class="trip-details">
+                    <div class="trip-detail-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                        6 Days
+                    </div>
+                    <div class="trip-detail-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                        12-20 Students
+                    </div>
+                </div>
+                <div class="trip-footer">
+                    <div class="trip-price">
+                        <span class="price-label">Starting from</span>
+                        <span class="price-amount">$2,199/student</span>
+                    </div>
+                    <button class="view-details-btn">View Details</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trip Card 5 -->
+        <div class="trip-card">
+            <div class="trip-image">
+                <img src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800" alt="History">
+                <div class="trip-category">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                    </svg>
+                    History
+                </div>
+                <div class="trip-rating">
+                    <span class="star-icon">★</span> 4.9
+                </div>
+            </div>
+            <div class="trip-content">
+                <h3 class="trip-title">Ancient Civilizations History Tour</h3>
+                <div class="trip-location">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    Rome & Athens
+                </div>
+                <p class="trip-description">
+                    Walk through history exploring ancient Roman and Greek civilizations with expert historians.
+                </p>
+                <div class="trip-details">
+                    <div class="trip-detail-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                        7 Days
+                    </div>
+                    <div class="trip-detail-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                        20-30 Students
+                    </div>
+                </div>
+                <div class="trip-footer">
+                    <div class="trip-price">
+                        <span class="price-label">Starting from</span>
+                        <span class="price-amount">$1,899/student</span>
+                    </div>
+                    <button class="view-details-btn">View Details</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trip Card 6 -->
+        <div class="trip-card">
+            <div class="trip-image">
+                <img src="https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800" alt="Nature">
+                <div class="trip-category">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                    </svg>
+                    Nature
+                </div>
+                <div class="trip-rating">
+                    <span class="star-icon">★</span> 4.8
+                </div>
+            </div>
+            <div class="trip-content">
+                <h3 class="trip-title">Rainforest Ecology Study</h3>
+                <div class="trip-location">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    Amazon Rainforest, Brazil
+                </div>
+                <p class="trip-description">
+                    Discover rainforest biodiversity while learning about conservation and indigenous cultures.
+                </p>
+                <div class="trip-details">
+                    <div class="trip-detail-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                        5 Days
+                    </div>
+                    <div class="trip-detail-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                        10-18 Students
+                    </div>
+                </div>
+                <div class="trip-footer">
+                    <div class="trip-price">
+                        <span class="price-label">Starting from</span>
+                        <span class="price-amount">$1,799/student</span>
+                    </div>
+                    <button class="view-details-btn">View Details</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

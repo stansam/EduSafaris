@@ -3,6 +3,7 @@ import base64
 import secrets
 from datetime import datetime
 from flask import render_template, request, redirect, url_for, flash, jsonify, current_app
+from flask_socketio import join_room, leave_room
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import Forbidden
@@ -15,7 +16,14 @@ from app.models.consent import Consent
 from app.models.notification import Notification
 from app.utils import send_email, send_sms  # External helpers
 from .forms import ConsentForm, NotificationForm
-from . import parent_comm_bp
+from app.parent_comm import parent_comm_bp
+from app.utils.utils import roles_required
+
+@parent_comm_bp.route('/dashboard')
+@login_required
+@roles_required('parent')
+def dashboard():
+    return render_template('parent_comm/dashboard.html')
 
 
 @parent_comm_bp.route('/trips')
@@ -372,7 +380,7 @@ def join_parent_room():
     """Join parent-specific room for real-time notifications"""
     if current_user.is_authenticated and current_user.role == 'parent':
         room = f'user_{current_user.id}'
-        socketio.join_room(room)
+        join_room(room)
         socketio.emit('room_joined', {'room': room})
 
 
@@ -381,4 +389,4 @@ def leave_parent_room():
     """Leave parent room"""
     if current_user.is_authenticated and current_user.role == 'parent':
         room = f'user_{current_user.id}'
-        socketio.leave_room(room)
+        leave_room(room)

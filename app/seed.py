@@ -54,8 +54,9 @@ def seed_database():
             app.logger.info("Starting database seeding...")
             
             # Create admin user
-            admin_email = os.environ.get('ADMIN_EMAIL', 'admin@edusafaris.com')
-            admin_password = os.environ.get('ADMIN_PASSWORD', 'admin123')
+            from app.config import BaseConfig
+            admin_email = BaseConfig.ADMIN_EMAIL
+            admin_password = BaseConfig.ADMIN_PASSWORD
             
             admin_data = {
                 'email': admin_email,
@@ -200,8 +201,9 @@ def seed_database():
                 'registration_deadline': date.today() + timedelta(days=15),
                 'max_participants': 40,
                 'min_participants': 15,
-                'price_per_student': 125.00,
+                'price_per_student': 12500.00,
                 'status': 'active',
+                'featured': True,
                 'medical_info_required': True,
                 'consent_required': True,
                 'category': 'science',
@@ -224,8 +226,10 @@ def seed_database():
                 'registration_deadline': date.today() + timedelta(days=45),
                 'max_participants': 35,
                 'min_participants': 20,
-                'price_per_student': 275.00,
+                'price_per_student': 27500.00,
                 'status': 'active',
+                'featured': True,
+
                 'medical_info_required': True,
                 'consent_required': True,
                 'category': 'history',

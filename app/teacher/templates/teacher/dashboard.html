@@ -1,0 +1,64 @@
+{% extends "dash_base.html" %}
+
+{% block title %} Teacher Dash {% endblock %}
+
+{% block styles %} 
+<link rel="stylesheet" href="{{url_for('teacher.static', filename='teacher/css/dash.css')}}">
+<link rel="stylesheet" href="{{url_for('teacher.static', filename='teacher/css/dash/consent.css')}}">
+<link rel="stylesheet" href="{{url_for('teacher.static', filename='teacher/css/dash/trips.css')}}">
+{% endblock %}
+
+{% block scripts %} 
+<script src="{{url_for('teacher.static', filename='teacher/js/dash.js')}}"></script>
+<script src="{{url_for('teacher.static', filename='teacher/js/dash/consent.js')}}"></script>
+<script src="{{url_for('teacher.static', filename='teacher/js/dash/stats.js')}}"></script>
+<script src="{{url_for('teacher.static', filename='teacher/js/dash/trips.js')}}"></script>
+{% endblock %}
+
+{% block content %} 
+
+    <div class="teach-trips-dashboard">
+        <!--Header section-->
+        {% include 'teacher/dashboard/header.html' %}
+
+        <!-- Tabs Section -->
+        <div class="teach-trips-tabs">
+            <div class="teach-trips-tab-list">
+                <button class="teach-trips-tab-btn active-trip-tab" data-tab="my-trips">My Trips</button>
+                <button class="teach-trips-tab-btn" data-tab="participants">Participants</button>
+                <button class="teach-trips-tab-btn" data-tab="consents">Consents</button>
+                <button class="teach-trips-tab-btn" data-tab="notifications">Notifications</button>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="teach-trips-content-area">
+                <!-- My Trips Tab -->
+                <div class="teach-trips-tab-content active-content" id="my-trips-content">
+                        {% include 'teacher/dashboard/trips.html' %}
+                </div>
+
+                <!-- Participants Tab -->
+                <div class="teach-trips-tab-content" id="participants-content" style="display: none;">
+                    {% include 'teacher/dashboard/participants.html' %}
+                </div>
+
+                <!-- Consents Tab -->
+                <div class="teach-trips-tab-content" id="consents-content" style="display: none;">
+                    {% include 'teacher/dashboard/consents.html' %}
+                    
+                </div>
+
+                <!-- Notifications Tab -->
+                <div class="teach-trips-tab-content" id="notifications-content" style="display: none;">
+                    {% include 'teacher/dashboard/notifications.html' %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% include 'teacher/dashboard/modals/consent.html' %}
+{% include 'teacher/dashboard/modals/trip_details.html' %}
+{% endblock %}
+
+
+

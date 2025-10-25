@@ -10,7 +10,13 @@ from app.vendor.models import Vendor, Advertisement, Booking
 from app.models.user import User
 from app.models.trip import Trip
 
-vendors = Blueprint('vendors', __name__, url_prefix='/vendors')
+from app.vendor import vendor_bp as vendors
+from app.utils.utils import roles_required  
+
+@vendors.route('/dashboard')
+@roles_required('vendor')
+def dashboard():
+    return render_template('vendors/dashboard.html')
 
 @vendors.route('/')
 def vendor_directory():

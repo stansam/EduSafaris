@@ -49,6 +49,7 @@ class Notification(BaseModel):
         db.Index('idx_notification_read', 'is_read'),
         db.Index('idx_notification_priority', 'priority'),
         db.Index('idx_notification_scheduled', 'scheduled_for'),
+        db.Index('idx_notification_created', 'created_at'),
     )
     
     def mark_as_read(self):
@@ -106,6 +107,28 @@ class Notification(BaseModel):
         
         db.session.commit()
         return notifications
+    
+    @classmethod
+    def create_emergency_notification(cls, recipient_id, alert, sender_id=None):
+        """Create emergency notification from alert"""
+        notification = cls(
+            title=f'Emergency Alert - {alert.severity.upper()}',
+            message=alert.message,
+            notification_type='emergency',
+            priority='urgent' if alert.severity == 'critical' else 'high',
+            sender_id=sender_id,
+            recipient_id=recipient_id,
+            trip_id=alert.trip_id,
+            related_data={
+                'alert_id': alert.id,
+                'latitude': alert.latitude,
+                'longitude': alert.longitude,
+                'location_description': alert.location_description
+            }
+        )
+        db.session.add(notification)
+        db.session.commit()
+        return notification
     
     def serialize(self):
         return {

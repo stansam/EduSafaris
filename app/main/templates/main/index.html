@@ -1,65 +1,19 @@
-{% extends "base_global.html" %}
+{% extends "main/base.html" %}
+{% block styles %} 
+<link rel="stylesheet" href="{{url_for('main.static', filename='main/css/featured.css')}}">
+<link rel="stylesheet" href="{{url_for('main.static', filename='main/css/why.css')}}">
+{% endblock %}
 
-{% block content %}
-<div class="hero-section">
-    <div class="container">
-        <h1>Welcome to Edu Safaris</h1>
-        <p>Safe, Educational, and Memorable Travel Experiences for Students</p>
-        {% if not current_user.is_authenticated %}
-        <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg me-3">Get Started</a>
-        <a href="{{ url_for('trips.list_trips') }}" class="btn btn-outline-light btn-lg">Browse Trips</a>
-        {% else %}
-        <a href="{{ url_for('main.dashboard') }}" class="btn btn-light btn-lg me-3">Go to Dashboard</a>
-        <a href="{{ url_for('trips.list_trips') }}" class="btn btn-outline-light btn-lg">Browse Trips</a>
-        {% endif %}
-    </div>
-</div>
+{% block scripts %} 
+<script src="{{url_for('main.static', filename='main/js/dash/featured.js')}}"></script>
+<script src="{{url_for('main.static', filename='main/js/featured.js')}}"></script>
+<script src="{{url_for('main.static', filename='main/js/why.js')}}"></script>
+{% endblock %}
 
-<div class="container my-5">
-    <div class="row">
-        <div class="col-md-4">
-            <div class="feature-card">
-                <i class="fas fa-shield-alt"></i>
-                <h3>Safety First</h3>
-                <p>All trips are planned with student safety as our top priority. Professional supervision and emergency protocols ensure peace of mind.</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="feature-card">
-                <i class="fas fa-graduation-cap"></i>
-                <h3>Educational Value</h3>
-                <p>Every trip is designed to enhance learning through real-world experiences that complement classroom education.</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="feature-card">
-                <i class="fas fa-users"></i>
-                <h3>Expert Guides</h3>
-                <p>Experienced educators and local guides provide insights that bring destinations to life for students.</p>
-            </div>
-        </div>
-    </div>
-</div>
+{% block content %} 
 
-<div class="bg-light py-5">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-6">
-                <h2>Transform Learning Through Travel</h2>
-                <p>Our platform connects educators with trusted travel providers to create unforgettable educational experiences. From science museums to historical sites, every trip is an opportunity for discovery.</p>
-                <ul class="list-unstyled">
-                    <li><i class="fas fa-check text-success me-2"></i> Comprehensive safety protocols</li>
-                    <li><i class="fas fa-check text-success me-2"></i> Educational curriculum alignment</li>
-                    <li><i class="fas fa-check text-success me-2"></i> Real-time trip tracking</li>
-                    <li><i class="fas fa-check text-success me-2"></i> Parent communication tools</li>
-                </ul>
-            </div>
-            <div class="col-md-6">
-                <img src="{{ url_for('static', filename='images/students-learning.jpg') }}" 
-                     alt="Students Learning" class="img-fluid rounded" 
-                     onerror="this.src='{{url_for('static', filename='images/placeholder.jpeg')}}'">
-            </div>
-        </div>
-    </div>
-</div>
+{% include 'main/components/cta.html' %}
+{% include 'main/home/featured.html' %}
+{% include 'main/home/why.html' %}
+
 {% endblock %}

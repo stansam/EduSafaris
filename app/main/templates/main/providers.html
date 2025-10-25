@@ -1,0 +1,27 @@
+{% extends "main/base.html" %}
+{% block styles %} 
+<link rel="stylesheet" href="{{url_for('main.static', filename='main/css/providers/hero.css')}}">
+<link rel="stylesheet" href="{{url_for('main.static', filename='main/css/providers/why.css')}}">
+<link rel="stylesheet" href="{{url_for('main.static', filename='main/css/providers/gettingStarted.css')}}">
+<link rel="stylesheet" href="{{url_for('main.static', filename='main/css/providers/who.css')}}">
+{% endblock %}
+
+{% block scripts %} 
+<script src="{{url_for('main.static', filename='main/js/providers/hero.js')}}"></script>
+<script src="{{url_for('main.static', filename='main/js/providers/why.js')}}"></script>
+<script src="{{url_for('main.static', filename='main/js/providers/gettingStarted.js')}}"></script>
+<script src="{{url_for('main.static', filename='main/js/providers/who.js')}}"></script>
+{% endblock %}
+
+{% block content %} 
+
+{% include 'main/providers/hero.html' %}
+{% include 'main/providers/why.html' %}
+{% include 'main/providers/gettingStarted.html' %}
+{% include 'main/providers/who.html' %}
+
+{% endblock %}
+
+{% block cta %}
+    {% include 'main/providers/cta.html' %}
+{% endblock %}

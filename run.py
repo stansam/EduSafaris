@@ -1,7 +1,4 @@
 #!/usr/bin/env python3
-"""
-Edu Safaris Flask Application Entry Point
-"""
 import os
 from app import create_app, socketio
 from dotenv import load_dotenv

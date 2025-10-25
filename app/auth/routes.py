@@ -43,7 +43,7 @@ def register():
         try:
             # Create new user
             user = User(
-                username=form.username.data,
+                first_name=form.username.data,
                 password=form.password.data,
                 email=form.email.data.lower()
             )
@@ -79,7 +79,7 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data.lower()).first()
         
-        if user and user.check_password(form.password.data):
+        if user and user.verify_password(form.password.data):
             if not user.is_active:
                 flash('Your account has been deactivated. Please contact support.', 'error')
                 return render_template('auth/login.html', title='Sign In', form=form)
@@ -96,7 +96,7 @@ def login():
             if not next_page or not next_page.startswith('/'):
                 next_page = user.get_dashboard_url()
             
-            flash(f'Welcome back, {user.username}!', 'success')
+            flash(f'Welcome back, {user.full_name}!', 'success')
             return redirect(next_page)
         else:
             flash('Invalid email or password.', 'error')
@@ -107,7 +107,7 @@ def login():
 @login_required
 def logout():
     """User logout"""
-    username = current_user.username
+    username = current_user.first_name
     logout_user()
     flash(f'You have been logged out, {username}.', 'info')
     return redirect(url_for('auth.login'))
@@ -215,7 +215,7 @@ def api_login():
     
     user = User.query.filter_by(email=email).first()
     
-    if user and user.check_password(password):
+    if user and user.verify_password(password):
         if not user.is_active:
             return jsonify({'error': 'Account is deactivated'}), 403
         
@@ -230,7 +230,7 @@ def api_login():
             'access_token': access_token,
             'user': {
                 'id': user.id,
-                'username': user.username,
+                'username': user.first_name,
                 'email': user.email,
                 'role': user.role,
                 'is_verified': user.is_verified
@@ -261,7 +261,7 @@ def api_register():
         return jsonify({'error': 'Password must be at least 8 characters'}), 400
     
     # Check for existing users
-    if User.query.filter_by(username=username).first():
+    if User.query.filter_by(first_name=username).first():
         return jsonify({'error': 'Username already taken'}), 409
     
     if User.query.filter_by(email=email).first():
@@ -269,8 +269,7 @@ def api_register():
     
     try:
         # Create user
-        user = User(username=username, email=email)
-        user.set_password(password)
+        user = User(first_name=username, email=email, password=password)
         
         db.session.add(user)
         db.session.commit()
@@ -283,7 +282,7 @@ def api_register():
             'message': 'User created successfully',
             'user': {
                 'id': user.id,
-                'username': user.username,
+                'username': user.first_name,
                 'email': user.email,
                 'role': user.role
             }

@@ -59,9 +59,9 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{{ url_for('profiles.profile_view') }}">Profile</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
+                            <li><a class="dropdown-item" href="{{current_user.get_dashboard_url()}}">Dashboard</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{{ url_for('auth.logout') if 'auth.logout' in url_map }}">Logout</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('auth.logout')}}">Logout</a></li>
                         </ul>
                     </li>
                     {% else %}

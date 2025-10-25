@@ -1,0 +1,119 @@
+.edu-why-section {
+  padding: 100px 20px;
+  background-color: #f8f9fa;
+}
+
+.edu-why-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.edu-why-title {
+  font-size: 2.75rem;
+  font-weight: 800;
+  text-align: center;
+  color: #1a1a1a;
+  margin: 0 0 16px 0;
+}
+
+.edu-why-subtitle {
+  font-size: 1.15rem;
+  text-align: center;
+  color: #6c757d;
+  margin: 0 auto 60px;
+  max-width: 700px;
+}
+
+.edu-why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 30px;
+  margin-top: 60px;
+}
+
+.edu-why-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 40px 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 1px solid #e9ecef;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.edu-why-card[data-aos="fade-up"].aos-animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.edu-why-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.edu-why-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.edu-why-icon-calendar { background: linear-gradient(135deg, #f39c12, #e67e22); }
+.edu-why-icon-dollar { background: linear-gradient(135deg, #f39c12, #e67e22); }
+.edu-why-icon-shield { background: linear-gradient(135deg, #f39c12, #e67e22); }
+.edu-why-icon-file { background: linear-gradient(135deg, #f39c12, #e67e22); }
+.edu-why-icon-users { background: linear-gradient(135deg, #f39c12, #e67e22); }
+.edu-why-icon-check { background: linear-gradient(135deg, #f39c12, #e67e22); }
+
+.edu-why-card:hover .edu-why-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.edu-why-card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 12px 0;
+}
+
+.edu-why-card-text {
+  font-size: 1rem;
+  color: #6c757d;
+  line-height: 1.6;
+  margin: 0;
+}
+
+@media (max-width: 1024px) {
+  .edu-why-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .edu-why-section {
+    padding: 60px 20px;
+  }
+  
+  .edu-why-title {
+    font-size: 2rem;
+  }
+  
+  .edu-why-subtitle {
+    font-size: 1rem;
+  }
+  
+  .edu-why-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .edu-why-card {
+    padding: 30px 24px;
+  }
+}

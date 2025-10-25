@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpg" sizes="16x16" href="{{ url_for('main.static', filename='main/assets/loc.jpg') }}">
+    <title>EduSafaris - Educational Adventures</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{url_for('main.static', filename='main/css/main.css')}}">
+    <link rel="stylesheet" href="{{url_for('main.static', filename='main/css/components.css')}}">
+    <link rel="stylesheet" href="{{url_for('main.static', filename='main/css/footer.css')}}">
+    {% block styles %} {% endblock %}
+</head>
+<body>
+    {% include 'main/components/nav.html' %}
+    {% block content %} {% endblock %}
+    {% block cta %}
+        {% include 'main/home/cta_lower.html' %}
+    {% endblock %}
+    {% include 'main/components/footer.html' %}
+
+    <script src="{{url_for('main.static', filename='main/js/components.js')}}"></script>
+    <script src="{{url_for('main.static', filename='main/js/cta-l.js')}}"></script>
+    <script src="{{url_for('main.static', filename='main/js/footer.js')}}"></script>
+    {% block scripts %} {% endblock %}
+</body>
+</html>

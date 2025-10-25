@@ -1,0 +1,39 @@
+{% extends "dash_base.html" %}
+
+{% block title %} Vendor Dash {% endblock %}
+
+{% block styles %} 
+<link rel="stylesheet" href="{{url_for('vendor.static', filename='css/dash.css')}}">
+{% endblock %}
+
+{% block scripts %} 
+<script src="{{url_for('vendor.static', filename='js/dash.js')}}"></script>
+{% endblock %}
+
+{% block content %} 
+
+    <div class="vp-container">
+        {% include 'vendors/dashboard/header.html' %}
+
+        <div id="my-bookings" class="vp-tab-content vp-active">
+          {% include 'vendors/dashboard/bookings.html' %}  
+        </div>
+
+        <div id="availability" class="vp-tab-content">
+            {% include 'vendors/dashboard/availability.html' %}
+        </div>
+
+        <div id="profile" class="vp-tab-content">
+            {% include 'vendors/dashboard/profile.html' %}
+        </div>
+
+        <div id="revenue" class="vp-tab-content">
+            {% include 'vendors/dashboard/revenue.html' %}
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+

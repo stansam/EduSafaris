@@ -1,0 +1,48 @@
+<nav class="navbar">
+    <div class="navbar-left">
+        <div class="navbar-logo">ES</div>
+        <div class="navbar-brand">
+            <h1>Edu Safaris</h1>
+            <p>Admin Dashboard</p>
+        </div>
+    </div>
+
+    <div class="navbar-right">
+        <div class="navbar-icons">
+            <!-- Notification Bell -->
+            <button class="navbar-icon-btn" id="notificationBellBtn">
+                <i class="fas fa-bell"></i>
+                <!-- 🔔 -->
+                <span class="notification-badge">1</span>
+            </button>
+        </div>
+
+        <!-- User Profile -->
+        <div class="navbar-user">
+            <div class="user-avatar" id="userAvatarBtn">AU</div>
+            
+            <!-- User Dropdown Menu -->
+            <div class="dropdown-menu" id="userDropdown">
+                <div class="dropdown-header">
+                    <h3>Admin User</h3>
+                    <p>Admin</p>
+                </div>
+                <button class="dropdown-item" id="profileBtn">
+                    <!-- <span>👤</span> -->
+                     <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </button>
+                <button class="dropdown-item" id="settingsBtn">
+                    <!-- <span>⚙️</span> -->
+                     <i class="fas fa-gear"></i>
+                    <span>Settings</span>
+                </button>
+                <button class="dropdown-item logout" id="logoutBtn">
+                    <!-- <span>🚪</span> -->
+                     <i class="fas fa-right-from-bracket"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>

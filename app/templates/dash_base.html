@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpg" sizes="16x16" href="{{ url_for('main.static', filename='main/assets/loc.jpg') }}">
+    <title>Edu Safaris - {% block title %} {% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/dash.css')}}">
+    {% block styles %} {% endblock %}
+</head>
+<body>
+    {% include 'dash/nav.html' %}
+    {% include 'dash/notifications.html' %}
+
+    {% block content %} {% endblock %}    
+
+    <script src="{{url_for('static', filename='js/dash.js')}}"></script>
+    {% block scripts %} {% endblock %}
+</body>
+</html>

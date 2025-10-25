@@ -1,0 +1,75 @@
+<div class="safari-header-section">
+    <div class="safari-title-group">
+        <h1>Dashboard Overview</h1>
+        <p>Manage all educational safari operations</p>
+    </div>
+    <button class="safari-create-btn" onclick="handleCreateTrip()">
+        <span>+</span> Create Trip
+    </button>
+</div>
+
+<div class="safari-metrics-grid">
+    <div class="safari-metric-card safari-metric-active" id="safari-active-trips">
+        <div class="safari-metric-header">
+            <span class="safari-metric-label">Active Trips</span>
+            <div class="safari-metric-icon">
+                <!-- 🎒 -->
+                <i class="fa-solid fa-person-running"></i>
+            </div>
+        </div>
+        <div class="safari-metric-value" id="active-trips-value">3</div>
+    </div>
+
+    <div class="safari-metric-card safari-metric-progress" id="safari-in-progress">
+        <div class="safari-metric-header">
+            <span class="safari-metric-label">In Progress</span>
+            <div class="safari-metric-icon">
+                <!-- 📍 -->
+                <i class="fa-solid fa-location-dot"></i>
+            </div>
+        </div>
+        <div class="safari-metric-value" id="in-progress-value">1</div>
+    </div>
+
+    <div class="safari-metric-card safari-metric-pending" id="safari-pending">
+        <div class="safari-metric-header">
+            <span class="safari-metric-label">Pending Approvals</span>
+            <div class="safari-metric-icon">
+                <!-- 👤 -->
+                <i class="fa-solid fa-user"></i>
+            </div>
+        </div>
+        <div class="safari-metric-value" id="pending-value">5</div>
+    </div>
+
+    <div class="safari-metric-card safari-metric-revenue" id="safari-revenue">
+        <div class="safari-metric-header">
+            <span class="safari-metric-label">Revenue (30d)</span>
+            <div class="safari-metric-icon">
+                <!-- 💵 -->
+                <i class="fa-solid fa-chart-simple"></i>
+            </div>
+        </div>
+        <div class="safari-metric-value" id="revenue-value">$45,000</div>
+        <div class="safari-metric-subtext" id="revenue-change">↑ 12% vs last period</div>
+    </div>
+
+    <div class="safari-metric-card safari-metric-emergency" id="safari-emergencies">
+        <div class="safari-metric-header">
+            <span class="safari-metric-label">Emergencies</span>
+            <div class="safari-metric-icon">
+                <!-- ⚠️ -->
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+        </div>
+        <div class="safari-metric-value" id="emergencies-value">1</div>
+    </div>
+</div>
+
+<div class="safari-tabs-container">
+    <button class="safari-tab-btn safari-tab-active" data-tab="overview">Overview</button>
+    <button class="safari-tab-btn" data-tab="trips">Trips</button>
+    <button class="safari-tab-btn" data-tab="vendors">Vendors</button>
+    <button class="safari-tab-btn" data-tab="payments">Payments</button>
+    <button class="safari-tab-btn" data-tab="reports">Reports</button>
+</div>

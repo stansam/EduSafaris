@@ -22,7 +22,7 @@ def roles_required(*roles):
             
             if current_user.role not in roles:
                 flash('You do not have permission to access this page.', 'error')
-                return redirect(url_for('main.dashboard'))
+                return redirect(url_for('main.index'))
             
             return f(*args, **kwargs)
         return decorated_function
@@ -34,7 +34,7 @@ def admin_required(f):
     def decorated_function(*args, **kwargs):
         if not current_user.is_authenticated or current_user.role != 'admin':
             flash('Admin access required.', 'error')
-            return redirect(url_for('main.dashboard'))
+            return redirect(url_for('main.index'))
         return f(*args, **kwargs)
     return decorated_function
 

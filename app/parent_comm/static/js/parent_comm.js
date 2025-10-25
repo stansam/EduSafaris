@@ -342,6 +342,11 @@ function showTemporaryMessage(message, type = 'info') {
     }, 3000);
 }
 
+momentDiv = document.getElementById("generated_time")
+if(momentDiv){
+    momentDiv.textContent = moment().format("MMMM Do, YYYY [at] h:mm A");
+}
+
 // Export functions for external use
 window.ParentComm = {
     markNotificationAsRead,

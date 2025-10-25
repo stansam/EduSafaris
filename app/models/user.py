@@ -71,30 +71,30 @@ class User(UserMixin, BaseModel):
         return f"{self.first_name} {self.last_name}"
     
     def is_admin(self):
-        return self.role == 'admin'
+        return self.role.lower() == 'admin'
     
     def is_teacher(self):
-        return self.role == 'teacher'
+        return self.role.lower() == 'teacher'
     
     def is_vendor(self):
-        return self.role == 'vendor'
+        return self.role.lower() == 'vendor'
     
     def is_parent(self):
-        return self.role == 'parent'
+        return self.role.lower() == 'parent'
     
     def get_dashboard_url(self):
         from flask import url_for
 
-        if self.is_admin:
+        if self.is_admin():
             return url_for('admin.dashboard')
-        if self.is_teacher:
-            return url_for('trips.list_trips')
-        if self.is_vendor:
-            return url_for('vendor.vendor_directory')
-        if self.is_parent:
-            return url_for('parent')
+        elif self.is_teacher():
+            return url_for('teacher.dashboard')
+        elif self.is_vendor():
+            return url_for('vendor.dashboard')
+        elif self.is_parent():
+            return url_for('parent_comm.dashboard')
         else:
-            return url_for('student')
+            return url_for('main.index')
     
     def get_total_students(self):
         """Get total number of students for teacher"""
@@ -123,7 +123,18 @@ class User(UserMixin, BaseModel):
                 if trip.start_date and trip.start_date > datetime.now().date():
                     upcoming_count += 1
         return upcoming_count
-    
+    def get_children_count(self):
+        """Get total number of unique children (participants) for parent"""
+        if not self.is_parent():
+            return 0
+        
+        unique_participant_ids = set()
+        for consent in self.consents:
+            if consent.participant_id:
+                unique_participant_ids.add(consent.participant_id)
+        
+        return len(unique_participant_ids)
+
     def serialize(self):
         return {
             'id': self.id,

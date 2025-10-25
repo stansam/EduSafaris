@@ -1,0 +1,64 @@
+<section class="filter-section" id="filterSection">
+    <div class="filter-container">
+        <div class="search-wrapper">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input 
+                type="text" 
+                class="search-input" 
+                placeholder="Search trips, destinations, or activities..."
+                id="searchInput"
+            >
+        </div>
+
+        <div class="filter-dropdown">
+            <button class="dropdown-button" id="categoryBtn">
+                <span id="categoryText">Category</span>
+                <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"/>
+                </svg>
+            </button>
+            <div class="dropdown-menu" id="categoryMenu">
+                <div class="dropdown-item" data-value="all">All Categories</div>
+                <div class="dropdown-item" data-value="science">Science & Nature</div>
+                <div class="dropdown-item" data-value="history">History & Culture</div>
+                <div class="dropdown-item" data-value="art">Art & Museums</div>
+                <div class="dropdown-item" data-value="adventure">Adventure & Sports</div>
+                <div class="dropdown-item" data-value="technology">Technology & Innovation</div>
+            </div>
+        </div>
+
+        <div class="filter-dropdown">
+            <button class="dropdown-button" id="durationBtn">
+                <span id="durationText">Duration</span>
+                <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"/>
+                </svg>
+            </button>
+            <div class="dropdown-menu" id="durationMenu">
+                <div class="dropdown-item" data-value="all">All Durations</div>
+                <div class="dropdown-item" data-value="half">Half Day (3-4 hours)</div>
+                <div class="dropdown-item" data-value="full">Full Day (6-8 hours)</div>
+                <div class="dropdown-item" data-value="multi">Multi-Day (2+ days)</div>
+                <div class="dropdown-item" data-value="week">Week Long</div>
+            </div>
+        </div>
+
+        <button class="filter-toggle" id="filterToggle">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="4" y1="21" x2="4" y2="14"/>
+                <line x1="4" y1="10" x2="4" y2="3"/>
+                <line x1="12" y1="21" x2="12" y2="12"/>
+                <line x1="12" y1="8" x2="12" y2="3"/>
+                <line x1="20" y1="21" x2="20" y2="16"/>
+                <line x1="20" y1="12" x2="20" y2="3"/>
+                <line x1="1" y1="14" x2="7" y2="14"/>
+                <line x1="9" y1="8" x2="15" y2="8"/>
+                <line x1="17" y1="16" x2="23" y2="16"/>
+            </svg>
+            <span class="filter-badge" id="filterBadge">0</span>
+        </button>
+    </div>
+</section>

@@ -1,0 +1,40 @@
+{% extends "dash_base.html" %}
+
+{% block title %} Admin Dash {% endblock %}
+
+{% block styles %} 
+<link rel="stylesheet" href="{{url_for('admin.static', filename='admin/css/dash.css')}}">
+<link rel="stylesheet" href="{{url_for('admin.static', filename='admin/css/tabs.css')}}">
+{% endblock %}
+
+{% block scripts %} 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+<script src="{{url_for('admin.static', filename='admin/js/revenueChart.js')}}"></script>
+<script src="{{url_for('admin.static', filename='admin/js/dash1.js')}}"></script>
+{% endblock %}
+
+{% block content %} 
+
+    <div class="safari-dashboard-container">
+        {% include 'admin/dashboard/header.html' %}
+        <div class="safari-tab-content safari-tab-active" data-tab-content="overview">
+            {% include 'admin/dashboard/overview.html' %}    
+        </div>
+        <div class="safari-tab-content" data-tab-content="trips">
+            {% include 'admin/dashboard/trips.html' %}    
+        </div>
+        <div class="safari-tab-content" data-tab-content="vendors">
+            {% include 'admin/dashboard/vendors.html' %}    
+        </div>
+        <div class="safari-tab-content" data-tab-content="payments">
+            {% include 'admin/dashboard/payments.html' %}    
+        </div>
+        <div class="safari-tab-content" data-tab-content="reports">
+            {% include 'admin/dashboard/reports.html' %}    
+        </div>
+    </div>
+
+{% endblock %}
+
+
+

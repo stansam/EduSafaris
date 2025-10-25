@@ -1,0 +1,526 @@
+.edusafaris-nav {
+    background: white;
+    padding: 1rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.edusafaris-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.edusafaris-logo-icon {
+    background: linear-gradient(135deg, #ff8c42, #ff6b35);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.edusafaris-logo-text {
+    color: #2c3e50;
+}
+
+.edusafaris-logo-text span {
+    color: #ff8c42;
+}
+
+.edusafaris-nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+}
+
+.edusafaris-nav-links a {
+    color: #5a6c7d;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.edusafaris-nav-links a:hover {
+    color: #ff8c42;
+}
+.edusafaris-nav-links a.active {
+    color: #ff8c42;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    border-bottom: 2px solid #ff8c42;
+}
+
+.edusafaris-nav-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.edusafaris-signin-btn {
+    background: transparent;
+    border: none;
+    color: #2c3e50;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    transition: color 0.3s;
+}
+
+.edusafaris-signin-btn:hover {
+    color: #ff8c42;
+}
+
+.edusafaris-getstarted-btn {
+    background: linear-gradient(135deg, #ff8c42, #ff6b35);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.edusafaris-getstarted-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(255, 140, 66, 0.4);
+}
+
+.edusafaris-hero-section {
+    background: linear-gradient(135deg, #fef8f3 0%, #fff5eb 100%);
+    padding: 4rem 5%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+    min-height: 80vh;
+}
+
+.edusafaris-hero-content {
+    animation: edusafaris-fadeInLeft 1s ease-out;
+}
+
+.edusafaris-hero-title {
+    font-size: 3.5rem;
+    line-height: 1.2;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+}
+
+.edusafaris-hero-highlight {
+    color: #ff8c42;
+    display: block;
+}
+
+.edusafaris-hero-description {
+    font-size: 1.2rem;
+    color: #5a6c7d;
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+}
+
+.edusafaris-cta-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.edusafaris-cta-primary {
+    background: linear-gradient(135deg, #ff8c42, #ff6b35);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.edusafaris-cta-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 140, 66, 0.5);
+}
+
+.edusafaris-cta-secondary {
+    background: white;
+    color: #2c3e50;
+    border: 2px solid #e0e0e0;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s;
+}
+
+.edusafaris-cta-secondary:hover {
+    border-color: #ff8c42;
+    color: #ff8c42;
+    transform: translateY(-3px);
+}
+
+.edusafaris-stats {
+    display: flex;
+    gap: 3rem;
+    margin-top: 3rem;
+}
+
+.edusafaris-stat-item {
+    text-align: center;
+}
+
+.edusafaris-stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    display: block;
+}
+
+.edusafaris-stat-label {
+    color: #5a6c7d;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+}
+
+.edusafaris-hero-image {
+    position: relative;
+    animation: edusafaris-fadeInRight 1s ease-out;
+}
+
+.edusafaris-main-image {
+    width: 100%;
+    height: 600px;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+
+.edusafaris-floating-card {
+    position: absolute;
+    background: white;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    animation: edusafaris-float 3s ease-in-out infinite;
+}
+
+.edusafaris-floating-card-top {
+    top: 10%;
+    left: -5%;
+}
+
+.edusafaris-floating-card-bottom {
+    bottom: 10%;
+    right: -5%;
+}
+
+.edusafaris-card-icon {
+    background: linear-gradient(135deg, #ff8c42, #ff6b35);
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.edusafaris-card-content h4 {
+    color: #2c3e50;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.edusafaris-card-content p {
+    color: #5a6c7d;
+    font-size: 0.85rem;
+}
+
+.edusafaris-location-badge {
+    background: white;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.edusafaris-location-icon {
+    background: linear-gradient(135deg, #4a90e2, #357abd);
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+
+.edusafaris-location-text h4 {
+    color: #2c3e50;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.edusafaris-location-text p {
+    color: #5a6c7d;
+    font-size: 0.85rem;
+}
+
+@keyframes edusafaris-fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes edusafaris-fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes edusafaris-float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+@keyframes edusafaris-countUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.edusafaris-stat-item {
+    animation: edusafaris-countUp 0.8s ease-out forwards;
+}
+
+.edusafaris-stat-item:nth-child(1) {
+    animation-delay: 0.2s;
+    opacity: 0;
+}
+
+.edusafaris-stat-item:nth-child(2) {
+    animation-delay: 0.4s;
+    opacity: 0;
+}
+
+.edusafaris-stat-item:nth-child(3) {
+    animation-delay: 0.6s;
+    opacity: 0;
+}
+
+@media (max-width: 1024px) {
+    .edusafaris-hero-section {
+        grid-template-columns: 1fr;
+        padding: 3rem 3%;
+    }
+
+    .edusafaris-hero-title {
+        font-size: 2.5rem;
+    }
+
+    .edusafaris-main-image {
+        height: 450px;
+    }
+
+    .edusafaris-nav-links {
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .edusafaris-nav {
+        flex-wrap: wrap;
+        padding: 1rem 3%;
+    }
+
+    .edusafaris-nav-links {
+        display: none;
+    }
+
+    .edusafaris-hero-title {
+        font-size: 2rem;
+    }
+
+    .edusafaris-hero-description {
+        font-size: 1rem;
+    }
+
+    .edusafaris-cta-buttons {
+        flex-direction: column;
+    }
+
+    .edusafaris-cta-primary,
+    .edusafaris-cta-secondary {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .edusafaris-stats {
+        gap: 1.5rem;
+    }
+
+    .edusafaris-stat-number {
+        font-size: 2rem;
+    }
+
+    .edusafaris-floating-card {
+        padding: 0.75rem 1rem;
+    }
+
+    .edusafaris-floating-card-top,
+    .edusafaris-floating-card-bottom {
+        position: relative;
+        left: 0;
+        right: 0;
+        margin-top: 1rem;
+    }
+
+    .edusafaris-main-image {
+        height: 350px;
+    }
+}
+
+.edusafaris-user-menu {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.edusafaris-user-info {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 0.5rem;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.edusafaris-user-info:hover {
+  color: #ff8c42;
+}
+
+.edusafaris-user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ff8c42;
+}
+
+.edusafaris-dropdown-icon {
+  font-size: 0.8rem;
+  transition: transform 0.3s;
+}
+
+.edusafaris-user-info.active .edusafaris-dropdown-icon {
+  transform: rotate(180deg);
+}
+
+/* Dropdown container */
+.edusafaris-user-dropdown {
+  position: absolute;
+  top: 120%;
+  right: 0;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  width: 220px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+/* Visible state */
+.edusafaris-user-dropdown.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Top section (user email + contact) */
+.edusafaris-user-meta {
+  text-align: center;
+  padding: 1rem 0.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.edusafaris-user-email,
+.edusafaris-user-contact {
+  margin: 0;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: rgba(44, 62, 80, 0.7);
+}
+
+/* Links section */
+.edusafaris-user-links {
+  display: flex;
+  flex-direction: column;
+}
+
+.edusafaris-user-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  color: #2c3e50;
+  font-weight: 500;
+  transition: background 0.3s, color 0.3s;
+}
+
+.edusafaris-user-link:hover {
+  background: rgba(255, 140, 66, 0.1);
+  color: #ff8c42;
+}
+
+.edusafaris-user-link i {
+  color: #ff8c42;
+}

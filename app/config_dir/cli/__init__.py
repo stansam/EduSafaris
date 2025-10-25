@@ -1,4 +1,7 @@
 import os 
+import click
+from flask.cli import with_appcontext
+from app.config_dir.cli.trips_cmd import seed_trips_command
 
 def register_cli_commands(app):
     """Register CLI commands"""
@@ -47,3 +50,9 @@ def register_cli_commands(app):
         db.session.commit()
         
         print(f'Admin user created: {email}')
+    @app.cli.command("seed-trips")
+    @click.command('seed-trips')
+    @click.option('--clear', is_flag=True, help='Clear existing trips before seeding')
+    @with_appcontext
+    def extra_trips(clear):
+        seed_trips_command(clear)

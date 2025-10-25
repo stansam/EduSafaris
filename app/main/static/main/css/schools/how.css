@@ -1,0 +1,153 @@
+.edu-how-section {
+  padding: 100px 20px;
+  background-color: #ffffff;
+  position: relative;
+}
+
+.edu-how-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.edu-how-title {
+  font-size: 2.75rem;
+  font-weight: 800;
+  text-align: center;
+  color: #1a1a1a;
+  margin: 0 0 16px 0;
+}
+
+.edu-how-subtitle {
+  font-size: 1.15rem;
+  text-align: center;
+  color: #6c757d;
+  margin: 0 auto 60px;
+  max-width: 600px;
+}
+
+.edu-how-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 40px;
+  margin-top: 60px;
+  position: relative;
+}
+
+.edu-how-step {
+  background: #ffffff;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  padding: 40px 30px;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: eduHowFadeIn 0.6s ease forwards;
+}
+
+.edu-how-step[data-step="1"] { animation-delay: 0.1s; }
+.edu-how-step[data-step="2"] { animation-delay: 0.2s; }
+.edu-how-step[data-step="3"] { animation-delay: 0.3s; }
+.edu-how-step[data-step="4"] { animation-delay: 0.4s; }
+.edu-how-step[data-step="5"] { animation-delay: 0.5s; }
+.edu-how-step[data-step="6"] { animation-delay: 0.6s; }
+
+@keyframes eduHowFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.edu-how-step:hover {
+  border-color: #f39c12;
+  box-shadow: 0 8px 24px rgba(243, 156, 18, 0.15);
+  transform: translateY(-5px);
+}
+
+.edu-how-number {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f39c12, #e67e22);
+  color: #ffffff;
+  font-size: 1.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  transition: all 0.3s ease;
+}
+
+.edu-how-step:hover .edu-how-number {
+  transform: scale(1.15) rotate(360deg);
+}
+
+.edu-how-step-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 12px 0;
+}
+
+.edu-how-step-text {
+  font-size: 1rem;
+  color: #6c757d;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.edu-how-connector {
+  display: none;
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+  .edu-how-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .edu-how-section {
+    padding: 60px 20px;
+  }
+  
+  .edu-how-title {
+    font-size: 2rem;
+  }
+  
+  .edu-how-subtitle {
+    font-size: 1rem;
+  }
+  
+  .edu-how-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  
+  .edu-how-step {
+    padding: 32px 24px;
+  }
+}
+
+/* Progress line animation */
+.edu-how-section::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: linear-gradient(to right, #f39c12, #e67e22);
+  opacity: 0.2;
+  z-index: 0;
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .edu-how-section::after {
+    display: block;
+  }
+}

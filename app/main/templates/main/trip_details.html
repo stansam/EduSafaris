@@ -1,0 +1,21 @@
+{% extends "main/base.html" %}
+{% block styles %} 
+<link rel="stylesheet" href="{{url_for('main.static', filename='main/css/trip_details.css')}}">
+{% endblock %}
+
+{% block scripts %} 
+<script src="{{url_for('main.static', filename='main/js/trip_details.js')}}"></script>
+<script src="{{url_for('main.static', filename='main/js/trip_details/fetch.js')}}"></script>
+{% endblock %}
+
+{% block content %} 
+
+{% include 'main/trip_details/hero.html' %}
+<div class="trip-main-container" data-trip-id="{{ trip_id }}">
+        <!-- Content Section -->
+        {% include 'main/trip_details/content.html' %}
+         <!-- Sidebar -->
+        {% include 'main/trip_details/sidebar.html' %}
+</div>
+
+{% endblock %}

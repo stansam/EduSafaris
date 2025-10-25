@@ -1,0 +1,517 @@
+.edusafaris-featured-section {
+    padding: 5rem 5%;
+    background: linear-gradient(to bottom, #fafafa 0%, #ffffff 100%);
+}
+
+.edusafaris-featured-header {
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto 4rem;
+    animation: edusafaris-featured-fadeIn 0.8s ease-out;
+}
+
+.edusafaris-featured-title {
+    font-size: 3rem;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.edusafaris-featured-subtitle {
+    font-size: 1.2rem;
+    color: #5a6c7d;
+    line-height: 1.7;
+}
+
+.edusafaris-trips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.edusafaris-trip-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    cursor: pointer;
+    animation: edusafaris-featured-slideUp 0.6s ease-out;
+    animation-fill-mode: both;
+}
+
+.edusafaris-trip-card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.edusafaris-trip-card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.edusafaris-trip-card:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.edusafaris-trip-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.edusafaris-trip-image-container {
+    position: relative;
+    height: 280px;
+    overflow: hidden;
+}
+
+.edusafaris-trip-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.edusafaris-trip-card:hover .edusafaris-trip-image {
+    transform: scale(1.1);
+}
+
+.edusafaris-trip-category {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: white;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #2c3e50;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.edusafaris-trip-rating {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: white;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #2c3e50;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.edusafaris-star-icon {
+    color: #ffa726;
+}
+
+.edusafaris-trip-content {
+    padding: 1.5rem;
+}
+
+.edusafaris-trip-title {
+    font-size: 1.4rem;
+    color: #2c3e50;
+    margin-bottom: 0.8rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.edusafaris-trip-location {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #5a6c7d;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+}
+
+.edusafaris-location-icon {
+    color: #ff8c42;
+}
+
+.edusafaris-trip-description {
+    color: #5a6c7d;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.edusafaris-trip-details {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.edusafaris-detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #5a6c7d;
+    font-size: 0.9rem;
+}
+
+.edusafaris-detail-icon {
+    color: #ff8c42;
+    font-size: 1rem;
+}
+
+.edusafaris-trip-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.edusafaris-trip-price-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.edusafaris-trip-price-label {
+    font-size: 0.85rem;
+    color: #5a6c7d;
+    margin-bottom: 0.25rem;
+}
+
+.edusafaris-trip-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ff8c42;
+}
+
+.edusafaris-view-details-btn {
+    background: linear-gradient(135deg, #ff8c42, #ff6b35);
+    color: white;
+    border: none;
+    padding: 0.9rem 1.8rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.edusafaris-view-details-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 140, 66, 0.4);
+}
+
+.edusafaris-view-all-container {
+    text-align: center;
+    animation: edusafaris-featured-fadeIn 1s ease-out;
+}
+
+.edusafaris-view-all-btn {
+    background: white;
+    color: #2c3e50;
+    border: 2px solid #e0e0e0;
+    padding: 1rem 2.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    transition: all 0.3s;
+}
+
+.edusafaris-view-all-btn:hover {
+    border-color: #ff8c42;
+    color: #ff8c42;
+    transform: translateX(5px);
+}
+
+.edusafaris-arrow-icon {
+    transition: transform 0.3s;
+}
+
+.edusafaris-view-all-btn:hover .edusafaris-arrow-icon {
+    transform: translateX(5px);
+}
+
+@keyframes edusafaris-featured-fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes edusafaris-featured-slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 1200px) {
+    .edusafaris-trips-grid {
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .edusafaris-featured-section {
+        padding: 3rem 3%;
+    }
+
+    .edusafaris-featured-title {
+        font-size: 2rem;
+    }
+
+    .edusafaris-featured-subtitle {
+        font-size: 1rem;
+    }
+
+    .edusafaris-trips-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .edusafaris-trip-title {
+        font-size: 1.2rem;
+    }
+
+    .edusafaris-trip-details {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .edusafaris-trip-footer {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+
+    .edusafaris-view-details-btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .edusafaris-trip-image-container {
+        height: 220px;
+    }
+
+    .edusafaris-trip-content {
+        padding: 1.2rem;
+    }
+
+    .edusafaris-featured-header {
+        margin-bottom: 2.5rem;
+    }
+}
+
+/* Loading State Styles */
+.edusafaris-trips-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    color: #666;
+}
+
+.edusafaris-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #2563eb;
+    border-radius: 50%;
+    animation: edusafaris-spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes edusafaris-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.edusafaris-trips-loading p {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+}
+
+/* Status Badge Styles */
+.edusafaris-trip-status-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    z-index: 2;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.edusafaris-trip-status-badge.filling {
+    background: rgba(234, 179, 8, 0.95);
+    color: #ffffff;
+}
+
+.edusafaris-trip-status-badge.full {
+    background: rgba(239, 68, 68, 0.95);
+    color: #ffffff;
+}
+
+.edusafaris-trip-status-badge.closed {
+    background: rgba(107, 114, 128, 0.95);
+    color: #ffffff;
+}
+
+/* Adjust image container for status badges */
+.edusafaris-trip-image-container {
+    position: relative;
+}
+
+/* Error State Styles */
+.edusafaris-trips-error {
+    padding: 40px 20px;
+    text-align: center;
+    color: #ef4444;
+}
+
+.edusafaris-trips-error i {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.edusafaris-trips-error h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    color: #1f2937;
+}
+
+.edusafaris-trips-error p {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 0 0 20px 0;
+}
+
+.edusafaris-retry-btn {
+    padding: 10px 24px;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.edusafaris-retry-btn:hover {
+    background-color: #1d4ed8;
+}
+
+/* Skeleton Loading (Optional Enhancement) */
+.edusafaris-trip-card-skeleton {
+    background: #f9fafb;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.edusafaris-skeleton-image {
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: edusafaris-skeleton-loading 1.5s ease-in-out infinite;
+}
+
+.edusafaris-skeleton-content {
+    padding: 20px;
+}
+
+.edusafaris-skeleton-line {
+    height: 16px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: edusafaris-skeleton-loading 1.5s ease-in-out infinite;
+    border-radius: 4px;
+    margin-bottom: 12px;
+}
+
+.edusafaris-skeleton-line.short {
+    width: 60%;
+}
+
+@keyframes edusafaris-skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .edusafaris-trip-status-badge {
+        font-size: 10px;
+        padding: 4px 8px;
+        top: 8px;
+        left: 8px;
+    }
+    
+    .edusafaris-spinner {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .edusafaris-trips-loading p {
+        font-size: 14px;
+    }
+}
+
+/* Image lazy loading fade-in effect */
+.edusafaris-trip-image {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.edusafaris-trip-image.loaded,
+.edusafaris-trip-image[src] {
+    opacity: 1;
+}
+
+/* Smooth card appearance animation */
+.edusafaris-trip-card {
+    animation: edusafaris-fadeInUp 0.5s ease-out forwards;
+    opacity: 0;
+}
+
+.edusafaris-trip-card:nth-child(1) { animation-delay: 0.1s; }
+.edusafaris-trip-card:nth-child(2) { animation-delay: 0.2s; }
+.edusafaris-trip-card:nth-child(3) { animation-delay: 0.3s; }
+.edusafaris-trip-card:nth-child(4) { animation-delay: 0.4s; }
+.edusafaris-trip-card:nth-child(5) { animation-delay: 0.5s; }
+.edusafaris-trip-card:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes edusafaris-fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

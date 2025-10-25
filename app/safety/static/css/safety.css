@@ -1,0 +1,128 @@
+.safety-container {
+    min-height: 100vh;
+    background: #f9fafb;
+}
+
+/* Map styling */
+.leaflet-popup-content {
+    font-family: inherit;
+}
+
+.device-marker {
+    background: #3b82f6;
+    border: 2px solid white;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.device-marker.bus {
+    background: #059669;
+}
+
+.device-marker.emergency {
+    background: #dc2626;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Alert styling */
+.alert-notification {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    max-width: 400px;
+    background: white;
+    border-left: 4px solid #f87171;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+}
+
+.alert-notification.show {
+    transform: translateX(0);
+}
+
+.alert-notification.critical {
+    border-left-color: #dc2626;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 20%, 40%, 60%, 80% {
+        transform: translateX(-2px);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(2px);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+/* Device status */
+.device-status-online {
+    color: #059669;
+}
+
+.device-status-offline {
+    color: #dc2626;
+}
+
+.device-status-warning {
+    color: #f59e0b;
+}
+
+/* Loading states */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #3b82f6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .status-indicators {
+        flex-direction: column;
+    }
+    
+    .map-container {
+        height: 50vh;
+    }
+    
+    .alert-notification {
+        left: 1rem;
+        right: 1rem;
+        max-width: none;
+    }
+}
