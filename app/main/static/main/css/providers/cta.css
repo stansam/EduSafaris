@@ -1,0 +1,55 @@
+.edusafaris-cta-section {
+    background: linear-gradient(135deg, #ff8940 0%, #995a13 100%);
+    padding: 1rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.edusafaris-cta-content {
+    max-width: unset;
+    margin: 0;
+    position: relative;
+    z-index: 1;
+    animation: edusafaris-cta-fadeIn 0.8s ease-out;
+}
+
+.edusafaris-cta-title {
+    font-size: 1.7rem;
+    color: white;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.edusafaris-cta-subtitle {
+    font-size: 1rem;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.95);
+    line-height: 1.7;
+    margin-bottom: 1.2rem;
+}
+
+.edusafaris-cta-buttons-l {
+    display: flex;
+    /* gap: 1.5rem; */
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+.edusafaris-cta-primary-btn {
+    background: white;
+    color: #ff6b35;
+    border: none;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.875rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}

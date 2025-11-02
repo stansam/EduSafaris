@@ -1,0 +1,113 @@
+<!-- Upload Document Modal -->
+<div id="uploadDocumentModal" class="modal-child-overlay" style="display: none;">
+    <div class="modal-child-container">
+        <div class="modal-child-header">
+            <h2><i class="fas fa-upload"></i> Upload Document</h2>
+            <button class="modal-child-close" onclick="closeUploadDocumentModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <form id="uploadDocumentForm" class="modal-child-form">
+            <input type="hidden" id="uploadDocChildId" name="child_id">
+            
+            <!-- Child Info -->
+            <div class="profile-child-alert" style="background: #d4edda; border-left-color: #27ae60;">
+                <div class="profile-child-alert-title" style="color: #155724;">
+                    <i class="fas fa-info-circle"></i>
+                    Uploading for: <span id="uploadDocChildName"></span>
+                </div>
+            </div>
+            
+            <!-- Document Information -->
+            <div class="form-child-section">
+                <h3 class="section-child-title">
+                    <i class="fas fa-file-alt"></i> Document Information
+                </h3>
+                
+                <div class="form-child-group">
+                    <label for="uploadDocTitle" class="form-child-label required">Document Title</label>
+                    <input type="text" id="uploadDocTitle" name="title" class="form-child-input" required placeholder="e.g., Medical Certificate">
+                    <span class="form-child-error" id="uploadDocTitleError"></span>
+                </div>
+                
+                <div class="form-child-group">
+                    <label for="uploadDocType" class="form-child-label required">Document Type</label>
+                    <select id="uploadDocType" name="document_type" class="form-child-input" required>
+                        <option value="">Select document type...</option>
+                        <option value="medical_form">Medical Form</option>
+                        <option value="consent_form">Consent Form</option>
+                        <option value="id_document">ID Document</option>
+                        <option value="insurance">Insurance Document</option>
+                        <option value="vaccination_record">Vaccination Record</option>
+                        <option value="prescription">Prescription</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <span class="form-child-error" id="uploadDocTypeError"></span>
+                </div>
+                
+                <div class="form-child-group">
+                    <label for="uploadDocDescription" class="form-child-label">Description (Optional)</label>
+                    <textarea id="uploadDocDescription" name="description" class="form-child-textarea" rows="3" placeholder="Brief description of the document..."></textarea>
+                    <span class="form-child-error" id="uploadDocDescriptionError"></span>
+                </div>
+                
+                <div class="form-child-group">
+                    <label for="uploadDocExpiry" class="form-child-label">Expiry Date (Optional)</label>
+                    <input type="date" id="uploadDocExpiry" name="expiry_date" class="form-child-input">
+                    <span class="form-child-error" id="uploadDocExpiryError"></span>
+                </div>
+            </div>
+            
+            <!-- File Upload -->
+            <div class="form-child-section">
+                <h3 class="section-child-title">
+                    <i class="fas fa-paperclip"></i> Upload File
+                </h3>
+                
+                <input type="file" id="uploadDocFile" name="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" style="display: none;">
+                
+                <div class="file-child-upload-area" id="uploadDocDropzone" onclick="document.getElementById('uploadDocFile').click()">
+                    <div class="file-child-upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <div class="file-child-upload-text">Click to browse or drag and drop</div>
+                    <div class="file-child-upload-hint">Supported: PDF, JPG, PNG, DOC, DOCX (Max 10MB)</div>
+                </div>
+                
+                <div id="uploadDocFileSelected" class="file-child-selected" style="display: none;">
+                    <i class="fas fa-file-check"></i>
+                    <div class="file-child-selected-info">
+                        <div class="file-child-selected-name" id="uploadDocFileName"></div>
+                        <div class="file-child-selected-size" id="uploadDocFileSize"></div>
+                    </div>
+                    <button type="button" class="document-child-btn" style="background: #e74c3c; color: white;" onclick="clearSelectedFile()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <span class="form-child-error" id="uploadDocFileError"></span>
+            </div>
+            
+            <!-- Upload Progress -->
+            <div id="uploadDocProgress" style="display: none; margin-top: 20px;">
+                <div style="background: #ecf0f1; border-radius: 8px; overflow: hidden; height: 8px;">
+                    <div id="uploadDocProgressBar" style="background: #3498db; height: 100%; width: 0%; transition: width 0.3s ease;"></div>
+                </div>
+                <div style="text-align: center; margin-top: 8px; color: #7f8c8d; font-size: 14px;">
+                    <span id="uploadDocProgressText">Uploading...</span>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="modal-child-actions">
+                <button type="button" class="btn-child-cancel" onclick="closeUploadDocumentModal()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button type="submit" class="btn-child-submit" id="uploadDocSubmitBtn">
+                    <i class="fas fa-upload"></i> Upload Document
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

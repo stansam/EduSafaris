@@ -1,0 +1,329 @@
+<!-- Register Child Modal -->
+<div class="register-child-modal-overlay" id="registerChildModalOverlay">
+    <div class="register-child-modal-container">
+        <div class="register-child-modal-header">
+            <h2 class="register-child-modal-title">
+                <i class="fas fa-user-plus"></i>
+                Register Child for Trip
+            </h2>
+            <button class="register-child-modal-close" id="registerChildModalClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="register-child-modal-body" id="registerChildModalBody">
+            <!-- Trip Info -->
+            <div class="register-child-trip-info" id="registerChildTripInfo">
+                <div class="register-child-trip-card">
+                    <h3 id="registerChildTripTitle">Loading...</h3>
+                    <div class="register-child-trip-meta">
+                        <span><i class="fas fa-map-marker-alt"></i> <span id="registerChildTripDestination"></span></span>
+                        <span><i class="fas fa-calendar"></i> <span id="registerChildTripDate"></span></span>
+                        <span><i class="fas fa-dollar-sign"></i> <span id="registerChildTripPrice"></span></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Registration Form -->
+            <form id="registerChildForm" class="register-child-form">
+                <!-- Personal Information -->
+                <div class="register-child-section">
+                    <h3 class="register-child-section-title">
+                        <i class="fas fa-user"></i>
+                        Personal Information
+                    </h3>
+                    
+                    <div class="register-child-form-grid">
+                        <div class="register-child-form-group">
+                            <label for="registerChildFirstName" class="register-child-label required">
+                                First Name
+                            </label>
+                            <input 
+                                type="text" 
+                                id="registerChildFirstName" 
+                                class="register-child-input"
+                                required
+                                maxlength="100"
+                            >
+                            <span class="register-child-error" id="registerChildFirstNameError"></span>
+                        </div>
+
+                        <div class="register-child-form-group">
+                            <label for="registerChildLastName" class="register-child-label required">
+                                Last Name
+                            </label>
+                            <input 
+                                type="text" 
+                                id="registerChildLastName" 
+                                class="register-child-input"
+                                required
+                                maxlength="100"
+                            >
+                            <span class="register-child-error" id="registerChildLastNameError"></span>
+                        </div>
+
+                        <div class="register-child-form-group">
+                            <label for="registerChildDOB" class="register-child-label required">
+                                Date of Birth
+                            </label>
+                            <input 
+                                type="date" 
+                                id="registerChildDOB" 
+                                class="register-child-input"
+                                required
+                            >
+                            <span class="register-child-error" id="registerChildDOBError"></span>
+                        </div>
+
+                        <div class="register-child-form-group">
+                            <label for="registerChildGradeLevel" class="register-child-label">
+                                Grade Level
+                            </label>
+                            <input 
+                                type="text" 
+                                id="registerChildGradeLevel" 
+                                class="register-child-input"
+                                maxlength="50"
+                            >
+                        </div>
+
+                        <div class="register-child-form-group">
+                            <label for="registerChildStudentId" class="register-child-label">
+                                Student ID
+                            </label>
+                            <input 
+                                type="text" 
+                                id="registerChildStudentId" 
+                                class="register-child-input"
+                                maxlength="50"
+                            >
+                        </div>
+
+                        <div class="register-child-form-group">
+                            <label for="registerChildEmail" class="register-child-label">
+                                Email
+                            </label>
+                            <input 
+                                type="email" 
+                                id="registerChildEmail" 
+                                class="register-child-input"
+                                maxlength="150"
+                            >
+                        </div>
+
+                        <div class="register-child-form-group">
+                            <label for="registerChildPhone" class="register-child-label">
+                                Phone
+                            </label>
+                            <input 
+                                type="tel" 
+                                id="registerChildPhone" 
+                                class="register-child-input"
+                                maxlength="20"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Medical Information -->
+                <div class="register-child-section">
+                    <h3 class="register-child-section-title">
+                        <i class="fas fa-heartbeat"></i>
+                        Medical Information
+                    </h3>
+                    
+                    <div class="register-child-form-grid">
+                        <div class="register-child-form-group register-child-full-width">
+                            <label for="registerChildMedicalConditions" class="register-child-label">
+                                Medical Conditions
+                            </label>
+                            <textarea 
+                                id="registerChildMedicalConditions" 
+                                class="register-child-textarea"
+                                rows="3"
+                                placeholder="Please list any medical conditions..."
+                            ></textarea>
+                        </div>
+
+                        <div class="register-child-form-group register-child-full-width">
+                            <label for="registerChildMedications" class="register-child-label">
+                                Current Medications
+                            </label>
+                            <textarea 
+                                id="registerChildMedications" 
+                                class="register-child-textarea"
+                                rows="3"
+                                placeholder="Please list any medications..."
+                            ></textarea>
+                        </div>
+
+                        <div class="register-child-form-group register-child-full-width">
+                            <label for="registerChildAllergies" class="register-child-label">
+                                Allergies
+                            </label>
+                            <textarea 
+                                id="registerChildAllergies" 
+                                class="register-child-textarea"
+                                rows="3"
+                                placeholder="Please list any allergies..."
+                            ></textarea>
+                        </div>
+
+                        <div class="register-child-form-group register-child-full-width">
+                            <label for="registerChildDietaryRestrictions" class="register-child-label">
+                                Dietary Restrictions
+                            </label>
+                            <textarea 
+                                id="registerChildDietaryRestrictions" 
+                                class="register-child-textarea"
+                                rows="3"
+                                placeholder="Please list any dietary restrictions..."
+                            ></textarea>
+                        </div>
+
+                        <div class="register-child-form-group register-child-full-width">
+                            <label for="registerChildEmergencyMedical" class="register-child-label">
+                                Emergency Medical Information
+                            </label>
+                            <textarea 
+                                id="registerChildEmergencyMedical" 
+                                class="register-child-textarea"
+                                rows="3"
+                                placeholder="Any additional emergency medical information..."
+                            ></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Emergency Contacts -->
+                <div class="register-child-section">
+                    <h3 class="register-child-section-title">
+                        <i class="fas fa-phone-alt"></i>
+                        Emergency Contacts
+                    </h3>
+                    
+                    <div class="register-child-subsection">
+                        <h4 class="register-child-subsection-title">Primary Contact</h4>
+                        <div class="register-child-form-grid">
+                            <div class="register-child-form-group">
+                                <label for="registerChildEmergency1Name" class="register-child-label">
+                                    Name
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="registerChildEmergency1Name" 
+                                    class="register-child-input"
+                                    maxlength="100"
+                                >
+                            </div>
+
+                            <div class="register-child-form-group">
+                                <label for="registerChildEmergency1Phone" class="register-child-label">
+                                    Phone
+                                </label>
+                                <input 
+                                    type="tel" 
+                                    id="registerChildEmergency1Phone" 
+                                    class="register-child-input"
+                                    maxlength="20"
+                                >
+                            </div>
+
+                            <div class="register-child-form-group">
+                                <label for="registerChildEmergency1Relationship" class="register-child-label">
+                                    Relationship
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="registerChildEmergency1Relationship" 
+                                    class="register-child-input"
+                                    maxlength="50"
+                                    placeholder="e.g., Mother, Father, Guardian"
+                                >
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="register-child-subsection">
+                        <h4 class="register-child-subsection-title">Secondary Contact</h4>
+                        <div class="register-child-form-grid">
+                            <div class="register-child-form-group">
+                                <label for="registerChildEmergency2Name" class="register-child-label">
+                                    Name
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="registerChildEmergency2Name" 
+                                    class="register-child-input"
+                                    maxlength="100"
+                                >
+                            </div>
+
+                            <div class="register-child-form-group">
+                                <label for="registerChildEmergency2Phone" class="register-child-label">
+                                    Phone
+                                </label>
+                                <input 
+                                    type="tel" 
+                                    id="registerChildEmergency2Phone" 
+                                    class="register-child-input"
+                                    maxlength="20"
+                                >
+                            </div>
+
+                            <div class="register-child-form-group">
+                                <label for="registerChildEmergency2Relationship" class="register-child-label">
+                                    Relationship
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="registerChildEmergency2Relationship" 
+                                    class="register-child-input"
+                                    maxlength="50"
+                                    placeholder="e.g., Grandparent, Uncle, Family Friend"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Special Requirements -->
+                <div class="register-child-section">
+                    <h3 class="register-child-section-title">
+                        <i class="fas fa-clipboard-list"></i>
+                        Special Requirements
+                    </h3>
+                    
+                    <div class="register-child-form-group register-child-full-width">
+                        <label for="registerChildSpecialRequirements" class="register-child-label">
+                            Special Requirements or Accommodations
+                        </label>
+                        <textarea 
+                            id="registerChildSpecialRequirements" 
+                            class="register-child-textarea"
+                            rows="4"
+                            placeholder="Please describe any special requirements or accommodations needed..."
+                        ></textarea>
+                    </div>
+                </div>
+
+                <!-- Alert Message -->
+                <div class="register-child-alert" id="registerChildAlert" style="display: none;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="registerChildAlertMessage"></span>
+                </div>
+            </form>
+        </div>
+
+        <div class="register-child-modal-footer">
+            <button type="button" class="register-child-btn register-child-btn-secondary" id="registerChildCancelBtn">
+                <i class="fas fa-times"></i>
+                Cancel
+            </button>
+            <button type="submit" form="registerChildForm" class="register-child-btn register-child-btn-primary" id="registerChildSubmitBtn">
+                <i class="fas fa-check"></i>
+                Register Child
+            </button>
+        </div>
+    </div>
+</div>

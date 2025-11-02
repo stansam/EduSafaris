@@ -43,6 +43,7 @@ class Location(BaseModel):
     # Foreign Keys
     trip_id = db.Column(db.Integer, db.ForeignKey('trips.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    participant_id = db.Column(db.Integer, db.ForeignKey('participants.id'))
     
     # Indexes
     __table_args__ = (
@@ -52,15 +53,21 @@ class Location(BaseModel):
         db.Index('idx_location_timestamp', 'timestamp'),
         db.Index('idx_trip_location_trip_device', 'trip_id', 'device_id'),
         db.Index('idx_location_type', 'location_type'),
+        db.Index('idx_location_participant', 'participant_id'),  
+        db.Index('idx_location_user', 'user_id'), 
     )
     
     @classmethod
-    def add_checkin(cls, trip_id, latitude, longitude, name=None, notes=None):
+    def add_checkin(cls, trip_id, latitude, longitude, participant_id=None, user_id=None, 
+                    device_id=None, name=None, notes=None):
         """Add a check-in location for a trip"""
         location = cls(
             trip_id=trip_id,
             latitude=latitude,
             longitude=longitude,
+            participant_id=participant_id,
+            user_id=user_id,
+            device_id=device_id or 'unknown',
             name=name or 'Check-in Point',
             location_type='checkin',
             notes=notes
@@ -116,6 +123,23 @@ class Location(BaseModel):
         return cls.query.filter_by(trip_id=trip_id, device_id=device_id, is_valid=True)\
                        .order_by(cls.timestamp.desc()).first()
     
+    @classmethod
+    def get_latest_for_participant(cls, trip_id, participant_id):
+        """Get latest location for specific participant"""
+        return cls.query.filter_by(
+            trip_id=trip_id, 
+            participant_id=participant_id, 
+            is_valid=True
+        ).order_by(cls.timestamp.desc()).first()
+    
+    @classmethod
+    def get_participant_location_history(cls, participant_id, trip_id=None, limit=50):
+        """Get location history for a participant"""
+        query = cls.query.filter_by(participant_id=participant_id, is_valid=True)
+        if trip_id:
+            query = query.filter_by(trip_id=trip_id)
+        return query.order_by(cls.timestamp.desc()).limit(limit).all()
+    
     def serialize(self):
         return {
             'id': self.id,
@@ -133,7 +157,9 @@ class Location(BaseModel):
             'location_type': self.location_type,
             'is_safe_zone': self.is_safe_zone,
             'notes': self.notes,
-            'trip_id': self.trip_id
+            'trip_id': self.trip_id,
+            'participant_id': self.participant_id,
+            'participant': self.participant.serialize() if self.participant else None
         }
     
     def __repr__(self):

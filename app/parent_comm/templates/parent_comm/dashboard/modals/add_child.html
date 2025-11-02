@@ -1,0 +1,106 @@
+<!-- Add Child Modal -->
+<div id="addChildModal" class="modal-child-overlay" style="display: none;">
+    <div class="modal-child-container">
+        <div class="modal-child-header">
+            <h2><i class="fas fa-user-plus"></i> Register Child for Trip</h2>
+            <button class="modal-child-close" onclick="closeAddChildModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <form id="addChildForm" class="modal-child-form">
+            <!-- Trip Selection -->
+            <div class="form-child-section">
+                <h3 class="section-child-title">
+                    <i class="fas fa-plane"></i> Trip Information
+                </h3>
+                <div class="form-child-group">
+                    <label for="addTripSelect" class="form-child-label required">Select Trip</label>
+                    <select id="addTripSelect" name="trip_id" class="form-child-input" required>
+                        <option value="">Choose a trip...</option>
+                    </select>
+                    <span class="form-child-error" id="addTripSelectError"></span>
+                </div>
+            </div>
+
+            <!-- Personal Information -->
+            <div class="form-child-section">
+                <h3 class="section-child-title">
+                    <i class="fas fa-user"></i> Personal Information
+                </h3>
+                <div class="form-child-row">
+                    <div class="form-child-group">
+                        <label for="addFirstName" class="form-child-label required">First Name</label>
+                        <input type="text" id="addFirstName" name="first_name" class="form-child-input" required>
+                        <span class="form-child-error" id="addFirstNameError"></span>
+                    </div>
+                    <div class="form-child-group">
+                        <label for="addLastName" class="form-child-label required">Last Name</label>
+                        <input type="text" id="addLastName" name="last_name" class="form-child-input" required>
+                        <span class="form-child-error" id="addLastNameError"></span>
+                    </div>
+                </div>
+                
+                <div class="form-child-row">
+                    <div class="form-child-group">
+                        <label for="addDateOfBirth" class="form-child-label">Date of Birth</label>
+                        <input type="date" id="addDateOfBirth" name="date_of_birth" class="form-child-input">
+                        <span class="form-child-error" id="addDateOfBirthError"></span>
+                    </div>
+                    <div class="form-child-group">
+                        <label for="addGradeLevel" class="form-child-label">Grade/Class</label>
+                        <input type="text" id="addGradeLevel" name="grade_level" class="form-child-input" placeholder="e.g., Grade 8">
+                        <span class="form-child-error" id="addGradeLevelError"></span>
+                    </div>
+                </div>
+                
+                <div class="form-child-group">
+                    <label for="addStudentId" class="form-child-label">Student ID</label>
+                    <input type="text" id="addStudentId" name="student_id" class="form-child-input" placeholder="Optional">
+                    <span class="form-child-error" id="addStudentIdError"></span>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="form-child-section">
+                <h3 class="section-child-title">
+                    <i class="fas fa-phone"></i> Contact Information
+                </h3>
+                <div class="form-child-row">
+                    <div class="form-child-group">
+                        <label for="addEmail" class="form-child-label">Email</label>
+                        <input type="email" id="addEmail" name="email" class="form-child-input" placeholder="child@example.com">
+                        <span class="form-child-error" id="addEmailError"></span>
+                    </div>
+                    <div class="form-child-group">
+                        <label for="addPhone" class="form-child-label">Phone</label>
+                        <input type="tel" id="addPhone" name="phone" class="form-child-input" placeholder="+254 700 000000">
+                        <span class="form-child-error" id="addPhoneError"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Special Requirements -->
+            <div class="form-child-section">
+                <h3 class="section-child-title">
+                    <i class="fas fa-info-circle"></i> Special Requirements
+                </h3>
+                <div class="form-child-group">
+                    <label for="addSpecialRequirements" class="form-child-label">Any special needs or requirements?</label>
+                    <textarea id="addSpecialRequirements" name="special_requirements" class="form-child-textarea" rows="3" placeholder="Please describe any special requirements..."></textarea>
+                    <span class="form-child-error" id="addSpecialRequirementsError"></span>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="modal-child-actions">
+                <button type="button" class="btn-child-cancel" onclick="closeAddChildModal()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button type="submit" class="btn-child-submit" id="addChildSubmitBtn">
+                    <i class="fas fa-check"></i> Register Child
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -96,15 +96,16 @@ def get_trips():
         
         # Paginate
         pagination = query.paginate(page=page, per_page=per_page, error_out=False)
-        
         trips_data = []
         for trip in pagination.items:
+            pending_consents = (db.session.query(Consent).join(Participant, Consent.participant_id == Participant.id)
+                                .filter(Participant.trip_id == trip.id,Consent.is_signed == False).count()
+                                if trip.consent_required else 0
+                            )
             trips_data.append({
                 **trip.serialize(),
                 'current_participants_count': trip.current_participants,
-                'pending_consents': trip.participants.join(Consent).filter(
-                    Consent.is_signed == False
-                ).count() if trip.consent_required else 0
+                'pending_consents': pending_consents
             })
         
         return jsonify({
@@ -134,7 +135,7 @@ def get_trip_details(trip_id):
         
         # Get participants with details
         participants = []
-        for participant in trip.participants.all():
+        for participant in trip.participants:
             participants.append({
                 **participant.serialize(),
                 'consent_status': 'signed' if participant.has_all_consents() else 'pending'

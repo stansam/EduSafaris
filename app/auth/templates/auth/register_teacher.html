@@ -1,0 +1,290 @@
+{% extends "register_base.html" %}
+
+{% block title %}Teacher Registration{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('auth.static', filename='css/register_teacher.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="registration-wrapper">
+    <div class="registration-container">
+        <!-- Left Panel - Illustration and Info -->
+        <div class="info-panel">
+            <div class="info-content">
+                <div class="logo-section">
+                    <a href="{{ url_for('main.index') }}" class="back-link">← Back to Home</a>
+                </div>
+                
+                <div class="illustration">
+                    <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Background circle -->
+                        <circle cx="200" cy="200" r="180" fill="#6366f1" opacity="0.1"/>
+                        
+                        <!-- Teacher figure -->
+                        <circle cx="200" cy="150" r="40" fill="#6366f1"/>
+                        <path d="M 200 195 Q 160 195 130 230 L 130 280 L 270 280 L 270 230 Q 240 195 200 195 Z" fill="#818cf8"/>
+                        
+                        <!-- Teacher's head -->
+                        <circle cx="200" cy="130" r="28" fill="#fbbf24"/>
+                        
+                        <!-- Glasses -->
+                        <circle cx="190" cy="130" r="8" fill="none" stroke="#4b5563" stroke-width="2"/>
+                        <circle cx="210" cy="130" r="8" fill="none" stroke="#4b5563" stroke-width="2"/>
+                        <line x1="198" y1="130" x2="202" y2="130" stroke="#4b5563" stroke-width="2"/>
+                        
+                        <!-- Book -->
+                        <rect x="160" y="240" width="35" height="45" fill="#10b981" rx="3"/>
+                        <line x1="160" y1="250" x2="195" y2="250" stroke="#059669" stroke-width="2"/>
+                        <line x1="160" y1="260" x2="195" y2="260" stroke="#059669" stroke-width="2"/>
+                        <line x1="160" y1="270" x2="195" y2="270" stroke="#059669" stroke-width="2"/>
+                        
+                        <!-- Students (small figures) -->
+                        <circle cx="100" cy="310" r="18" fill="#8b5cf6"/>
+                        <rect x="88" y="328" width="24" height="35" rx="12" fill="#a78bfa"/>
+                        
+                        <circle cx="300" cy="310" r="18" fill="#ec4899"/>
+                        <rect x="288" y="328" width="24" height="35" rx="12" fill="#f472b6"/>
+                        
+                        <!-- Decorative elements -->
+                        <path d="M80,80 L85,95 L100,100 L85,105 L80,120 L75,105 L60,100 L75,95 Z" fill="#fbbf24" opacity="0.7"/>
+                        <path d="M320,70 L323,80 L333,83 L323,86 L320,96 L317,86 L307,83 L317,80 Z" fill="#f472b6" opacity="0.7"/>
+                    </svg>
+                </div>
+                
+                <div class="info-text">
+                    <h1>Welcome, Educator!</h1>
+                    <p>Join our platform to create amazing educational experiences for your students.</p>
+                    
+                    <div class="benefits">
+                        <div class="benefit-item">
+                            <span class="benefit-icon">
+                                <!-- 📚 -->
+                                <i class="fas fa-book"></i>
+                            </span>
+                            <span>Plan Engaging Trips</span>
+                        </div>
+                        <div class="benefit-item">
+                            <span class="benefit-icon">
+                                <!-- 👥 -->
+                                 <i class="fas fa-users"></i>
+                            </span>
+                            <span>Manage Students</span>
+                        </div>
+                        <div class="benefit-item">
+                            <span class="benefit-icon">
+                                <!-- 🔒 -->
+                                 <i class="fas fa-lock"></i>
+                            </span>
+                            <span>Ensure Safety</span>
+                        </div>
+                        <div class="benefit-item">
+                            <span class="benefit-icon">
+                                <!-- 📱 -->
+                                 <i class="fas fa-mobile-screen-button"></i>
+                            </span>
+                            <span>Real-time Updates</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel - Registration Form -->
+        <div class="form-panel">
+            <div class="form-container">
+                <div class="form-header">
+                    <h2>Create Teacher Account</h2>
+                    <p>Fill in your details to get started</p>
+                </div>
+
+                <!-- Alert Messages -->
+                <div id="alert-container"></div>
+
+                <form id="teacherRegistrationForm" class="registration-form" novalidate>
+                    <!-- Progress Indicator -->
+                    <div class="progress-indicator">
+                        <div class="progress-step active" data-step="1">
+                            <div class="step-number">1</div>
+                            <div class="step-label">Personal</div>
+                        </div>
+                        <div class="progress-line"></div>
+                        <div class="progress-step" data-step="2">
+                            <div class="step-number">2</div>
+                            <div class="step-label">Professional</div>
+                        </div>
+                        <div class="progress-line"></div>
+                        <div class="progress-step" data-step="3">
+                            <div class="step-number">3</div>
+                            <div class="step-label">Security</div>
+                        </div>
+                    </div>
+
+                    <!-- Step 1: Personal Information -->
+                    <div class="form-step active" data-step="1">
+                        <h3 class="step-title">Personal Information</h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="first_name">First Name <span class="required">*</span></label>
+                                <input type="text" id="first_name" name="first_name" required>
+                                <span class="error-message"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="last_name">Last Name <span class="required">*</span></label>
+                                <input type="text" id="last_name" name="last_name" required>
+                                <span class="error-message"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address <span class="required">*</span></label>
+                            <input type="email" id="email" name="email" required>
+                            <span class="error-message"></span>
+                            <span class="input-hint">We'll send verification to this email</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Phone Number <span class="required">*</span></label>
+                            <input type="tel" id="phone" name="phone" placeholder="+1234567890" required>
+                            <span class="error-message"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="date_of_birth">Date of Birth</label>
+                            <input type="date" id="date_of_birth" name="date_of_birth">
+                            <span class="error-message"></span>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url_for('auth.register') }}'">Back</button>
+                            <button type="button" class="btn btn-primary" onclick="nextStep(2)">Next Step</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Professional Information -->
+                    <div class="form-step" data-step="2">
+                        <h3 class="step-title">Professional Information</h3>
+                        
+                        <div class="form-group">
+                            <label for="school">School/Institution <span class="required">*</span></label>
+                            <input type="text" id="school" name="school" required>
+                            <span class="error-message"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bio">Professional Bio</label>
+                            <textarea id="bio" name="bio" rows="4" placeholder="Tell us about your teaching experience and interests..."></textarea>
+                            <span class="error-message"></span>
+                            <span class="input-hint">Optional: Share your teaching philosophy or areas of expertise</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emergency_contact">Emergency Contact Name</label>
+                            <input type="text" id="emergency_contact" name="emergency_contact">
+                            <span class="error-message"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emergency_phone">Emergency Contact Phone</label>
+                            <input type="tel" id="emergency_phone" name="emergency_phone" placeholder="+1234567890">
+                            <span class="error-message"></span>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" onclick="previousStep(1)">Previous</button>
+                            <button type="button" class="btn btn-primary" onclick="nextStep(3)">Next Step</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Security -->
+                    <div class="form-step" data-step="3">
+                        <h3 class="step-title">Account Security</h3>
+                        
+                        <div class="form-group">
+                            <label for="password">Password <span class="required">*</span></label>
+                            <div class="password-input-wrapper">
+                                <input type="password" id="password" name="password" autocomplete="new-password" required>
+                                <button type="button" class="toggle-password" data-target="password">
+                                    <span class="eye-icon">
+                                        <!-- 👁️ -->
+                                         <i class="fas fa-eye"></i>
+                                    </span>
+                                </button>
+                            </div>
+                            <span class="error-message"></span>
+                            <div class="password-strength">
+                                <div class="strength-bar">
+                                    <div class="strength-fill"></div>
+                                </div>
+                                <span class="strength-text"></span>
+                            </div>
+                            <div class="password-requirements">
+                                <div class="requirement" data-requirement="length">
+                                    <span class="requirement-icon">○</span>
+                                    <span>At least 8 characters</span>
+                                </div>
+                                <div class="requirement" data-requirement="uppercase">
+                                    <span class="requirement-icon">○</span>
+                                    <span>One uppercase letter</span>
+                                </div>
+                                <div class="requirement" data-requirement="lowercase">
+                                    <span class="requirement-icon">○</span>
+                                    <span>One lowercase letter</span>
+                                </div>
+                                <div class="requirement" data-requirement="number">
+                                    <span class="requirement-icon">○</span>
+                                    <span>One number</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirm_password">Confirm Password <span class="required">*</span></label>
+                            <div class="password-input-wrapper">
+                                <input type="password" id="confirm_password" name="confirm_password" autocomplete="confirm-password" required>
+                                <button type="button" class="toggle-password" data-target="confirm_password">
+                                    <span class="eye-icon">
+                                        <!-- 👁️ -->
+                                        <i class="fas fa-eye"></i>
+                                    </span>
+                                </button>
+                            </div>
+                            <span class="error-message"></span>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="terms" name="terms" required>
+                                <span class="checkbox-custom"></span>
+                                <span class="checkbox-text">I agree to the <a href="#" target="_blank">Terms of Service</a> and <a href="#" target="_blank">Privacy Policy</a> <span class="required">*</span></span>
+                            </label>
+                            <span class="error-message"></span>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" onclick="previousStep(2)">Previous</button>
+                            <button type="submit" class="btn btn-primary btn-submit">
+                                <span class="btn-text">Create Account</span>
+                                <span class="btn-loader" style="display: none;">
+                                    <span class="spinner"></span>
+                                    Creating...
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="form-footer">
+                    <p>Already have an account? <a href="{{ url_for('auth.login') }}">Sign In</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('auth.static', filename='js/register_teacher.js') }}"></script>
+{% endblock %}

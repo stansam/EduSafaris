@@ -1,0 +1,226 @@
+<!-- Trip Details Modal -->
+<div class="trip-details-modal-overlay" id="tripDetailsModalOverlay">
+    <div class="trip-details-modal-container">
+        <div class="trip-details-modal-header">
+            <h2 class="trip-details-modal-title">
+                <i class="fas fa-plane-departure"></i>
+                Trip Details
+            </h2>
+            <button class="trip-details-modal-close" id="tripDetailsModalClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="trip-details-modal-body" id="tripDetailsModalBody">
+            <!-- Loading State -->
+            <div class="trip-details-loading" id="tripDetailsLoading">
+                <div class="trip-details-spinner"></div>
+                <p>Loading trip details...</p>
+            </div>
+
+            <!-- Content -->
+            <div class="trip-details-content" id="tripDetailsContent" style="display: none;">
+                <!-- Hero Section -->
+                <div class="trip-details-hero">
+                    <div class="trip-details-hero-image" id="tripDetailsHeroImage"></div>
+                    <div class="trip-details-hero-overlay">
+                        <h1 class="trip-details-hero-title" id="tripDetailsTitle"></h1>
+                        <div class="trip-details-hero-meta">
+                            <span class="trip-details-hero-meta-item" id="tripDetailsDestination">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span></span>
+                            </span>
+                            <span class="trip-details-hero-meta-item" id="tripDetailsCategory">
+                                <i class="fas fa-tag"></i>
+                                <span></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Info Cards -->
+                <div class="trip-details-quick-info">
+                    <div class="trip-details-info-card">
+                        <i class="fas fa-calendar-alt"></i>
+                        <div class="trip-details-info-content">
+                            <span class="trip-details-info-label">Start Date</span>
+                            <span class="trip-details-info-value" id="tripDetailsStartDate"></span>
+                        </div>
+                    </div>
+                    <div class="trip-details-info-card">
+                        <i class="fas fa-calendar-check"></i>
+                        <div class="trip-details-info-content">
+                            <span class="trip-details-info-label">End Date</span>
+                            <span class="trip-details-info-value" id="tripDetailsEndDate"></span>
+                        </div>
+                    </div>
+                    <div class="trip-details-info-card">
+                        <i class="fas fa-clock"></i>
+                        <div class="trip-details-info-content">
+                            <span class="trip-details-info-label">Duration</span>
+                            <span class="trip-details-info-value" id="tripDetailsDuration"></span>
+                        </div>
+                    </div>
+                    <div class="trip-details-info-card">
+                        <i class="fas fa-users"></i>
+                        <div class="trip-details-info-content">
+                            <span class="trip-details-info-label">Available Spots</span>
+                            <span class="trip-details-info-value" id="tripDetailsSpots"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="trip-details-tabs">
+                    <button class="trip-details-tab active" data-tab="overview">
+                        <i class="fas fa-info-circle"></i>
+                        Overview
+                    </button>
+                    <button class="trip-details-tab" data-tab="itinerary">
+                        <i class="fas fa-route"></i>
+                        Itinerary
+                    </button>
+                    <button class="trip-details-tab" data-tab="pricing">
+                        <i class="fas fa-dollar-sign"></i>
+                        Pricing
+                    </button>
+                    <button class="trip-details-tab" data-tab="requirements">
+                        <i class="fas fa-clipboard-list"></i>
+                        Requirements
+                    </button>
+                </div>
+
+                <!-- Tab Contents -->
+                <div class="trip-details-tab-content">
+                    <!-- Overview Tab -->
+                    <div class="trip-details-tab-pane active" data-pane="overview">
+                        <div class="trip-details-section">
+                            <h3 class="trip-details-section-title">
+                                <i class="fas fa-book-open"></i>
+                                Description
+                            </h3>
+                            <p class="trip-details-description" id="tripDetailsDescription"></p>
+                        </div>
+
+                        <div class="trip-details-section">
+                            <h3 class="trip-details-section-title">
+                                <i class="fas fa-graduation-cap"></i>
+                                Eligibility
+                            </h3>
+                            <div class="trip-details-grid">
+                                <div class="trip-details-field">
+                                    <span class="trip-details-field-label">Grade Level:</span>
+                                    <span class="trip-details-field-value" id="tripDetailsGradeLevel"></span>
+                                </div>
+                                <div class="trip-details-field">
+                                    <span class="trip-details-field-label">Max Participants:</span>
+                                    <span class="trip-details-field-value" id="tripDetailsMaxParticipants"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="trip-details-section">
+                            <h3 class="trip-details-section-title">
+                                <i class="fas fa-calendar-times"></i>
+                                Registration Deadline
+                            </h3>
+                            <div class="trip-details-deadline" id="tripDetailsDeadline"></div>
+                        </div>
+                    </div>
+
+                    <!-- Itinerary Tab -->
+                    <div class="trip-details-tab-pane" data-pane="itinerary">
+                        <div class="trip-details-section">
+                            <h3 class="trip-details-section-title">
+                                <i class="fas fa-map-marked-alt"></i>
+                                Day-by-Day Itinerary
+                            </h3>
+                            <div class="trip-details-itinerary" id="tripDetailsItinerary">
+                                <!-- Itinerary items will be inserted here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pricing Tab -->
+                    <div class="trip-details-tab-pane" data-pane="pricing">
+                        <div class="trip-details-section">
+                            <h3 class="trip-details-section-title">
+                                <i class="fas fa-money-bill-wave"></i>
+                                Cost Breakdown
+                            </h3>
+                            <div class="trip-details-pricing-card">
+                                <div class="trip-details-pricing-main">
+                                    <span class="trip-details-pricing-label">Price per Student</span>
+                                    <span class="trip-details-pricing-amount" id="tripDetailsPrice"></span>
+                                </div>
+                                <div class="trip-details-pricing-includes">
+                                    <h4>What's Included:</h4>
+                                    <ul id="tripDetailsIncludes">
+                                        <!-- Includes will be inserted here -->
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Requirements Tab -->
+                    <div class="trip-details-tab-pane" data-pane="requirements">
+                        <div class="trip-details-section">
+                            <h3 class="trip-details-section-title">
+                                <i class="fas fa-file-medical"></i>
+                                Medical & Special Requirements
+                            </h3>
+                            <div class="trip-details-requirements-info">
+                                <div class="trip-details-alert trip-details-alert-info">
+                                    <i class="fas fa-info-circle"></i>
+                                    <div>
+                                        <strong>Important:</strong> Please provide accurate medical information and any special requirements for your child during registration.
+                                    </div>
+                                </div>
+                                <ul class="trip-details-requirements-list">
+                                    <li><i class="fas fa-check"></i> Medical conditions and medications</li>
+                                    <li><i class="fas fa-check"></i> Allergies and dietary restrictions</li>
+                                    <li><i class="fas fa-check"></i> Emergency contact information</li>
+                                    <li><i class="fas fa-check"></i> Special accommodations needed</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Registration Status -->
+                <div class="trip-details-registration-status" id="tripDetailsRegistrationStatus" style="display: none;">
+                    <div class="trip-details-alert trip-details-alert-success">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <strong>You have children registered for this trip!</strong>
+                            <div id="tripDetailsRegisteredChildren"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error State -->
+            <div class="trip-details-error" id="tripDetailsError" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>Failed to Load Trip Details</h3>
+                <p id="tripDetailsErrorMessage"></p>
+                <button class="trip-details-retry-btn" id="tripDetailsRetryBtn">
+                    <i class="fas fa-redo"></i>
+                    Retry
+                </button>
+            </div>
+        </div>
+
+        <div class="trip-details-modal-footer" id="tripDetailsModalFooter" style="display: none;">
+            <button class="trip-details-btn trip-details-btn-secondary" id="tripDetailsViewItineraryBtn">
+                <i class="fas fa-route"></i>
+                View Full Itinerary
+            </button>
+            <button class="trip-details-btn trip-details-btn-primary" id="tripDetailsRegisterBtn">
+                <i class="fas fa-user-plus"></i>
+                Register Child
+            </button>
+        </div>
+    </div>
+</div>

@@ -9,8 +9,12 @@ from app.utils import send_password_reset_email, send_verification_email
 import datetime
 from collections import defaultdict
 import time
+from app.auth.activity_log import (
+    log_registration, log_login, log_logout,
+    log_password_reset_request, log_password_reset_completed,
+    log_email_verification
+)
 
-# Simple rate limiting storage (in production, use Redis or similar)
 reset_attempts = defaultdict(list)
 
 def is_rate_limited(email, max_attempts=3, window_minutes=15):
@@ -45,12 +49,18 @@ def register():
             user = User(
                 first_name=form.username.data,
                 password=form.password.data,
-                email=form.email.data.lower()
+                email=form.email.data.lower(),
+                role='parent'
             )
             # user.set_password(form.password.data)
             
             db.session.add(user)
             db.session.commit()
+
+            try:
+                log_registration(user, 'parent')
+            except Exception as log_error:
+                current_app.logger.error(f'Activity log error: {str(log_error)}')
             
             # Send verification email
             token = user.generate_verification_token()
@@ -81,6 +91,11 @@ def login():
         
         if user and user.verify_password(form.password.data):
             if not user.is_active:
+                try:
+                    log_login(user, success=False, error_message='Account deactivated')
+                except Exception as log_error:
+                    current_app.logger.error(f'Activity log error: {str(log_error)}')
+                
                 flash('Your account has been deactivated. Please contact support.', 'error')
                 return render_template('auth/login.html', title='Sign In', form=form)
             
@@ -99,6 +114,12 @@ def login():
             flash(f'Welcome back, {user.full_name}!', 'success')
             return redirect(next_page)
         else:
+            # Log failed login attempt
+            try:
+                log_login(None, success=False, error_message='Invalid credentials')
+            except Exception as log_error:
+                current_app.logger.error(f'Activity log error: {str(log_error)}')
+            
             flash('Invalid email or password.', 'error')
     
     return render_template('auth/login.html', title='Sign In', form=form)
@@ -108,6 +129,13 @@ def login():
 def logout():
     """User logout"""
     username = current_user.first_name
+    user_to_log = current_user._get_current_object()
+    
+    try:
+        log_logout(user_to_log)
+    except Exception as log_error:
+        current_app.logger.error(f'Activity log error: {str(log_error)}')
+
     logout_user()
     flash(f'You have been logged out, {username}.', 'info')
     return redirect(url_for('auth.login'))
@@ -139,7 +167,11 @@ def reset_request():
             else:
                 flash('Failed to send reset email. Please try again later.', 'error')
         else:
-            # For security, don't reveal if email exists
+            try:
+                log_password_reset_request(None)
+            except Exception as log_error:
+                current_app.logger.error(f'Activity log error: {str(log_error)}')
+
             flash('If an account with that email exists, a reset link has been sent.', 'info')
         
         return redirect(url_for('auth.login'))
@@ -163,6 +195,12 @@ def reset_password(token):
         try:
             user.set_password(form.password.data)
             db.session.commit()
+
+            try:
+                log_password_reset_completed(user)
+            except Exception as log_error:
+                current_app.logger.error(f'Activity log error: {str(log_error)}')
+
             flash('Your password has been updated! You can now log in.', 'success')
             return redirect(url_for('auth.login'))
         except Exception as e:
@@ -187,6 +225,12 @@ def verify_email(token):
     try:
         user.is_verified = True
         db.session.commit()
+        
+        try:
+            log_email_verification(user)
+        except Exception as log_error:
+            current_app.logger.error(f'Activity log error: {str(log_error)}')
+
         flash('Your email has been verified! You can now access all features.', 'success')
         
         if current_user.is_authenticated:
@@ -200,95 +244,17 @@ def verify_email(token):
         flash('An error occurred while verifying your email.', 'error')
         return redirect(url_for('auth.login'))
 
-# JWT API Routes
-@auth_bp.route('/api/login', methods=['POST'])
-def api_login():
-    """API login endpoint returning JWT token"""
-    if not request.is_json:
-        return jsonify({'error': 'Request must be JSON'}), 400
     
-    email = request.json.get('email', '').lower()
-    password = request.json.get('password', '')
-    
-    if not email or not password:
-        return jsonify({'error': 'Email and password are required'}), 400
-    
-    user = User.query.filter_by(email=email).first()
-    
-    if user and user.verify_password(password):
-        if not user.is_active:
-            return jsonify({'error': 'Account is deactivated'}), 403
-        
-        # Create JWT token
-        access_token = create_access_token(identity=str(user.id))
-        
-        # Update last login
-        user.last_login = datetime.datetime.now()
-        db.session.commit()
-        
-        return jsonify({
-            'access_token': access_token,
-            'user': {
-                'id': user.id,
-                'username': user.first_name,
-                'email': user.email,
-                'role': user.role,
-                'is_verified': user.is_verified
-            }
-        }), 200
-    else:
-        return jsonify({'error': 'Invalid credentials'}), 401
+@auth_bp.route('/register/teacher')
+def register_teacher():
+    """Render teacher registration form"""
+    if current_user.is_authenticated:
+        return redirect(url_for('main.index'))
+    return render_template('auth/register_teacher.html')
 
-@auth_bp.route('/api/register', methods=['POST'])
-def api_register():
-    """API registration endpoint"""
-    if not request.is_json:
-        return jsonify({'error': 'Request must be JSON'}), 400
-    
-    data = request.json
-    username = data.get('username', '').strip()
-    email = data.get('email', '').lower().strip()
-    password = data.get('password', '')
-    
-    # Basic validation
-    if not username or not email or not password:
-        return jsonify({'error': 'Username, email, and password are required'}), 400
-    
-    if len(username) < 3:
-        return jsonify({'error': 'Username must be at least 3 characters'}), 400
-    
-    if len(password) < 8:
-        return jsonify({'error': 'Password must be at least 8 characters'}), 400
-    
-    # Check for existing users
-    if User.query.filter_by(first_name=username).first():
-        return jsonify({'error': 'Username already taken'}), 409
-    
-    if User.query.filter_by(email=email).first():
-        return jsonify({'error': 'Email already registered'}), 409
-    
-    try:
-        # Create user
-        user = User(first_name=username, email=email, password=password)
-        
-        db.session.add(user)
-        db.session.commit()
-        
-        # Send verification email (optional for API)
-        token = user.generate_verification_token()
-        send_verification_email(user, token)
-        
-        return jsonify({
-            'message': 'User created successfully',
-            'user': {
-                'id': user.id,
-                'username': user.first_name,
-                'email': user.email,
-                'role': user.role
-            }
-        }), 201
-        
-    except Exception as e:
-        db.session.rollback()
-        current_app.logger.error(f'API registration error: {str(e)}')
-        return jsonify({'error': 'Registration failed'}), 500
+@auth_bp.route('/register/vendor')
+def register_vendor():
+    """Render vendor registration form"""
+    if current_user.is_authenticated:
+        return redirect(url_for('main.index'))
+    return render_template('auth/register_vendor.html')

@@ -1,0 +1,362 @@
+.trip-demo-btn {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 12px 16px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.trip-demo-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.trip-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 9999;
+    animation: tripFadeIn 0.3s ease;
+}
+
+.trip-modal-overlay.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+@keyframes tripFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes tripSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.trip-modal-content {
+    background: white;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    animation: tripSlideUp 0.3s ease;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.trip-modal-header {
+    padding: 24px 30px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+    border-radius: 16px 16px 0 0;
+}
+
+.trip-modal-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.trip-modal-close {
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #6b7280;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.trip-modal-close:hover {
+    background: #f3f4f6;
+    color: #1f2937;
+}
+
+.trip-modal-body {
+    padding: 30px;
+}
+
+.trip-alert {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: none;
+    animation: tripSlideUp 0.3s ease;
+}
+
+.trip-alert.show {
+    display: block;
+}
+
+.trip-alert-success {
+    background: #d1fae5;
+    color: #065f46;
+    border-left: 4px solid #10b981;
+}
+
+.trip-alert-error {
+    background: #fee2e2;
+    color: #991b1b;
+    border-left: 4px solid #ef4444;
+}
+
+.trip-alert-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.trip-alert-list {
+    margin-top: 8px;
+    padding-left: 20px;
+}
+
+.trip-form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.trip-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+@media (max-width: 640px) {
+    .trip-form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.trip-form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.trip-form-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+}
+
+.trip-form-required {
+    color: #ef4444;
+    margin-left: 4px;
+}
+
+.trip-form-input,
+.trip-form-select,
+.trip-form-textarea {
+    padding: 10px 14px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.trip-form-input:focus,
+.trip-form-select:focus,
+.trip-form-textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.trip-form-input.error,
+.trip-form-select.error,
+.trip-form-textarea.error {
+    border-color: #ef4444;
+}
+
+.trip-form-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.trip-form-checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 0;
+}
+
+.trip-form-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #667eea;
+}
+
+.trip-form-checkbox-label {
+    font-size: 14px;
+    color: #374151;
+    cursor: pointer;
+    user-select: none;
+}
+
+.trip-form-help {
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 4px;
+}
+
+.trip-modal-footer {
+    padding: 20px 30px;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    position: sticky;
+    bottom: 0;
+    background: white;
+    border-radius: 0 0 16px 16px;
+}
+
+.trip-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.trip-btn-secondary {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.trip-btn-secondary:hover {
+    background: #e5e7eb;
+}
+
+.trip-btn-primary {
+    background: #667eea;
+    color: white;
+}
+
+.trip-btn-primary:hover {
+    background: #5568d3;
+}
+
+.trip-btn-primary:disabled,
+.trip-btn-secondary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.trip-loading-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: tripSpin 0.6s linear infinite;
+}
+
+@keyframes tripSpin {
+    to { transform: rotate(360deg); }
+}
+
+.trip-section-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 24px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.trip-section-title:first-child {
+    margin-top: 0;
+}
+
+.trip-itinerary-editor {
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 16px;
+    background: #f9fafb;
+}
+
+.trip-itinerary-day {
+    background: white;
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    border: 1px solid #e5e7eb;
+}
+
+.trip-itinerary-day-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.trip-itinerary-day-title {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.trip-btn-small {
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 6px;
+}
+
+.trip-btn-danger {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.trip-btn-danger:hover {
+    background: #fecaca;
+}
+
+.trip-btn-add {
+    background: #667eea;
+    color: white;
+    margin-top: 12px;
+}
+
+.trip-btn-add:hover {
+    background: #5568d3;
+}

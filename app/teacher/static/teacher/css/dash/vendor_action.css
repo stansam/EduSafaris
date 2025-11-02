@@ -1,0 +1,604 @@
+/* ============================================
+   VENDOR ACTION MODALS - SHARED STYLES
+   ============================================ */
+
+.vam-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    padding: 20px;
+    animation: vamFadeIn 0.3s ease;
+}
+
+@keyframes vamFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.vam-modal-container {
+    background: #fff;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 700px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    animation: vamSlideUp 0.3s ease;
+}
+
+.vam-modal-small {
+    max-width: 500px;
+}
+
+@keyframes vamSlideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.vam-modal-header {
+    padding: 25px 30px;
+    border-bottom: 2px solid #ecf0f1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.vam-modal-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.vam-modal-title i {
+    color: #3498db;
+}
+
+.vam-btn-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #95a5a6;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.vam-btn-close:hover {
+    background: #ecf0f1;
+    color: #e74c3c;
+}
+
+.vam-modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 30px;
+}
+
+.vam-modal-footer {
+    padding: 20px 30px;
+    border-top: 2px solid #ecf0f1;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+/* ============================================
+   FORM ELEMENTS
+   ============================================ */
+
+.vam-form-group {
+    margin-bottom: 20px;
+}
+
+.vam-form-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.vam-label {
+    display: block;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 8px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.vam-label.required::after {
+    content: '*';
+    color: #e74c3c;
+    margin-left: 4px;
+}
+
+.vam-label i {
+    color: #3498db;
+}
+
+.vam-input,
+.vam-textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: all 0.3s ease;
+}
+
+.vam-input:focus,
+.vam-textarea:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.vam-input:read-only {
+    background: #f8f9fa;
+    cursor: not-allowed;
+}
+
+.vam-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.vam-help-text {
+    display: block;
+    font-size: 12px;
+    color: #7f8c8d;
+    margin-top: 6px;
+}
+
+/* Alert Boxes */
+.vam-alert {
+    padding: 15px;
+    border-radius: 8px;
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    border: 1px solid;
+}
+
+.vam-alert i {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.vam-alert-info {
+    background: #e8f4f8;
+    border-color: #3498db;
+    color: #2c3e50;
+}
+
+.vam-alert-info i {
+    color: #3498db;
+}
+
+.vam-alert-warning {
+    background: #fef5e7;
+    border-color: #f39c12;
+    color: #2c3e50;
+}
+
+.vam-alert-warning i {
+    color: #f39c12;
+}
+
+.vam-alert-danger {
+    background: #fadbd8;
+    border-color: #e74c3c;
+    color: #2c3e50;
+}
+
+.vam-alert-danger i {
+    color: #e74c3c;
+}
+
+.vam-alert strong {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.vam-alert ol {
+    margin: 10px 0 0 0;
+    padding-left: 20px;
+}
+
+/* Buttons */
+.vam-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.vam-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.vam-btn-secondary {
+    background: #ecf0f1;
+    color: #7f8c8d;
+}
+
+.vam-btn-secondary:hover:not(:disabled) {
+    background: #bdc3c7;
+    color: #2c3e50;
+}
+
+.vam-btn-primary {
+    background: #3498db;
+    color: #fff;
+}
+
+.vam-btn-primary:hover:not(:disabled) {
+    background: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+}
+
+.vam-btn-success {
+    background: #27ae60;
+    color: #fff;
+}
+
+.vam-btn-success:hover:not(:disabled) {
+    background: #229954;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
+}
+
+.vam-btn-danger {
+    background: #e74c3c;
+    color: #fff;
+}
+
+.vam-btn-danger:hover:not(:disabled) {
+    background: #c0392b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+}
+
+/* ============================================
+   VENDOR INFO CARD
+   ============================================ */
+
+.vam-vendor-info {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.vam-vendor-avatar {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+}
+
+.vam-vendor-info h4 {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 5px 0;
+}
+
+.vam-vendor-info span {
+    font-size: 14px;
+    opacity: 0.9;
+    text-transform: capitalize;
+}
+
+/* ============================================
+   BOOKING SUMMARY
+   ============================================ */
+
+.vam-booking-summary {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 2px solid #e0e0e0;
+}
+
+.vam-booking-summary h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0 0 15px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.vam-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.vam-summary-row:last-child {
+    border-bottom: none;
+}
+
+.vam-summary-label {
+    font-size: 14px;
+    color: #7f8c8d;
+    font-weight: 600;
+}
+
+.vam-summary-value {
+    font-size: 14px;
+    color: #2c3e50;
+    font-weight: 700;
+}
+
+.vam-summary-total {
+    background: #fff;
+    margin: 15px -20px -20px;
+    padding: 15px 20px;
+    border-radius: 0 0 12px 12px;
+    border-top: 2px solid #e0e0e0;
+}
+
+.vam-summary-total .vam-summary-row {
+    border: none;
+    padding: 0;
+}
+
+.vam-summary-total .vam-summary-label {
+    font-size: 16px;
+    color: #2c3e50;
+}
+
+.vam-summary-total .vam-summary-value {
+    font-size: 20px;
+    color: #27ae60;
+}
+
+/* ============================================
+   STAR RATING
+   ============================================ */
+
+.vam-star-rating {
+    display: flex;
+    gap: 10px;
+    font-size: 36px;
+    margin: 10px 0;
+}
+
+.vam-star-rating i {
+    color: #e0e0e0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.vam-star-rating i:hover,
+.vam-star-rating i.active {
+    color: #f39c12;
+    transform: scale(1.1);
+}
+
+.vam-detailed-ratings {
+    margin-top: 25px;
+    padding-top: 25px;
+    border-top: 2px solid #ecf0f1;
+}
+
+.vam-detailed-ratings h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0 0 15px 0;
+}
+
+/* ============================================
+   PAYMENT SPECIFIC STYLES
+   ============================================ */
+
+.vam-payment-summary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+}
+
+.vam-payment-summary h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 15px 0;
+}
+
+.vam-payment-amount {
+    font-size: 42px;
+    font-weight: 700;
+    margin: 10px 0;
+}
+
+.vam-payment-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+    border-bottom: 2px solid #ecf0f1;
+}
+
+.vam-payment-tab {
+    padding: 12px 20px;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: #7f8c8d;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.vam-payment-tab:hover:not(:disabled) {
+    color: #3498db;
+}
+
+.vam-payment-tab.active {
+    color: #3498db;
+    border-bottom-color: #3498db;
+}
+
+.vam-payment-tab:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.vam-payment-form {
+    display: block;
+}
+
+.vam-payment-form.hidden {
+    display: none;
+}
+
+.vam-payment-processing {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.vam-payment-processing h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 20px 0 10px;
+}
+
+.vam-payment-processing p {
+    color: #7f8c8d;
+    margin-bottom: 20px;
+}
+
+.vam-spinner {
+    width: 60px;
+    height: 60px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #3498db;
+    border-radius: 50%;
+    margin: 0 auto;
+    animation: vamSpin 1s linear infinite;
+}
+
+@keyframes vamSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 768px) {
+    .vam-modal-overlay {
+        padding: 0;
+    }
+
+    .vam-modal-container {
+        max-width: 100%;
+        max-height: 100vh;
+        border-radius: 0;
+    }
+
+    .vam-modal-header {
+        padding: 20px;
+    }
+
+    .vam-modal-body {
+        padding: 20px;
+    }
+
+    .vam-modal-footer {
+        padding: 15px 20px;
+        flex-direction: column;
+    }
+
+    .vam-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .vam-form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .vam-star-rating {
+        font-size: 28px;
+    }
+
+    .vam-vendor-info {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .vam-payment-amount {
+        font-size: 32px;
+    }
+}
+
+@media (max-width: 480px) {
+    .vam-modal-title {
+        font-size: 18px;
+    }
+
+    .vam-payment-tabs {
+        flex-direction: column;
+    }
+
+    .vam-payment-tab {
+        border-bottom: none;
+        border-left: 3px solid transparent;
+        justify-content: center;
+    }
+
+    .vam-payment-tab.active {
+        border-bottom-color: transparent;
+        border-left-color: #3498db;
+        background: rgba(52, 152, 219, 0.1);
+    }
+}

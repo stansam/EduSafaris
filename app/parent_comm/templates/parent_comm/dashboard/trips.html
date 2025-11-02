@@ -1,0 +1,241 @@
+<div class="trips-main-container">
+    <!-- Search and Filter Section -->
+    <div class="trips-search-section">
+        <div class="trips-search-header">
+            <h2 class="trips-section-title">
+                <i class="fas fa-plane-departure"></i>
+                Browse Available Trips
+            </h2>
+            <button class="trips-toggle-filters-btn" id="tripsToggleFiltersBtn">
+                <i class="fas fa-filter"></i>
+                Filters
+            </button>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="trips-search-bar">
+            <i class="fas fa-search trips-search-icon"></i>
+            <input 
+                type="text" 
+                id="tripsSearchInput" 
+                class="trips-search-input" 
+                placeholder="Search trips by title, destination, or description..."
+            >
+            <button class="trips-clear-search-btn" id="tripsClearSearchBtn" style="display: none;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <!-- Advanced Filters -->
+        <div class="trips-filters-panel" id="tripsFiltersPanel" style="display: none;">
+            <div class="trips-filters-grid">
+                <div class="trips-filter-group">
+                    <label for="tripsDestinationFilter">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Destination
+                    </label>
+                    <input 
+                        type="text" 
+                        id="tripsDestinationFilter" 
+                        class="trips-filter-input"
+                        placeholder="Enter destination..."
+                    >
+                </div>
+
+                <div class="trips-filter-group">
+                    <label for="tripsCategoryFilter">
+                        <i class="fas fa-tag"></i>
+                        Category
+                    </label>
+                    <select id="tripsCategoryFilter" class="trips-filter-select">
+                        <option value="">All Categories</option>
+                    </select>
+                </div>
+
+                <div class="trips-filter-group">
+                    <label for="tripsGradeLevelFilter">
+                        <i class="fas fa-graduation-cap"></i>
+                        Grade Level
+                    </label>
+                    <select id="tripsGradeLevelFilter" class="trips-filter-select">
+                        <option value="">All Grades</option>
+                    </select>
+                </div>
+
+                <div class="trips-filter-group">
+                    <label for="tripsMinPriceFilter">
+                        <i class="fas fa-dollar-sign"></i>
+                        Min Price
+                    </label>
+                    <input 
+                        type="number" 
+                        id="tripsMinPriceFilter" 
+                        class="trips-filter-input"
+                        placeholder="0"
+                        min="0"
+                        step="100"
+                    >
+                </div>
+
+                <div class="trips-filter-group">
+                    <label for="tripsMaxPriceFilter">
+                        <i class="fas fa-dollar-sign"></i>
+                        Max Price
+                    </label>
+                    <input 
+                        type="number" 
+                        id="tripsMaxPriceFilter" 
+                        class="trips-filter-input"
+                        placeholder="10000"
+                        min="0"
+                        step="100"
+                    >
+                </div>
+
+                <div class="trips-filter-group">
+                    <label for="tripsStartDateFromFilter">
+                        <i class="fas fa-calendar-alt"></i>
+                        Start Date From
+                    </label>
+                    <input 
+                        type="date" 
+                        id="tripsStartDateFromFilter" 
+                        class="trips-filter-input"
+                    >
+                </div>
+
+                <div class="trips-filter-group">
+                    <label for="tripsStartDateToFilter">
+                        <i class="fas fa-calendar-alt"></i>
+                        Start Date To
+                    </label>
+                    <input 
+                        type="date" 
+                        id="tripsStartDateToFilter" 
+                        class="trips-filter-input"
+                    >
+                </div>
+
+                <div class="trips-filter-group">
+                    <label for="tripsSortByFilter">
+                        <i class="fas fa-sort"></i>
+                        Sort By
+                    </label>
+                    <select id="tripsSortByFilter" class="trips-filter-select">
+                        <option value="start_date">Start Date</option>
+                        <option value="price">Price</option>
+                        <option value="title">Title</option>
+                        <option value="created_at">Recently Added</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="trips-filters-actions">
+                <button class="trips-apply-filters-btn" id="tripsApplyFiltersBtn">
+                    <i class="fas fa-check"></i>
+                    Apply Filters
+                </button>
+                <button class="trips-reset-filters-btn" id="tripsResetFiltersBtn">
+                    <i class="fas fa-redo"></i>
+                    Reset
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Toggle -->
+    <div class="trips-view-toggle">
+        <div class="trips-view-buttons">
+            <button class="trips-view-btn active" data-view="grid" id="tripsGridViewBtn">
+                <i class="fas fa-th"></i>
+                Grid
+            </button>
+            <button class="trips-view-btn" data-view="list" id="tripsListViewBtn">
+                <i class="fas fa-list"></i>
+                List
+            </button>
+        </div>
+        <div class="trips-results-info" id="tripsResultsInfo">
+            <span class="trips-loading-text">Loading trips...</span>
+        </div>
+    </div>
+
+    <!-- Trips Grid/List Container -->
+    <div class="trips-content-container">
+        <div class="trips-grid-view" id="tripsGridView">
+            <!-- Trip cards will be dynamically inserted here -->
+        </div>
+
+        <div class="trips-list-view" id="tripsListView" style="display: none;">
+            <!-- Trip list items will be dynamically inserted here -->
+        </div>
+
+        <!-- Loading State -->
+        <div class="trips-loading-state" id="tripsLoadingState">
+            <div class="trips-spinner"></div>
+            <p>Loading trips...</p>
+        </div>
+
+        <!-- Empty State -->
+        <div class="trips-empty-state" id="tripsEmptyState" style="display: none;">
+            <i class="fas fa-plane-slash"></i>
+            <h3>No Trips Found</h3>
+            <p>Try adjusting your search or filter criteria.</p>
+        </div>
+
+        <!-- Error State -->
+        <div class="trips-error-state" id="tripsErrorState" style="display: none;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>Failed to Load Trips</h3>
+            <p id="tripsErrorMessage">An error occurred while loading trips.</p>
+            <button class="trips-retry-btn" id="tripsRetryBtn">
+                <i class="fas fa-redo"></i>
+                Retry
+            </button>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="trips-pagination-container" id="tripsPaginationContainer" style="display: none;">
+        <button class="trips-pagination-btn" id="tripsPrevPageBtn" disabled>
+            <i class="fas fa-chevron-left"></i>
+            Previous
+        </button>
+        <div class="trips-pagination-info" id="tripsPaginationInfo">
+            Page 1 of 1
+        </div>
+        <button class="trips-pagination-btn" id="tripsNextPageBtn" disabled>
+            Next
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <!-- My Registrations Section -->
+    <div class="trips-my-registrations-section">
+        <div class="trips-section-header">
+            <h2 class="trips-section-title">
+                <i class="fas fa-clipboard-list"></i>
+                My Children's Registrations
+            </h2>
+            <button class="trips-refresh-registrations-btn" id="tripsRefreshRegistrationsBtn">
+                <i class="fas fa-sync-alt"></i>
+                Refresh
+            </button>
+        </div>
+
+        <div class="trips-registrations-container" id="tripsRegistrationsContainer">
+            <!-- Registrations will be dynamically inserted here -->
+        </div>
+
+        <div class="trips-registrations-empty" id="tripsRegistrationsEmpty" style="display: none;">
+            <i class="fas fa-clipboard"></i>
+            <p>No active registrations yet.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div class="trips-toast" id="tripsToast">
+    <i class="fas fa-check-circle trips-toast-icon"></i>
+    <span class="trips-toast-message" id="tripsToastMessage"></span>
+</div>

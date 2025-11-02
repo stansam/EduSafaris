@@ -1,0 +1,186 @@
+<!-- Update Child Profile Modal -->
+<div id="updateChildModal" class="modal-child-overlay" style="display: none;">
+    <div class="modal-child-container" style="max-width: 900px;">
+        <div class="modal-child-header">
+            <h2><i class="fas fa-edit"></i> Update Child Profile</h2>
+            <button class="modal-child-close" onclick="closeUpdateChildModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <form id="updateChildForm" class="modal-child-form">
+            <input type="hidden" id="updateChildId" name="child_id">
+            
+            <!-- Loading State -->
+            <div id="updateChildLoading" class="loading-state" style="display: none;">
+                <div class="spinner"></div>
+                <p>Loading profile...</p>
+            </div>
+            
+            <!-- Form Content -->
+            <div id="updateChildContent" style="display: none;">
+                <!-- Personal Information -->
+                <div class="form-child-section">
+                    <h3 class="section-child-title">
+                        <i class="fas fa-user"></i> Personal Information
+                    </h3>
+                    <div class="form-child-row">
+                        <div class="form-child-group">
+                            <label for="updateFirstName" class="form-child-label required">First Name</label>
+                            <input type="text" id="updateFirstName" name="first_name" class="form-child-input" required>
+                            <span class="form-child-error" id="updateFirstNameError"></span>
+                        </div>
+                        <div class="form-child-group">
+                            <label for="updateLastName" class="form-child-label required">Last Name</label>
+                            <input type="text" id="updateLastName" name="last_name" class="form-child-input" required>
+                            <span class="form-child-error" id="updateLastNameError"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-child-row">
+                        <div class="form-child-group">
+                            <label for="updateDateOfBirth" class="form-child-label">Date of Birth</label>
+                            <input type="date" id="updateDateOfBirth" name="date_of_birth" class="form-child-input">
+                            <span class="form-child-error" id="updateDateOfBirthError"></span>
+                        </div>
+                        <div class="form-child-group">
+                            <label for="updateGradeLevel" class="form-child-label">Grade/Class</label>
+                            <input type="text" id="updateGradeLevel" name="grade_level" class="form-child-input">
+                            <span class="form-child-error" id="updateGradeLevelError"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-child-group">
+                        <label for="updateStudentId" class="form-child-label">Student ID</label>
+                        <input type="text" id="updateStudentId" name="student_id" class="form-child-input">
+                        <span class="form-child-error" id="updateStudentIdError"></span>
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="form-child-section">
+                    <h3 class="section-child-title">
+                        <i class="fas fa-phone"></i> Contact Information
+                    </h3>
+                    <div class="form-child-row">
+                        <div class="form-child-group">
+                            <label for="updateEmail" class="form-child-label">Email</label>
+                            <input type="email" id="updateEmail" name="email" class="form-child-input">
+                            <span class="form-child-error" id="updateEmailError"></span>
+                        </div>
+                        <div class="form-child-group">
+                            <label for="updatePhone" class="form-child-label">Phone</label>
+                            <input type="tel" id="updatePhone" name="phone" class="form-child-input">
+                            <span class="form-child-error" id="updatePhoneError"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Emergency Contacts -->
+                <div class="form-child-section">
+                    <h3 class="section-child-title">
+                        <i class="fas fa-phone-alt"></i> Emergency Contacts
+                    </h3>
+                    
+                    <!-- Primary Contact -->
+                    <h4 style="color: #2c3e50; margin-bottom: 16px; font-size: 16px;">Primary Contact</h4>
+                    <div class="form-child-row">
+                        <div class="form-child-group">
+                            <label for="updateEmergencyContact1Name" class="form-child-label">Name</label>
+                            <input type="text" id="updateEmergencyContact1Name" name="emergency_contact_1_name" class="form-child-input">
+                            <span class="form-child-error" id="updateEmergencyContact1NameError"></span>
+                        </div>
+                        <div class="form-child-group">
+                            <label for="updateEmergencyContact1Phone" class="form-child-label">Phone</label>
+                            <input type="tel" id="updateEmergencyContact1Phone" name="emergency_contact_1_phone" class="form-child-input">
+                            <span class="form-child-error" id="updateEmergencyContact1PhoneError"></span>
+                        </div>
+                    </div>
+                    <div class="form-child-group">
+                        <label for="updateEmergencyContact1Relationship" class="form-child-label">Relationship</label>
+                        <input type="text" id="updateEmergencyContact1Relationship" name="emergency_contact_1_relationship" class="form-child-input" placeholder="e.g., Parent, Guardian">
+                        <span class="form-child-error" id="updateEmergencyContact1RelationshipError"></span>
+                    </div>
+                    
+                    <!-- Secondary Contact -->
+                    <h4 style="color: #2c3e50; margin: 24px 0 16px 0; font-size: 16px;">Secondary Contact</h4>
+                    <div class="form-child-row">
+                        <div class="form-child-group">
+                            <label for="updateEmergencyContact2Name" class="form-child-label">Name</label>
+                            <input type="text" id="updateEmergencyContact2Name" name="emergency_contact_2_name" class="form-child-input">
+                            <span class="form-child-error" id="updateEmergencyContact2NameError"></span>
+                        </div>
+                        <div class="form-child-group">
+                            <label for="updateEmergencyContact2Phone" class="form-child-label">Phone</label>
+                            <input type="tel" id="updateEmergencyContact2Phone" name="emergency_contact_2_phone" class="form-child-input">
+                            <span class="form-child-error" id="updateEmergencyContact2PhoneError"></span>
+                        </div>
+                    </div>
+                    <div class="form-child-group">
+                        <label for="updateEmergencyContact2Relationship" class="form-child-label">Relationship</label>
+                        <input type="text" id="updateEmergencyContact2Relationship" name="emergency_contact_2_relationship" class="form-child-input" placeholder="e.g., Parent, Guardian">
+                        <span class="form-child-error" id="updateEmergencyContact2RelationshipError"></span>
+                    </div>
+                </div>
+
+                <!-- Medical Information -->
+                <div class="form-child-section">
+                    <h3 class="section-child-title">
+                        <i class="fas fa-heartbeat"></i> Medical Information
+                    </h3>
+                    <div class="form-child-group">
+                        <label for="updateMedicalConditions" class="form-child-label">Medical Conditions</label>
+                        <textarea id="updateMedicalConditions" name="medical_conditions" class="form-child-textarea" rows="3" placeholder="List any medical conditions..."></textarea>
+                        <span class="form-child-error" id="updateMedicalConditionsError"></span>
+                    </div>
+                    
+                    <div class="form-child-group">
+                        <label for="updateMedications" class="form-child-label">Current Medications</label>
+                        <textarea id="updateMedications" name="medications" class="form-child-textarea" rows="3" placeholder="List current medications..."></textarea>
+                        <span class="form-child-error" id="updateMedicationsError"></span>
+                    </div>
+                    
+                    <div class="form-child-group">
+                        <label for="updateAllergies" class="form-child-label">Allergies</label>
+                        <textarea id="updateAllergies" name="allergies" class="form-child-textarea" rows="2" placeholder="List any allergies..."></textarea>
+                        <span class="form-child-error" id="updateAllergiesError"></span>
+                    </div>
+                    
+                    <div class="form-child-group">
+                        <label for="updateDietaryRestrictions" class="form-child-label">Dietary Restrictions</label>
+                        <textarea id="updateDietaryRestrictions" name="dietary_restrictions" class="form-child-textarea" rows="2" placeholder="List dietary restrictions..."></textarea>
+                        <span class="form-child-error" id="updateDietaryRestrictionsError"></span>
+                    </div>
+                    
+                    <div class="form-child-group">
+                        <label for="updateEmergencyMedicalInfo" class="form-child-label">Emergency Medical Information</label>
+                        <textarea id="updateEmergencyMedicalInfo" name="emergency_medical_info" class="form-child-textarea" rows="3" placeholder="Any critical medical information for emergencies..."></textarea>
+                        <span class="form-child-error" id="updateEmergencyMedicalInfoError"></span>
+                    </div>
+                </div>
+
+                <!-- Special Requirements -->
+                <div class="form-child-section">
+                    <h3 class="section-child-title">
+                        <i class="fas fa-info-circle"></i> Special Requirements
+                    </h3>
+                    <div class="form-child-group">
+                        <label for="updateSpecialRequirements" class="form-child-label">Special Needs or Requirements</label>
+                        <textarea id="updateSpecialRequirements" name="special_requirements" class="form-child-textarea" rows="3" placeholder="Any special requirements..."></textarea>
+                        <span class="form-child-error" id="updateSpecialRequirementsError"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="modal-child-actions">
+                <button type="button" class="btn-child-cancel" onclick="closeUpdateChildModal()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button type="submit" class="btn-child-submit" id="updateChildSubmitBtn">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

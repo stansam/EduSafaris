@@ -1,0 +1,77 @@
+<!-- Children Management Tab -->
+<div class="children-management-tab">
+    <!-- Header Section -->
+    <div class="children-tab-header">
+        <div class="header-left">
+            <h2 class="children-tab-title">
+                <i class="fas fa-child"></i> My Children
+            </h2>
+            <p class="children-tab-subtitle">Manage your children's trip registrations and information</p>
+        </div>
+        <div class="header-right">
+            <button class="btn-add-child" onclick="openAddChildModal()">
+                <i class="fas fa-plus"></i> Register Child
+            </button>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="children-filters">
+        <div class="filter-group">
+            <label for="statusFilter"><i class="fas fa-filter"></i> Status:</label>
+            <select id="statusFilter" class="filter-select" onchange="filterChildren()">
+                <option value="">All Statuses</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="registered">Registered</option>
+                <option value="waitlisted">Waitlisted</option>
+                <option value="cancelled">Cancelled</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="tripFilter"><i class="fas fa-plane"></i> Trip:</label>
+            <select id="tripFilter" class="filter-select" onchange="filterChildren()">
+                <option value="">All Trips</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="paymentFilter"><i class="fas fa-money-bill-wave"></i> Payment:</label>
+            <select id="paymentFilter" class="filter-select" onchange="filterChildren()">
+                <option value="">All Payments</option>
+                <option value="paid">Paid</option>
+                <option value="pending">Pending</option>
+                <option value="partial">Partial</option>
+            </select>
+        </div>
+        <button class="btn-clear-filters" onclick="clearFilters()">
+            <i class="fas fa-times"></i> Clear Filters
+        </button>
+    </div>
+
+    <!-- Loading State -->
+    <div id="childrenLoadingState" class="loading-state" style="display: none;">
+        <div class="spinner"></div>
+        <p>Loading children...</p>
+    </div>
+
+    <!-- Error State -->
+    <div id="childrenErrorState" class="error-state" style="display: none;">
+        <i class="fas fa-exclamation-triangle"></i>
+        <p id="childrenErrorMessage"></p>
+        <button class="btn-retry" onclick="loadChildren()">
+            <i class="fas fa-redo"></i> Retry
+        </button>
+    </div>
+
+    <!-- Empty State -->
+    <div id="childrenEmptyState" class="empty-state" style="display: none;">
+        <i class="fas fa-child"></i>
+        <h3>No Children Registered</h3>
+        <p>You haven't registered any children for trips yet.</p>
+        <button class="btn-add-child" onclick="openAddChildModal()">
+            <i class="fas fa-plus"></i> Register Your First Child
+        </button>
+    </div>
+
+    <!-- Children Grid -->
+    <div id="childrenGrid" class="children-grid"></div>
+</div>

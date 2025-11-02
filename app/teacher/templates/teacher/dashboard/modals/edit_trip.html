@@ -1,0 +1,155 @@
+<div id="tripEditModal" class="trip-modal-overlay">
+    <div class="trip-modal-content">
+        <div class="trip-modal-header">
+            <h2 class="trip-modal-title">Edit Trip</h2>
+            <button class="trip-modal-close" onclick="tripCloseEditModal()">&times;</button>
+        </div>
+        <div class="trip-modal-body">
+            <div id="tripEditAlert" class="trip-alert"></div>
+            
+            <form id="tripEditForm" onsubmit="tripHandleEditSubmit(event)">
+                <div class="trip-section-title">Basic Information</div>
+                
+                <div class="trip-form-grid">
+                    <div class="trip-form-group">
+                        <label class="trip-form-label">
+                            Trip Title<span class="trip-form-required">*</span>
+                        </label>
+                        <input type="text" id="tripEditTitle" class="trip-form-input" 
+                                placeholder="e.g., Summer Science Camp" maxlength="200" required>
+                    </div>
+
+                    <div class="trip-form-group">
+                        <label class="trip-form-label">
+                            Destination<span class="trip-form-required">*</span>
+                        </label>
+                        <input type="text" id="tripEditDestination" class="trip-form-input" 
+                                placeholder="e.g., Science Center, City" maxlength="200" required>
+                    </div>
+
+                    <div class="trip-form-group">
+                        <label class="trip-form-label">Description</label>
+                        <textarea id="tripEditDescription" class="trip-form-textarea" 
+                                    placeholder="Describe the trip, activities, and what students will learn..."></textarea>
+                    </div>
+
+                    <div class="trip-form-row">
+                        <div class="trip-form-group">
+                            <label class="trip-form-label">Category</label>
+                            <input type="text" id="tripEditCategory" class="trip-form-input" 
+                                    placeholder="e.g., science, history, sports" maxlength="50">
+                        </div>
+
+                        <div class="trip-form-group">
+                            <label class="trip-form-label">Grade Level</label>
+                            <input type="text" id="tripEditGradeLevel" class="trip-form-input" 
+                                    placeholder="e.g., 6-8, 9-12" maxlength="20">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="trip-section-title">Schedule & Pricing</div>
+                
+                <div class="trip-form-grid">
+                    <div class="trip-form-row">
+                        <div class="trip-form-group">
+                            <label class="trip-form-label">
+                                Start Date<span class="trip-form-required">*</span>
+                            </label>
+                            <input type="date" id="tripEditStartDate" class="trip-form-input" required>
+                        </div>
+
+                        <div class="trip-form-group">
+                            <label class="trip-form-label">
+                                End Date<span class="trip-form-required">*</span>
+                            </label>
+                            <input type="date" id="tripEditEndDate" class="trip-form-input" required>
+                        </div>
+                    </div>
+
+                    <div class="trip-form-row">
+                        <div class="trip-form-group">
+                            <label class="trip-form-label">Registration Deadline</label>
+                            <input type="date" id="tripEditRegDeadline" class="trip-form-input">
+                        </div>
+
+                        <div class="trip-form-group">
+                            <label class="trip-form-label">
+                                Price per Student<span class="trip-form-required">*</span>
+                            </label>
+                            <input type="number" id="tripEditPrice" class="trip-form-input" 
+                                    placeholder="299.99" step="0.01" min="0" max="999999.99" required>
+                            <span class="trip-form-help">Maximum: 999,999.99</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="trip-section-title">Participants</div>
+                
+                <div class="trip-form-grid">
+                    <div class="trip-form-row">
+                        <div class="trip-form-group">
+                            <label class="trip-form-label">
+                                Maximum Participants<span class="trip-form-required">*</span>
+                            </label>
+                            <input type="number" id="tripEditMaxParticipants" class="trip-form-input" 
+                                    placeholder="30" min="1" max="10000" required>
+                            <span class="trip-form-help" id="tripEditCurrentParticipants"></span>
+                        </div>
+
+                        <div class="trip-form-group">
+                            <label class="trip-form-label">Minimum Participants</label>
+                            <input type="number" id="tripEditMinParticipants" class="trip-form-input" 
+                                    placeholder="10" min="0" max="10000">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="trip-section-title">Requirements & Status</div>
+                
+                <div class="trip-form-grid">
+                    <div class="trip-form-checkbox-group">
+                        <input type="checkbox" id="tripEditMedicalInfo" class="trip-form-checkbox">
+                        <label for="tripEditMedicalInfo" class="trip-form-checkbox-label">
+                            Medical Information Required
+                        </label>
+                    </div>
+
+                    <div class="trip-form-checkbox-group">
+                        <input type="checkbox" id="tripEditConsent" class="trip-form-checkbox">
+                        <label for="tripEditConsent" class="trip-form-checkbox-label">
+                            Parental Consent Required
+                        </label>
+                    </div>
+
+                    <div class="trip-form-group">
+                        <label class="trip-form-label">Status</label>
+                        <select id="tripEditStatus" class="trip-form-select">
+                            <option value="draft">Draft</option>
+                            <option value="active">Active</option>
+                            <option value="full">Full</option>
+                            <option value="in_progress">In Progress</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="trip-section-title">Itinerary</div>
+                <div id="tripEditItinerary" class="trip-itinerary-editor">
+                    <div id="tripEditItineraryDays"></div>
+                    <button type="button" class="trip-btn trip-btn-small trip-btn-add" 
+                            onclick="tripAddItineraryDay('edit')">+ Add Day</button>
+                </div>
+            </form>
+        </div>
+        <div class="trip-modal-footer">
+            <button type="button" class="trip-btn trip-btn-secondary" onclick="tripCloseEditModal()">
+                Cancel
+            </button>
+            <button type="submit" form="tripEditForm" class="trip-btn trip-btn-primary" id="tripEditSubmitBtn">
+                Update Trip
+            </button>
+        </div>
+    </div>
+</div>

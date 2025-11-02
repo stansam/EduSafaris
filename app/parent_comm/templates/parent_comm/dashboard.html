@@ -4,18 +4,79 @@
 
 {% block styles %} 
 <link rel="stylesheet" href="{{url_for('parent_comm.static', filename='css/dash.css')}}">
+<link rel="stylesheet" href="{{url_for('parent_comm.static', filename='css/children.css')}}">
+<link rel="stylesheet" href="{{url_for('parent_comm.static', filename='css/add_child.css')}}">
+<link rel="stylesheet" href="{{url_for('parent_comm.static', filename='css/view_child.css')}}">
+<link rel="stylesheet" href="{{url_for('parent_comm.static', filename='css/update_child.css')}}">
+<link rel="stylesheet" href="{{url_for('parent_comm.static', filename='css/upload_document.css')}}">
+<link rel="stylesheet" href="{{url_for('parent_comm.static', filename='css/trips.css')}}">
+<link rel="stylesheet" href="{{url_for('parent_comm.static', filename='css/view_trip_details.css')}}">
+<link rel="stylesheet" href="{{url_for('parent_comm.static', filename='css/register_child.css')}}">
+<link rel="stylesheet" href="{{url_for('parent_comm.static', filename='css/cancel_registration.css')}}">
+<link rel="stylesheet" href="{{url_for('parent_comm.static', filename='css/update_requirements.css')}}">
 {% endblock %}
 
 {% block scripts %} 
 <script src="{{url_for('parent_comm.static', filename='js/dash.js')}}"></script>
+<script src="{{url_for('parent_comm.static', filename='js/children.js')}}"></script>
+<script src="{{url_for('parent_comm.static', filename='js/add_child.js')}}"></script>
+<script src="{{url_for('parent_comm.static', filename='js/view_child.js')}}"></script>
+<script src="{{url_for('parent_comm.static', filename='js/update_child.js')}}"></script>
+<script src="{{url_for('parent_comm.static', filename='js/upload_document.js')}}"></script>
+<script src="{{url_for('parent_comm.static', filename='js/consent_forms.js')}}"></script>
+<script src="{{url_for('parent_comm.static', filename='js/trips.js')}}"></script>
+<script src="{{url_for('parent_comm.static', filename='js/view_trip_details.js')}}"></script>
+<script src="{{url_for('parent_comm.static', filename='js/register_child.js')}}"></script>
+<script src="{{url_for('parent_comm.static', filename='js/cancel_registration.js')}}"></script>
+<script src="{{url_for('parent_comm.static', filename='js/update_requirements.js')}}"></script>
 {% endblock %}
 
 {% block content %} 
 
     <div class="dashboard-container">
         {% include 'parent_comm/dashboard/header.html' %}
+
+        <div class="tabs-container">
+            <div class="tabs-header">
+                <button class="tab-btn active" data-tab="my-children">My Children</button>
+                <button class="tab-btn" data-tab="trips">Trips</button>
+                <button class="tab-btn" data-tab="payments">Payments</button>
+                <button class="tab-btn" data-tab="notifications">Notifications</button>
+            </div>
+
+            <div class="tab-content">
+                <div class="tab-pane active" id="my-children">
+                    {% include 'parent_comm/dashboard/children.html' %}
+                </div>
+
+                <div class="tab-pane" id="trips">
+                    {% include 'parent_comm/dashboard/trips.html' %}
+                    
+                </div>
+
+                <div class="tab-pane" id="payments">
+                    {% include 'parent_comm/dashboard/payment.html' %}
+                    
+                </div>
+
+                <div class="tab-pane" id="notifications">
+                    {% include 'parent_comm/dashboard/notifications.html' %}
+                    
+                </div>
+            </div>
+        </div>
+
     </div>
 
+{% include 'parent_comm/dashboard/modals/add_child.html' %}
+{% include 'parent_comm/dashboard/modals/view_child.html' %}
+{% include 'parent_comm/dashboard/modals/update_child.html' %}
+{% include 'parent_comm/dashboard/modals/upload_document.html' %}
+{% include 'parent_comm/dashboard/modals/consent_forms.html' %}
+{% include 'parent_comm/dashboard/modals/view_trip_details.html' %}
+{% include 'parent_comm/dashboard/modals/register_child.html' %}
+{% include 'parent_comm/dashboard/modals/cancel_registration.html' %}
+{% include 'parent_comm/dashboard/modals/update_requirements    .html' %}
 {% endblock %}
 
 

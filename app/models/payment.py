@@ -37,6 +37,10 @@ class Payment(BaseModel):
     trip_id = db.Column(db.Integer, db.ForeignKey('trips.id'))
     booking_id = db.Column(db.Integer, db.ForeignKey('bookings.id'))
     participant_id = db.Column(db.Integer, db.ForeignKey('participants.id'))
+
+    participant = db.relationship('Participant', back_populates='payments', foreign_keys=[participant_id])
+    booking = db.relationship('Booking', back_populates='payments', foreign_keys=[booking_id])
+    trip = db.relationship('Trip', back_populates='payments', foreign_keys=[trip_id])
     
     # Indexes
     __table_args__ = (

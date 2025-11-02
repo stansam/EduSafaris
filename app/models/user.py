@@ -37,16 +37,21 @@ class User(UserMixin, BaseModel):
     email_verification_token = db.Column(db.String(100))
     
     # Relationships
-    organized_trips = db.relationship('Trip', backref='organizer', lazy='dynamic', 
-                                    foreign_keys='Trip.organizer_id')
+    organized_trips = db.relationship('Trip', backref='organizer', lazy='dynamic', foreign_keys='Trip.organizer_id')
     vendor_profile = db.relationship('Vendor', backref='user', uselist=False)
-    trip_participants = db.relationship('Participant', backref='user', lazy='dynamic')
-    sent_notifications = db.relationship('Notification', backref='sender', lazy='dynamic',
-                                       foreign_keys='Notification.sender_id')
-    received_notifications = db.relationship('Notification', backref='recipient', lazy='dynamic',
-                                           foreign_keys='Notification.recipient_id')
+    trip_participants = db.relationship('Participant', backref='user', lazy='dynamic', foreign_keys='Participant.user_id')
+    sent_notifications = db.relationship('Notification', backref='sender', lazy='dynamic', foreign_keys='Notification.sender_id')
+    received_notifications = db.relationship('Notification', backref='recipient', lazy='dynamic', foreign_keys='Notification.recipient_id')
     emergency_contacts = db.relationship('Emergency', backref='contact_person', lazy='dynamic')
     consents = db.relationship('Consent', backref='parent', lazy='dynamic')
+
+    children = db.relationship('Participant', backref='parent', foreign_keys='Participant.parent_id', lazy='dynamic')
+    documents = db.relationship('Document', backref='uploader', foreign_keys='Document.uploaded_by', lazy='dynamic')
+    sent_messages = db.relationship('Message', backref='sender', foreign_keys='Message.sender_id', lazy='dynamic')
+    received_messages = db.relationship('Message', backref='recipient', foreign_keys='Message.recipient_id', lazy='dynamic')
+    activity_logs = db.relationship('ActivityLog', backref='user', foreign_keys='ActivityLog.user_id', lazy='dynamic')
+    reviews = db.relationship('Review', backref='reviewer', foreign_keys='Review.reviewer_id', lazy='dynamic')
+    child_bookings = db.relationship('ChildBooking', back_populates='parent', lazy='dynamic')
     
     # Indexes
     __table_args__ = (
@@ -100,7 +105,7 @@ class User(UserMixin, BaseModel):
         """Get total number of students for teacher"""
         if not self.is_teacher():
             return 0
-        return sum(trip.participants.count() for trip in self.organized_trips)
+        return sum(len(trip.participants) for trip in self.organized_trips.all())
     
     def get_average_rating(self):
         """Get average rating for vendor"""

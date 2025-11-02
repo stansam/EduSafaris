@@ -121,6 +121,7 @@ function renderTrips(trips) {
             <div class="teach-trip-actions">
                 <button class="teach-trip-btn teach-trip-btn-secondary" onclick="viewTripDetails(${trip.id})">View Details</button>
                 <button class="teach-trip-btn teach-trip-btn-primary" onclick="viewParticipants(${trip.id}, '${escapeHtml(trip.title)}')">Participants</button>
+                <button class="trip-demo-btn" onclick="tripOpenEditModal(${trip.id})">Edit Trip</button>
             </div>
         </div>
     `).join('');

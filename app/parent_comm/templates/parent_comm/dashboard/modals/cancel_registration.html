@@ -1,0 +1,172 @@
+<!-- Cancel Registration Modal -->
+<div class="cancel-registration-modal-overlay" id="cancelRegistrationModalOverlay">
+    <div class="cancel-registration-modal-container">
+        <div class="cancel-registration-modal-header">
+            <h2 class="cancel-registration-modal-title">
+                <i class="fas fa-exclamation-triangle"></i>
+                Cancel Registration
+            </h2>
+            <button class="cancel-registration-modal-close" id="cancelRegistrationModalClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="cancel-registration-modal-body" id="cancelRegistrationModalBody">
+            <!-- Loading State -->
+            <div class="cancel-registration-loading" id="cancelRegistrationLoading">
+                <div class="cancel-registration-spinner"></div>
+                <p>Loading registration details...</p>
+            </div>
+
+            <!-- Content -->
+            <div class="cancel-registration-content" id="cancelRegistrationContent" style="display: none;">
+                <!-- Warning Alert -->
+                <div class="cancel-registration-alert cancel-registration-alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div>
+                        <strong>Warning!</strong> This action cannot be undone. Please confirm that you want to cancel this registration.
+                    </div>
+                </div>
+
+                <!-- Registration Details -->
+                <div class="cancel-registration-details">
+                    <h3 class="cancel-registration-details-title">Registration Details</h3>
+                    
+                    <div class="cancel-registration-info-grid">
+                        <div class="cancel-registration-info-item">
+                            <div class="cancel-registration-info-icon">
+                                <i class="fas fa-plane-departure"></i>
+                            </div>
+                            <div class="cancel-registration-info-content">
+                                <span class="cancel-registration-info-label">Trip</span>
+                                <span class="cancel-registration-info-value" id="cancelRegistrationTripTitle">Loading...</span>
+                            </div>
+                        </div>
+
+                        <div class="cancel-registration-info-item">
+                            <div class="cancel-registration-info-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="cancel-registration-info-content">
+                                <span class="cancel-registration-info-label">Child</span>
+                                <span class="cancel-registration-info-value" id="cancelRegistrationChildName">Loading...</span>
+                            </div>
+                        </div>
+
+                        <div class="cancel-registration-info-item">
+                            <div class="cancel-registration-info-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="cancel-registration-info-content">
+                                <span class="cancel-registration-info-label">Destination</span>
+                                <span class="cancel-registration-info-value" id="cancelRegistrationDestination">Loading...</span>
+                            </div>
+                        </div>
+
+                        <div class="cancel-registration-info-item">
+                            <div class="cancel-registration-info-icon">
+                                <i class="fas fa-calendar"></i>
+                            </div>
+                            <div class="cancel-registration-info-content">
+                                <span class="cancel-registration-info-label">Start Date</span>
+                                <span class="cancel-registration-info-value" id="cancelRegistrationStartDate">Loading...</span>
+                            </div>
+                        </div>
+
+                        <div class="cancel-registration-info-item">
+                            <div class="cancel-registration-info-icon">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <div class="cancel-registration-info-content">
+                                <span class="cancel-registration-info-label">Price</span>
+                                <span class="cancel-registration-info-value" id="cancelRegistrationPrice">Loading...</span>
+                            </div>
+                        </div>
+
+                        <div class="cancel-registration-info-item">
+                            <div class="cancel-registration-info-icon">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div class="cancel-registration-info-content">
+                                <span class="cancel-registration-info-label">Status</span>
+                                <span class="cancel-registration-info-value" id="cancelRegistrationStatus">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cancellation Form -->
+                <form id="cancelRegistrationForm" class="cancel-registration-form">
+                    <div class="cancel-registration-form-group">
+                        <label for="cancelRegistrationReason" class="cancel-registration-label">
+                            <i class="fas fa-comment-alt"></i>
+                            Reason for Cancellation (Optional)
+                        </label>
+                        <textarea 
+                            id="cancelRegistrationReason" 
+                            class="cancel-registration-textarea"
+                            rows="4"
+                            placeholder="Please provide a reason for cancelling this registration..."
+                        ></textarea>
+                        <span class="cancel-registration-hint">This information helps us improve our services.</span>
+                    </div>
+
+                    <!-- Policy Notice -->
+                    <div class="cancel-registration-policy">
+                        <h4 class="cancel-registration-policy-title">
+                            <i class="fas fa-file-contract"></i>
+                            Cancellation Policy
+                        </h4>
+                        <ul class="cancel-registration-policy-list">
+                            <li>Cancellations made 30+ days before trip: Full refund</li>
+                            <li>Cancellations made 15-29 days before trip: 50% refund</li>
+                            <li>Cancellations made less than 15 days before trip: No refund</li>
+                            <li>Refunds will be processed within 7-10 business days</li>
+                        </ul>
+                    </div>
+
+                    <!-- Confirmation Checkbox -->
+                    <div class="cancel-registration-confirmation">
+                        <label class="cancel-registration-checkbox-label">
+                            <input 
+                                type="checkbox" 
+                                id="cancelRegistrationConfirm" 
+                                class="cancel-registration-checkbox"
+                                required
+                            >
+                            <span>I understand and confirm that I want to cancel this registration</span>
+                        </label>
+                    </div>
+
+                    <!-- Alert Message -->
+                    <div class="cancel-registration-alert-message" id="cancelRegistrationAlert" style="display: none;">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span id="cancelRegistrationAlertMessage"></span>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Error State -->
+            <div class="cancel-registration-error" id="cancelRegistrationError" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>Failed to Load Registration</h3>
+                <p id="cancelRegistrationErrorMessage">An error occurred while loading the registration details.</p>
+                <button class="cancel-registration-retry-btn" id="cancelRegistrationRetryBtn">
+                    <i class="fas fa-redo"></i>
+                    Retry
+                </button>
+            </div>
+        </div>
+
+        <div class="cancel-registration-modal-footer" id="cancelRegistrationModalFooter" style="display: none;">
+            <button type="button" class="cancel-registration-btn cancel-registration-btn-secondary" id="cancelRegistrationCancelBtn">
+                <i class="fas fa-arrow-left"></i>
+                Go Back
+            </button>
+            <button type="submit" form="cancelRegistrationForm" class="cancel-registration-btn cancel-registration-btn-danger" id="cancelRegistrationSubmitBtn">
+                <i class="fas fa-times-circle"></i>
+                Confirm Cancellation
+            </button>
+        </div>
+    </div>
+</div>

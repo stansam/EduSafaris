@@ -1,0 +1,245 @@
+<!-- Vendor Profile Modal -->
+<div id="vendorProfileModal" class="vpm-modal-overlay" style="display: none;">
+    <input type="hidden" id="vpmVendorId" value="">
+    <div class="vpm-modal-container">
+        <div class="vpm-modal-header">
+            <h2 class="vpm-modal-title">
+                <i class="fas fa-store"></i> Vendor Profile
+            </h2>
+            <button class="vpm-btn-close" id="btnCloseVendorProfile">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="vpm-modal-body">
+            <!-- Loading State -->
+            <div class="vpm-loading" id="vpmLoadingState">
+                <div class="vpm-spinner"></div>
+                <p>Loading vendor profile...</p>
+            </div>
+
+            <!-- Profile Content -->
+            <div class="vpm-content" id="vpmContent" style="display: none;">
+                <!-- Vendor Header -->
+                <div class="vpm-header-section">
+                    <div class="vpm-header-info">
+                        <h3 class="vpm-business-name" id="vpmBusinessName"></h3>
+                        <div class="vpm-badges">
+                            <span class="vpm-badge vpm-badge-verified" id="vpmVerifiedBadge" style="display: none;">
+                                <i class="fas fa-check-circle"></i> Verified
+                            </span>
+                            <span class="vpm-badge vpm-badge-type" id="vpmTypeBadge"></span>
+                        </div>
+                    </div>
+
+                    <div class="vpm-rating-section">
+                        <div class="vpm-stars" id="vpmStars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <span class="vpm-rating-text" id="vpmRatingText"></span>
+                    </div>
+                </div>
+
+                <!-- Tabs Navigation -->
+                <div class="vpm-tabs">
+                    <button class="vpm-tab-btn active" data-tab="overview">
+                        <i class="fas fa-info-circle"></i> Overview
+                    </button>
+                    <button class="vpm-tab-btn" data-tab="reviews">
+                        <i class="fas fa-star"></i> Reviews
+                    </button>
+                    <button class="vpm-tab-btn" data-tab="documents">
+                        <i class="fas fa-file-alt"></i> Documents
+                    </button>
+                    <button class="vpm-tab-btn" data-tab="stats">
+                        <i class="fas fa-chart-bar"></i> Statistics
+                    </button>
+                </div>
+
+                <!-- Tab Contents -->
+                <div class="vpm-tab-content">
+                    <!-- Overview Tab -->
+                    <div class="vpm-tab-pane active" id="vpmOverviewTab">
+                        <div class="vpm-info-grid">
+                            <div class="vpm-info-card">
+                                <h4><i class="fas fa-info-circle"></i> About</h4>
+                                <p class="vpm-description" id="vpmDescription"></p>
+                            </div>
+
+                            <div class="vpm-info-card">
+                                <h4><i class="fas fa-address-card"></i> Contact Information</h4>
+                                <div class="vpm-contact-list">
+                                    <div class="vpm-contact-item">
+                                        <i class="fas fa-user"></i>
+                                        <div>
+                                            <span class="vpm-label">Owner</span>
+                                            <span class="vpm-value" id="vpmOwnerName"></span>
+                                        </div>
+                                    </div>
+                                    <div class="vpm-contact-item">
+                                        <i class="fas fa-phone"></i>
+                                        <div>
+                                            <span class="vpm-label">Phone</span>
+                                            <span class="vpm-value" id="vpmPhone"></span>
+                                        </div>
+                                    </div>
+                                    <div class="vpm-contact-item">
+                                        <i class="fas fa-envelope"></i>
+                                        <div>
+                                            <span class="vpm-label">Email</span>
+                                            <span class="vpm-value" id="vpmEmail"></span>
+                                        </div>
+                                    </div>
+                                    <div class="vpm-contact-item">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <div>
+                                            <span class="vpm-label">Address</span>
+                                            <span class="vpm-value" id="vpmAddress"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="vpm-info-card">
+                                <h4><i class="fas fa-briefcase"></i> Business Details</h4>
+                                <div class="vpm-details-list">
+                                    <div class="vpm-detail-row">
+                                        <span class="vpm-label">Registration Number:</span>
+                                        <span class="vpm-value" id="vpmRegNumber"></span>
+                                    </div>
+                                    <div class="vpm-detail-row">
+                                        <span class="vpm-label">Years in Business:</span>
+                                        <span class="vpm-value" id="vpmYearsInBusiness"></span>
+                                    </div>
+                                    <div class="vpm-detail-row">
+                                        <span class="vpm-label">Services Offered:</span>
+                                        <span class="vpm-value" id="vpmServices"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reviews Tab -->
+                    <div class="vpm-tab-pane" id="vpmReviewsTab">
+                        <div class="vpm-reviews-summary">
+                            <div class="vpm-reviews-overview">
+                                <div class="vpm-overall-rating">
+                                    <span class="vpm-big-rating" id="vpmOverallRating">0.0</span>
+                                    <div class="vpm-stars-large" id="vpmStarsLarge">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <span class="vpm-total-reviews" id="vpmTotalReviews">0 reviews</span>
+                                </div>
+                                <div class="vpm-rating-breakdown" id="vpmRatingBreakdown">
+                                    <!-- Rating bars will be inserted here -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="vpm-reviews-list" id="vpmReviewsList">
+                            <!-- Reviews will be inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- Documents Tab -->
+                    <div class="vpm-tab-pane" id="vpmDocumentsTab">
+                        <div class="vpm-documents-list" id="vpmDocumentsList">
+                            <!-- Documents will be inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- Statistics Tab -->
+                    <div class="vpm-tab-pane" id="vpmStatsTab">
+                        <div class="vpm-stats-grid">
+                            <div class="vpm-stat-card">
+                                <i class="fas fa-calendar-check"></i>
+                                <div>
+                                    <span class="vpm-stat-value" id="vpmTotalBookings">0</span>
+                                    <span class="vpm-stat-label">Total Bookings</span>
+                                </div>
+                            </div>
+                            <div class="vpm-stat-card">
+                                <i class="fas fa-hourglass-half"></i>
+                                <div>
+                                    <span class="vpm-stat-value" id="vpmPendingBookings">0</span>
+                                    <span class="vpm-stat-label">Pending</span>
+                                </div>
+                            </div>
+                            <div class="vpm-stat-card">
+                                <i class="fas fa-check-circle"></i>
+                                <div>
+                                    <span class="vpm-stat-value" id="vpmConfirmedBookings">0</span>
+                                    <span class="vpm-stat-label">Confirmed</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="vpm-modal-footer">
+            <button class="vpm-btn vpm-btn-secondary" id="btnVpmClose">
+                Close
+            </button>
+            <button class="vpm-btn vpm-btn-primary" id="btnVpmRequestQuote">
+                <i class="fas fa-file-invoice"></i> Request Quote
+            </button>
+            <button class="vpm-btn vpm-btn-success" id="btnVpmCreateBooking">
+                <i class="fas fa-plus"></i> Create Booking
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Review Item Template -->
+<template id="vpmReviewTemplate">
+    <div class="vpm-review-item">
+        <div class="vpm-review-header">
+            <div class="vpm-reviewer-info">
+                <div class="vpm-reviewer-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div>
+                    <h5 class="vpm-reviewer-name"></h5>
+                    <div class="vpm-review-stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+            </div>
+            <span class="vpm-review-date"></span>
+        </div>
+        <h6 class="vpm-review-title"></h6>
+        <p class="vpm-review-text"></p>
+    </div>
+</template>
+
+<!-- Document Item Template -->
+<template id="vpmDocumentTemplate">
+    <div class="vpm-document-item">
+        <div class="vpm-document-icon">
+            <i class="fas fa-file-alt"></i>
+        </div>
+        <div class="vpm-document-info">
+            <h5 class="vpm-document-title"></h5>
+            <span class="vpm-document-type"></span>
+        </div>
+        <div class="vpm-document-status">
+            <span class="vpm-document-badge"></span>
+            <span class="vpm-document-expiry"></span>
+        </div>
+    </div>
+</template>

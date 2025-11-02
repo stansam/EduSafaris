@@ -1,0 +1,148 @@
+<!-- Consent Forms Modal -->
+<div id="consentModal" class="modal-child-overlay" style="display: none;">
+    <div class="modal-child-container" style="max-width: 900px;">
+        <div class="modal-child-header">
+            <h2><i class="fas fa-file-signature"></i> Consent Forms</h2>
+            <button class="modal-child-close" onclick="closeConsentModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="modal-child-form">
+            <!-- Child Info -->
+            <div class="profile-child-alert" style="background: #d4edda; border-left-color: #27ae60;">
+                <div class="profile-child-alert-title" style="color: #155724;">
+                    <i class="fas fa-info-circle"></i>
+                    Consent forms for: <span id="consentChildName"></span>
+                </div>
+            </div>
+            
+            <!-- Loading State -->
+            <div id="consentLoading" class="loading-state" style="display: none;">
+                <div class="spinner"></div>
+                <p>Loading consent forms...</p>
+            </div>
+            
+            <!-- Error State -->
+            <div id="consentError" class="error-state" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p id="consentErrorMessage"></p>
+                <button class="btn-retry" onclick="loadConsentForms(currentConsentChildId)">
+                    <i class="fas fa-redo"></i> Retry
+                </button>
+            </div>
+            
+            <!-- Empty State -->
+            <div id="consentEmpty" class="empty-state" style="display: none;">
+                <i class="fas fa-file-signature"></i>
+                <h3>No Consent Forms</h3>
+                <p>There are no consent forms available for this child at the moment.</p>
+            </div>
+            
+            <!-- Consent List -->
+            <div id="consentList" class="consent-child-list" style="display: none;"></div>
+            
+            <!-- Actions -->
+            <div class="modal-child-actions">
+                <button type="button" class="btn-child-cancel" onclick="closeConsentModal()">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sign Consent Modal -->
+<div id="signConsentModal" class="modal-child-overlay" style="display: none;">
+    <div class="modal-child-container">
+        <div class="modal-child-header">
+            <h2><i class="fas fa-signature"></i> Sign Consent Form</h2>
+            <button class="modal-child-close" onclick="closeSignConsentModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <form id="signConsentForm" class="modal-child-form">
+            <input type="hidden" id="signConsentId" name="consent_id">
+            <input type="hidden" id="signConsentChildId" name="child_id">
+            
+            <!-- Consent Details -->
+            <div class="form-child-section">
+                <h3 class="section-child-title">
+                    <i class="fas fa-file-alt"></i> Consent Details
+                </h3>
+                <div class="profile-child-section">
+                    <div id="signConsentDetails"></div>
+                </div>
+            </div>
+            
+            <!-- Consent Text -->
+            <div class="form-child-section">
+                <h3 class="section-child-title">
+                    <i class="fas fa-scroll"></i> Consent Agreement
+                </h3>
+                <div class="profile-child-section" style="max-height: 400px; overflow-y: auto; padding: 20px; background: white; border: 2px solid #ecf0f1;">
+                    <div id="signConsentText" style="color: #2c3e50; line-height: 1.8; font-size: 14px;"></div>
+                </div>
+            </div>
+            
+            <!-- Signer Information -->
+            <div class="form-child-section">
+                <h3 class="section-child-title">
+                    <i class="fas fa-user"></i> Signer Information
+                </h3>
+                
+                <div class="form-child-row">
+                    <div class="form-child-group">
+                        <label for="signConsentSignerName" class="form-child-label required">Full Name</label>
+                        <input type="text" id="signConsentSignerName" name="signer_name" class="form-child-input" required placeholder="Your full legal name">
+                        <span class="form-child-error" id="signConsentSignerNameError"></span>
+                    </div>
+                    <div class="form-child-group">
+                        <label for="signConsentRelationship" class="form-child-label required">Relationship to Child</label>
+                        <select id="signConsentRelationship" name="signer_relationship" class="form-child-input" required>
+                            <option value="">Select relationship...</option>
+                            <option value="Parent">Parent</option>
+                            <option value="Legal Guardian">Legal Guardian</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <span class="form-child-error" id="signConsentRelationshipError"></span>
+                    </div>
+                </div>
+                
+                <div class="form-child-group">
+                    <label for="signConsentNotes" class="form-child-label">Additional Notes (Optional)</label>
+                    <textarea id="signConsentNotes" name="notes" class="form-child-textarea" rows="3" placeholder="Any additional comments or notes..."></textarea>
+                    <span class="form-child-error" id="signConsentNotesError"></span>
+                </div>
+            </div>
+            
+            <!-- Agreement Checkbox -->
+            <div class="form-child-section">
+                <div style="background: #fff3cd; padding: 20px; border-radius: 8px; border-left: 4px solid #f39c12;">
+                    <label style="display: flex; align-items: start; gap: 12px; cursor: pointer;">
+                        <input type="checkbox" id="signConsentAgree" required style="margin-top: 4px; width: 20px; height: 20px; cursor: pointer;">
+                        <span style="color: #856404; font-size: 14px; line-height: 1.6;">
+                            <strong>I hereby confirm that:</strong><br>
+                            • I have read and understood the consent form above<br>
+                            • I have the legal authority to provide this consent<br>
+                            • All information provided is accurate and complete<br>
+                            • I agree to the terms and conditions outlined in this consent form
+                        </span>
+                    </label>
+                    <span class="form-child-error" id="signConsentAgreeError"></span>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="modal-child-actions">
+                <button type="button" class="btn-child-cancel" onclick="closeSignConsentModal()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button type="submit" class="btn-child-submit" id="signConsentSubmitBtn">
+                    <i class="fas fa-signature"></i> Sign Consent Form
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Registration{% endblock %} | Trip Management System</title>    
+    <link rel="icon" type="image/jpg" sizes="16x16" href="{{ url_for('main.static', filename='main/assets/loc.jpg') }}">    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">    
+    <link rel="stylesheet" href="{{url_for('static', filename='css/register_base.css')}}">
+
+    {% block styles %}{% endblock %}
+</head>
+<body>
+    <!-- Page Loader -->
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-spinner"></div>
+    </div>
+
+    <!-- Main Content -->
+    <main role="main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Base JavaScript -->
+    <script>
+        // CSRF Token Management
+        // const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+        
+        // // Add CSRF token to all fetch requests
+        // const originalFetch = window.fetch;
+        // window.fetch = function(...args) {
+        //     if (args[1] && args[1].method && args[1].method.toUpperCase() !== 'GET') {
+        //         args[1].headers = args[1].headers || {};
+        //         if (csrfToken) {
+        //             args[1].headers['X-CSRFToken'] = csrfToken;
+        //         }
+        //     }
+        //     return originalFetch.apply(this, args);
+        // };
+
+        
+    </script>
+    <script src="{{url_for('static', filename='js/register_base.js')}}"></script>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

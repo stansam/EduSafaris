@@ -1,0 +1,189 @@
+<!-- Update Requirements Modal -->
+<div class="update-requirements-modal-overlay" id="updateRequirementsModalOverlay">
+    <div class="update-requirements-modal-container">
+        <div class="update-requirements-modal-header">
+            <h2 class="update-requirements-modal-title">
+                <i class="fas fa-edit"></i>
+                Update Special Requirements
+            </h2>
+            <button class="update-requirements-modal-close" id="updateRequirementsModalClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="update-requirements-modal-body" id="updateRequirementsModalBody">
+            <!-- Loading State -->
+            <div class="update-requirements-loading" id="updateRequirementsLoading">
+                <div class="update-requirements-spinner"></div>
+                <p>Loading participant information...</p>
+            </div>
+
+            <!-- Content -->
+            <div class="update-requirements-content" id="updateRequirementsContent" style="display: none;">
+                <!-- Participant Info -->
+                <div class="update-requirements-participant-info">
+                    <div class="update-requirements-info-card">
+                        <div class="update-requirements-info-header">
+                            <div class="update-requirements-info-icon">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                            <div>
+                                <h3 id="updateRequirementsChildName">Loading...</h3>
+                                <p><i class="fas fa-plane-departure"></i> <span id="updateRequirementsTripTitle">Loading...</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Update Form -->
+                <form id="updateRequirementsForm" class="update-requirements-form">
+                    <!-- Medical Information Section -->
+                    <div class="update-requirements-section">
+                        <h3 class="update-requirements-section-title">
+                            <i class="fas fa-heartbeat"></i>
+                            Medical Information
+                        </h3>
+                        <div class="update-requirements-info-text">
+                            Please provide accurate and up-to-date medical information to ensure your child's safety during the trip.
+                        </div>
+                        
+                        <div class="update-requirements-form-grid">
+                            <div class="update-requirements-form-group update-requirements-full-width">
+                                <label for="updateRequirementsMedicalConditions" class="update-requirements-label">
+                                    <i class="fas fa-notes-medical"></i>
+                                    Medical Conditions
+                                </label>
+                                <textarea 
+                                    id="updateRequirementsMedicalConditions" 
+                                    class="update-requirements-textarea"
+                                    rows="3"
+                                    placeholder="List any medical conditions (e.g., asthma, diabetes, epilepsy)..."
+                                ></textarea>
+                            </div>
+
+                            <div class="update-requirements-form-group update-requirements-full-width">
+                                <label for="updateRequirementsMedications" class="update-requirements-label">
+                                    <i class="fas fa-pills"></i>
+                                    Current Medications
+                                </label>
+                                <textarea 
+                                    id="updateRequirementsMedications" 
+                                    class="update-requirements-textarea"
+                                    rows="3"
+                                    placeholder="List all medications with dosage and frequency..."
+                                ></textarea>
+                            </div>
+
+                            <div class="update-requirements-form-group update-requirements-full-width">
+                                <label for="updateRequirementsAllergies" class="update-requirements-label">
+                                    <i class="fas fa-allergies"></i>
+                                    Allergies
+                                </label>
+                                <textarea 
+                                    id="updateRequirementsAllergies" 
+                                    class="update-requirements-textarea"
+                                    rows="3"
+                                    placeholder="List all allergies (food, medication, environmental)..."
+                                ></textarea>
+                            </div>
+
+                            <div class="update-requirements-form-group update-requirements-full-width">
+                                <label for="updateRequirementsEmergencyMedical" class="update-requirements-label">
+                                    <i class="fas fa-ambulance"></i>
+                                    Emergency Medical Information
+                                </label>
+                                <textarea 
+                                    id="updateRequirementsEmergencyMedical" 
+                                    class="update-requirements-textarea"
+                                    rows="3"
+                                    placeholder="Any critical information for emergency situations..."
+                                ></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dietary Requirements Section -->
+                    <div class="update-requirements-section">
+                        <h3 class="update-requirements-section-title">
+                            <i class="fas fa-utensils"></i>
+                            Dietary Requirements
+                        </h3>
+                        
+                        <div class="update-requirements-form-group update-requirements-full-width">
+                            <label for="updateRequirementsDietaryRestrictions" class="update-requirements-label">
+                                <i class="fas fa-ban"></i>
+                                Dietary Restrictions
+                            </label>
+                            <textarea 
+                                id="updateRequirementsDietaryRestrictions" 
+                                class="update-requirements-textarea"
+                                rows="3"
+                                placeholder="List any dietary restrictions or preferences (vegetarian, vegan, halal, kosher, etc.)..."
+                            ></textarea>
+                            <span class="update-requirements-hint">We will do our best to accommodate all dietary needs.</span>
+                        </div>
+                    </div>
+
+                    <!-- Special Requirements Section -->
+                    <div class="update-requirements-section">
+                        <h3 class="update-requirements-section-title">
+                            <i class="fas fa-clipboard-list"></i>
+                            Additional Special Requirements
+                        </h3>
+                        
+                        <div class="update-requirements-form-group update-requirements-full-width">
+                            <label for="updateRequirementsSpecialRequirements" class="update-requirements-label">
+                                <i class="fas fa-info-circle"></i>
+                                Special Accommodations or Needs
+                            </label>
+                            <textarea 
+                                id="updateRequirementsSpecialRequirements" 
+                                class="update-requirements-textarea"
+                                rows="4"
+                                placeholder="Describe any special accommodations needed (mobility assistance, sensory needs, behavioral considerations, etc.)..."
+                            ></textarea>
+                            <span class="update-requirements-hint">This information helps us better prepare for your child's needs.</span>
+                        </div>
+                    </div>
+
+                    <!-- Important Notice -->
+                    <div class="update-requirements-notice">
+                        <i class="fas fa-shield-alt"></i>
+                        <div>
+                            <strong>Privacy & Security</strong>
+                            <p>All medical and special requirement information is kept strictly confidential and will only be shared with authorized trip supervisors and medical personnel when necessary.</p>
+                        </div>
+                    </div>
+
+                    <!-- Alert Message -->
+                    <div class="update-requirements-alert" id="updateRequirementsAlert" style="display: none;">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span id="updateRequirementsAlertMessage"></span>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Error State -->
+            <div class="update-requirements-error" id="updateRequirementsError" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>Failed to Load Information</h3>
+                <p id="updateRequirementsErrorMessage">An error occurred while loading the participant information.</p>
+                <button class="update-requirements-retry-btn" id="updateRequirementsRetryBtn">
+                    <i class="fas fa-redo"></i>
+                    Retry
+                </button>
+            </div>
+        </div>
+
+        <div class="update-requirements-modal-footer" id="updateRequirementsModalFooter" style="display: none;">
+            <button type="button" class="update-requirements-btn update-requirements-btn-secondary" id="updateRequirementsCancelBtn">
+                <i class="fas fa-times"></i>
+                Cancel
+            </button>
+            <button type="submit" form="updateRequirementsForm" class="update-requirements-btn update-requirements-btn-primary" id="updateRequirementsSubmitBtn">
+                <i class="fas fa-save"></i>
+                Save Changes
+            </button>
+        </div>
+    </div>
+</div>

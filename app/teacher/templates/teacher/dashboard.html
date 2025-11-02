@@ -6,6 +6,13 @@
 <link rel="stylesheet" href="{{url_for('teacher.static', filename='teacher/css/dash.css')}}">
 <link rel="stylesheet" href="{{url_for('teacher.static', filename='teacher/css/dash/consent.css')}}">
 <link rel="stylesheet" href="{{url_for('teacher.static', filename='teacher/css/dash/trips.css')}}">
+<link rel="stylesheet" href="{{url_for('teacher.static', filename='teacher/css/dash/profile.css')}}">
+<link rel="stylesheet" href="{{url_for('teacher.static', filename='teacher/css/dash/trip_man_modals.css')}}">
+<link rel="stylesheet" href="{{url_for('teacher.static', filename='teacher/css/dash/participants.css')}}">
+<link rel="stylesheet" href="{{url_for('teacher.static', filename='teacher/css/dash/vendors.css')}}">
+<link rel="stylesheet" href="{{url_for('teacher.static', filename='teacher/css/dash/vendor_profile.css')}}">
+<link rel="stylesheet" href="{{url_for('teacher.static', filename='teacher/css/dash/vendor_action.css')}}">
+<link rel="stylesheet" href="{{url_for('teacher.static', filename='teacher/css/dash/add_ven_man.css')}}">
 {% endblock %}
 
 {% block scripts %} 
@@ -13,6 +20,18 @@
 <script src="{{url_for('teacher.static', filename='teacher/js/dash/consent.js')}}"></script>
 <script src="{{url_for('teacher.static', filename='teacher/js/dash/stats.js')}}"></script>
 <script src="{{url_for('teacher.static', filename='teacher/js/dash/trips.js')}}"></script>
+<script src="{{url_for('teacher.static', filename='teacher/js/dash/profile.js')}}"></script>
+<script>
+    const TEACHER_DASHBOARD_CONFIG = {
+        teacherUserId: '{{ current_user.id }}',
+    };
+</script>
+<script src="{{url_for('teacher.static', filename='teacher/js/dash/trip_man_modals.js')}}"></script>
+<script src="{{url_for('teacher.static', filename='teacher/js/dash/participants.js')}}"></script>
+<script src="{{url_for('teacher.static', filename='teacher/js/dash/vendors.js')}}"></script>
+<script src="{{url_for('teacher.static', filename='teacher/js/dash/vendor_profile.js')}}"></script>
+<script src="{{url_for('teacher.static', filename='teacher/js/dash/vendor_action.js')}}"></script>
+<script src="{{url_for('teacher.static', filename='teacher/js/dash/add_ven_man.js')}}"></script>
 {% endblock %}
 
 {% block content %} 
@@ -27,7 +46,9 @@
                 <button class="teach-trips-tab-btn active-trip-tab" data-tab="my-trips">My Trips</button>
                 <button class="teach-trips-tab-btn" data-tab="participants">Participants</button>
                 <button class="teach-trips-tab-btn" data-tab="consents">Consents</button>
+                <button class="teach-trips-tab-btn" data-tab="vendors">Vendors</button>
                 <button class="teach-trips-tab-btn" data-tab="notifications">Notifications</button>
+                <button class="teach-trips-tab-btn" data-tab="profile">Profile </button>
             </div>
 
             <!-- Tab Content -->
@@ -48,9 +69,19 @@
                     
                 </div>
 
+                <!-- Vendors Tab -->
+                <div class="teach-trips-tab-content" id="vendors-content" style="display: none;">
+                    {% include 'teacher/dashboard/vendors.html' %}
+                    
+                </div>
+
                 <!-- Notifications Tab -->
                 <div class="teach-trips-tab-content" id="notifications-content" style="display: none;">
                     {% include 'teacher/dashboard/notifications.html' %}
+                </div>
+                <!-- Profile Tab -->
+                <div class="teach-trips-tab-content" id="profile-content" style="display: none;">
+                    {% include 'teacher/dashboard/profile.html' %}
                 </div>
             </div>
         </div>
@@ -58,6 +89,11 @@
     </div>
 {% include 'teacher/dashboard/modals/consent.html' %}
 {% include 'teacher/dashboard/modals/trip_details.html' %}
+{% include 'teacher/dashboard/modals/create_trip.html' %}
+{% include 'teacher/dashboard/modals/edit_trip.html' %}
+{% include 'teacher/dashboard/modals/vendor_profile.html' %}
+{% include 'teacher/dashboard/modals/vendor_action.html' %}
+{% include 'teacher/dashboard/modals/add_ven_man.html' %}
 {% endblock %}
 
 

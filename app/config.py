@@ -29,7 +29,9 @@ class BaseConfig:
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)
     
+    
     # File upload settings
+    ALLOWED_EXTENSIONS = {'pdf', 'jpg', 'jpeg', 'png', 'doc', 'docx'}
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16MB max file size
     UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'uploads')
     
@@ -45,10 +47,16 @@ class BaseConfig:
     SOCKETIO_ASYNC_MODE = os.environ.get('eventlet')
     
     # Payment settings
+    MPESA_ENVIRONMENT = os.environ.get('MPESA_ENVIRONMENT', 'sandbox')  # 'sandbox' or 'production'
     MPESA_CONSUMER_KEY = os.environ.get('MPESA_CONSUMER_KEY')
     MPESA_CONSUMER_SECRET = os.environ.get('MPESA_CONSUMER_SECRET')
-    MPESA_CALLBACK_URL = os.environ.get('MPESA_CALLBACK_URL')
-    
+    MPESA_SHORTCODE = os.environ.get('MPESA_SHORTCODE')
+    MPESA_PASSKEY = os.environ.get('MPESA_PASSKEY')
+    MPESA_CALLBACK_URL = os.environ.get('MPESA_CALLBACK_URL', 'https://yourdomain.com/api/teacher/vendors/payments/mpesa/callback')
+
+    PAYMENT_TIMEOUT = timedelta(minutes=5)  
+    MAX_PAYMENT_AMOUNT = 1000000  
+    MIN_PAYMENT_AMOUNT = 10    
     # SMS settings
     SMS_API_KEY = os.environ.get('SMS_API_KEY')
 

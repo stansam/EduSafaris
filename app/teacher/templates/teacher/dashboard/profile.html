@@ -1,0 +1,248 @@
+<!-- Teacher Profile Section -->
+<div class="teacher-profile-wrapper">
+    <!-- Loading Spinner -->
+    <div class="teacher-profile-loading" id="teacherProfileLoading">
+        <div class="teacher-profile-spinner"></div>
+        <p>Loading profile...</p>
+    </div>
+
+    <!-- Error Message -->
+    <div class="teacher-profile-error" id="teacherProfileError" style="display: none;">
+        <div class="teacher-profile-error-icon"><i class="fas fa-triangle-exclamation"></i></div>
+        <p class="teacher-profile-error-message" id="teacherProfileErrorMessage"></p>
+        <button class="teacher-profile-retry-btn" onclick="teacherProfileLoadProfile()">Retry</button>
+    </div>
+
+    <!-- Success Toast -->
+    <div class="teacher-profile-toast" id="teacherProfileToast">
+        <span class="teacher-profile-toast-icon">✓</span>
+        <span class="teacher-profile-toast-message" id="teacherProfileToastMessage"></span>
+    </div>
+
+    <!-- Profile Content -->
+    <div class="teacher-profile-content" id="teacherProfileContent" style="display: none;">
+        <!-- Profile Header -->
+        <div class="teacher-profile-header">
+            <div class="teacher-profile-avatar-section">
+                <div class="teacher-profile-avatar" id="teacherProfileAvatar">
+                    <span id="teacherProfileInitials">T</span>
+                </div>
+                <div class="teacher-profile-header-info">
+                    <h2 class="teacher-profile-name" id="teacherProfileName">Teacher Name</h2>
+                    <p class="teacher-profile-email" id="teacherProfileEmail">teacher@example.com</p>
+                    <div class="teacher-profile-badges">
+                        <span class="teacher-profile-badge teacher-profile-badge-role">Teacher</span>
+                        <span class="teacher-profile-badge teacher-profile-badge-status" id="teacherProfileStatusBadge">Active</span>
+                        <span class="teacher-profile-badge teacher-profile-badge-verified" id="teacherProfileVerifiedBadge" style="display: none;">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+                                <path d="M10.5 3L4.5 9L1.5 6"/>
+                            </svg>
+                            Verified
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <button class="teacher-profile-edit-btn" id="teacherProfileEditBtn" onclick="teacherProfileToggleEditMode()">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5L13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175l-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                </svg>
+                Edit Profile
+            </button>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="teacher-profile-stats">
+            <div class="teacher-profile-stat-card">
+                <div class="teacher-profile-stat-icon" style="background: #e3f2fd;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#1976d2">
+                        <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
+                    </svg>
+                </div>
+                <div class="teacher-profile-stat-content">
+                    <p class="teacher-profile-stat-label">Total Trips</p>
+                    <p class="teacher-profile-stat-value" id="teacherProfileTotalTrips">0</p>
+                </div>
+            </div>
+            <div class="teacher-profile-stat-card">
+                <div class="teacher-profile-stat-icon" style="background: #f3e5f5;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#7b1fa2">
+                        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                    </svg>
+                </div>
+                <div class="teacher-profile-stat-content">
+                    <p class="teacher-profile-stat-label">Total Students</p>
+                    <p class="teacher-profile-stat-value" id="teacherProfileTotalStudents">0</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Details Form -->
+        <div class="teacher-profile-form">
+            <form id="teacherProfileForm">
+                <!-- Personal Information Section -->
+                <div class="teacher-profile-section">
+                    <h3 class="teacher-profile-section-title">Personal Information</h3>
+                    <div class="teacher-profile-grid">
+                        <div class="teacher-profile-field">
+                            <label for="teacherProfileFirstName" class="teacher-profile-label">
+                                First Name <span class="teacher-profile-required">*</span>
+                            </label>
+                            <input 
+                                type="text" 
+                                id="teacherProfileFirstName" 
+                                class="teacher-profile-input" 
+                                disabled
+                                minlength="2"
+                                maxlength="50"
+                                required
+                            />
+                            <span class="teacher-profile-field-error" id="teacherProfileFirstNameError"></span>
+                        </div>
+                        <div class="teacher-profile-field">
+                            <label for="teacherProfileLastName" class="teacher-profile-label">
+                                Last Name <span class="teacher-profile-required">*</span>
+                            </label>
+                            <input 
+                                type="text" 
+                                id="teacherProfileLastName" 
+                                class="teacher-profile-input" 
+                                disabled
+                                minlength="2"
+                                maxlength="50"
+                                required
+                            />
+                            <span class="teacher-profile-field-error" id="teacherProfileLastNameError"></span>
+                        </div>
+                        <div class="teacher-profile-field">
+                            <label for="teacherProfileEmailInput" class="teacher-profile-label">
+                                Email Address <span class="teacher-profile-required">*</span>
+                            </label>
+                            <input 
+                                type="email" 
+                                id="teacherProfileEmailInput" 
+                                class="teacher-profile-input" 
+                                disabled
+                                required
+                            />
+                            <span class="teacher-profile-field-info">Changing email will require re-verification</span>
+                            <span class="teacher-profile-field-error" id="teacherProfileEmailInputError"></span>
+                        </div>
+                        <div class="teacher-profile-field">
+                            <label for="teacherProfilePhone" class="teacher-profile-label">Phone Number</label>
+                            <input 
+                                type="tel" 
+                                id="teacherProfilePhone" 
+                                class="teacher-profile-input" 
+                                placeholder="+254 XXX XXX XXX"
+                                disabled
+                                maxlength="20"
+                            />
+                            <span class="teacher-profile-field-error" id="teacherProfilePhoneError"></span>
+                        </div>
+                        <div class="teacher-profile-field">
+                            <label for="teacherProfileDOB" class="teacher-profile-label">Date of Birth</label>
+                            <input 
+                                type="date" 
+                                id="teacherProfileDOB" 
+                                class="teacher-profile-input" 
+                                disabled
+                            />
+                            <span class="teacher-profile-field-error" id="teacherProfileDOBError"></span>
+                        </div>
+                        <div class="teacher-profile-field">
+                            <label for="teacherProfileSchool" class="teacher-profile-label">School</label>
+                            <input 
+                                type="text" 
+                                id="teacherProfileSchool" 
+                                class="teacher-profile-input" 
+                                disabled
+                                maxlength="100"
+                            />
+                            <span class="teacher-profile-field-error" id="teacherProfileSchoolError"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Emergency Contact Section -->
+                <div class="teacher-profile-section">
+                    <h3 class="teacher-profile-section-title">Emergency Contact</h3>
+                    <div class="teacher-profile-grid">
+                        <div class="teacher-profile-field">
+                            <label for="teacherProfileEmergencyContact" class="teacher-profile-label">Contact Name</label>
+                            <input 
+                                type="text" 
+                                id="teacherProfileEmergencyContact" 
+                                class="teacher-profile-input" 
+                                disabled
+                                maxlength="100"
+                            />
+                            <span class="teacher-profile-field-error" id="teacherProfileEmergencyContactError"></span>
+                        </div>
+                        <div class="teacher-profile-field">
+                            <label for="teacherProfileEmergencyPhone" class="teacher-profile-label">Contact Phone</label>
+                            <input 
+                                type="tel" 
+                                id="teacherProfileEmergencyPhone" 
+                                class="teacher-profile-input" 
+                                placeholder="+254 XXX XXX XXX"
+                                disabled
+                                maxlength="20"
+                            />
+                            <span class="teacher-profile-field-error" id="teacherProfileEmergencyPhoneError"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bio Section -->
+                <div class="teacher-profile-section">
+                    <h3 class="teacher-profile-section-title">About</h3>
+                    <div class="teacher-profile-field teacher-profile-field-full">
+                        <label for="teacherProfileBio" class="teacher-profile-label">Bio</label>
+                        <textarea 
+                            id="teacherProfileBio" 
+                            class="teacher-profile-textarea" 
+                            rows="4"
+                            placeholder="Tell us about yourself..."
+                            disabled
+                            maxlength="1000"
+                        ></textarea>
+                        <div class="teacher-profile-char-count">
+                            <span id="teacherProfileBioCharCount">0</span> / 1000 characters
+                        </div>
+                        <span class="teacher-profile-field-error" id="teacherProfileBioError"></span>
+                    </div>
+                </div>
+
+                <!-- Account Information -->
+                <div class="teacher-profile-section">
+                    <h3 class="teacher-profile-section-title">Account Information</h3>
+                    <div class="teacher-profile-info-grid">
+                        <div class="teacher-profile-info-item">
+                            <span class="teacher-profile-info-label">Last Login:</span>
+                            <span class="teacher-profile-info-value" id="teacherProfileLastLogin">-</span>
+                        </div>
+                        <div class="teacher-profile-info-item">
+                            <span class="teacher-profile-info-label">Account Created:</span>
+                            <span class="teacher-profile-info-value" id="teacherProfileCreatedAt">-</span>
+                        </div>
+                        <div class="teacher-profile-info-item">
+                            <span class="teacher-profile-info-label">Last Updated:</span>
+                            <span class="teacher-profile-info-value" id="teacherProfileUpdatedAt">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons (Hidden by default, shown in edit mode) -->
+                <div class="teacher-profile-actions" id="teacherProfileActions" style="display: none;">
+                    <button type="button" class="teacher-profile-btn teacher-profile-btn-cancel" onclick="teacherProfileCancelEdit()">
+                        Cancel
+                    </button>
+                    <button type="submit" class="teacher-profile-btn teacher-profile-btn-save" id="teacherProfileSaveBtn">
+                        <span class="teacher-profile-btn-text">Save Changes</span>
+                        <span class="teacher-profile-btn-spinner" style="display: none;"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

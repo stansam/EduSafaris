@@ -1,0 +1,292 @@
+<!-- Vendors Management Tab Content -->
+<div class="vendors-management-container">
+    <!-- Search and Filter Section -->
+    <div class="vendors-search-section">
+        <div class="vendors-search-header">
+            <h2 class="vendors-section-title">
+                <i class="fas fa-store"></i> Vendor Management
+            </h2>
+            <button class="btn-vendors-stats" id="btnShowVendorStats">
+                <i class="fas fa-chart-bar"></i> Statistics
+            </button>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="vendors-search-bar">
+            <div class="vendors-search-input-group">
+                <i class="fas fa-search vendors-search-icon"></i>
+                <input 
+                    type="text" 
+                    id="vendorSearchInput" 
+                    class="vendors-search-input" 
+                    placeholder="Search vendors by name, type, or description..."
+                >
+                <button class="btn-vendors-clear-search" id="btnClearVendorSearch" style="display: none;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <button class="btn-vendors-filter-toggle" id="btnToggleVendorFilters">
+                <i class="fas fa-filter"></i> Filters
+            </button>
+        </div>
+
+        <!-- Advanced Filters (Collapsible) -->
+        <div class="vendors-filters-panel" id="vendorFiltersPanel" style="display: none;">
+            <div class="vendors-filters-grid">
+                <div class="vendors-filter-group">
+                    <label for="filterVendorType">
+                        <i class="fas fa-tag"></i> Business Type
+                    </label>
+                    <select id="filterVendorType" class="vendors-filter-select">
+                        <option value="">All Types</option>
+                        <option value="transportation">Transportation</option>
+                        <option value="accommodation">Accommodation</option>
+                        <option value="activity">Activity Provider</option>
+                        <option value="catering">Catering</option>
+                        <option value="equipment">Equipment Rental</option>
+                    </select>
+                </div>
+
+                <div class="vendors-filter-group">
+                    <label for="filterVendorCity">
+                        <i class="fas fa-map-marker-alt"></i> City
+                    </label>
+                    <input 
+                        type="text" 
+                        id="filterVendorCity" 
+                        class="vendors-filter-input" 
+                        placeholder="Enter city..."
+                    >
+                </div>
+
+                <div class="vendors-filter-group">
+                    <label for="filterMinRating">
+                        <i class="fas fa-star"></i> Minimum Rating
+                    </label>
+                    <select id="filterMinRating" class="vendors-filter-select">
+                        <option value="">Any Rating</option>
+                        <option value="4.5">4.5+ Stars</option>
+                        <option value="4.0">4.0+ Stars</option>
+                        <option value="3.5">3.5+ Stars</option>
+                        <option value="3.0">3.0+ Stars</option>
+                    </select>
+                </div>
+
+                <div class="vendors-filter-group">
+                    <label class="vendors-checkbox-label">
+                        <input 
+                            type="checkbox" 
+                            id="filterVerifiedOnly" 
+                            class="vendors-checkbox"
+                        >
+                        <i class="fas fa-check-circle"></i> Verified Only
+                    </label>
+                </div>
+            </div>
+
+            <div class="vendors-filters-actions">
+                <button class="btn-vendors-apply-filters" id="btnApplyVendorFilters">
+                    <i class="fas fa-check"></i> Apply Filters
+                </button>
+                <button class="btn-vendors-reset-filters" id="btnResetVendorFilters">
+                    <i class="fas fa-redo"></i> Reset
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="vendors-quick-links">
+        <button class="vendors-quick-link-btn" id="btnViewMyBookings">
+            <i class="fas fa-calendar-check"></i>
+            <span>My Bookings</span>
+            <span class="vendors-badge" id="badgePendingBookings">0</span>
+        </button>
+        <button class="vendors-quick-link-btn" id="btnViewPendingPayments">
+            <i class="fas fa-credit-card"></i>
+            <span>Pending Payments</span>
+            <span class="vendors-badge vendors-badge-warning" id="badgePendingPayments">0</span>
+        </button>
+        <button class="vendors-quick-link-btn" id="btnCheckAvailability">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Check Availability</span>
+        </button>
+    </div>
+
+    <!-- Vendors List -->
+    <div class="vendors-list-container">
+        <!-- Loading State -->
+        <div class="vendors-loading" id="vendorsLoadingState">
+            <div class="vendors-spinner"></div>
+            <p>Loading vendors...</p>
+        </div>
+
+        <!-- Empty State -->
+        <div class="vendors-empty-state" id="vendorsEmptyState" style="display: none;">
+            <i class="fas fa-store-slash"></i>
+            <h3>No Vendors Found</h3>
+            <p>Try adjusting your search or filter criteria.</p>
+        </div>
+
+        <!-- Vendors Grid -->
+        <div class="vendors-grid" id="vendorsGrid">
+            <!-- Vendor cards will be dynamically inserted here -->
+        </div>
+
+        <!-- Pagination -->
+        <div class="vendors-pagination" id="vendorsPagination" style="display: none;">
+            <button class="btn-vendors-page" id="btnVendorsPrevPage" disabled>
+                <i class="fas fa-chevron-left"></i> Previous
+            </button>
+            <div class="vendors-page-info" id="vendorsPageInfo">
+                Page 1 of 1
+            </div>
+            <button class="btn-vendors-page" id="btnVendorsNextPage" disabled>
+                Next <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- My Bookings Section (Collapsible) -->
+    <div class="vendors-bookings-section" id="myBookingsSection" style="display: none;">
+        <div class="vendors-bookings-header">
+            <h3><i class="fas fa-list"></i> My Bookings</h3>
+            <button class="btn-vendors-close" id="btnCloseBookingsSection">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <!-- Bookings Filter Tabs -->
+        <div class="vendors-bookings-tabs">
+            <button class="vendors-tab-btn active" data-status="all">
+                All <span class="vendors-tab-count" id="countAllBookings">0</span>
+            </button>
+            <button class="vendors-tab-btn" data-status="pending">
+                Pending <span class="vendors-tab-count" id="countPendingBookings">0</span>
+            </button>
+            <button class="vendors-tab-btn" data-status="confirmed">
+                Confirmed <span class="vendors-tab-count" id="countConfirmedBookings">0</span>
+            </button>
+            <button class="vendors-tab-btn" data-status="completed">
+                Completed <span class="vendors-tab-count" id="countCompletedBookings">0</span>
+            </button>
+            <button class="vendors-tab-btn" data-status="cancelled">
+                Cancelled <span class="vendors-tab-count" id="countCancelledBookings">0</span>
+            </button>
+        </div>
+
+        <!-- Bookings List -->
+        <div class="vendors-bookings-list" id="vendorBookingsList">
+            <!-- Booking items will be dynamically inserted here -->
+        </div>
+    </div>
+</div>
+
+<!-- Vendor Card Template (Hidden) -->
+<template id="vendorCardTemplate">
+    <div class="vendor-card" data-vendor-id="">
+        <div class="vendor-card-header">
+            <div class="vendor-card-badge-container">
+                <span class="vendor-badge vendor-badge-verified" style="display: none;">
+                    <i class="fas fa-check-circle"></i> Verified
+                </span>
+                <span class="vendor-badge vendor-badge-type"></span>
+            </div>
+        </div>
+        
+        <div class="vendor-card-body">
+            <h3 class="vendor-card-name"></h3>
+            <div class="vendor-card-rating">
+                <div class="vendor-stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <span class="vendor-rating-text"></span>
+            </div>
+            
+            <div class="vendor-card-location">
+                <i class="fas fa-map-marker-alt"></i>
+                <span class="vendor-location-text"></span>
+            </div>
+            
+            <p class="vendor-card-description"></p>
+            
+            <div class="vendor-card-contact">
+                <div class="vendor-contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span class="vendor-phone"></span>
+                </div>
+                <div class="vendor-contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span class="vendor-email"></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="vendor-card-footer">
+            <button class="btn-vendor-action btn-vendor-view">
+                <i class="fas fa-eye"></i> View Profile
+            </button>
+            <button class="btn-vendor-action btn-vendor-quote">
+                <i class="fas fa-file-invoice"></i> Request Quote
+            </button>
+        </div>
+    </div>
+</template>
+
+<!-- Booking Item Template (Hidden) -->
+<template id="bookingItemTemplate">
+    <div class="vendor-booking-item" data-booking-id="">
+        <div class="booking-item-header">
+            <div class="booking-item-title">
+                <h4 class="booking-vendor-name"></h4>
+                <span class="booking-status-badge"></span>
+            </div>
+            <div class="booking-item-actions">
+                <button class="btn-booking-action" data-action="view" title="View Details">
+                    <i class="fas fa-eye"></i>
+                </button>
+                <button class="btn-booking-action" data-action="more" title="More Options">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="booking-item-body">
+            <div class="booking-item-info">
+                <span class="booking-info-label"><i class="fas fa-suitcase"></i> Trip:</span>
+                <span class="booking-trip-name"></span>
+            </div>
+            <div class="booking-item-info">
+                <span class="booking-info-label"><i class="fas fa-tag"></i> Type:</span>
+                <span class="booking-type"></span>
+            </div>
+            <div class="booking-item-info">
+                <span class="booking-info-label"><i class="fas fa-dollar-sign"></i> Amount:</span>
+                <span class="booking-amount"></span>
+            </div>
+            <div class="booking-item-info">
+                <span class="booking-info-label"><i class="fas fa-calendar"></i> Created:</span>
+                <span class="booking-date"></span>
+            </div>
+        </div>
+        
+        <div class="booking-item-footer">
+            <button class="btn-booking-primary" data-action="confirm" style="display: none;">
+                <i class="fas fa-check"></i> Confirm
+            </button>
+            <button class="btn-booking-primary" data-action="pay" style="display: none;">
+                <i class="fas fa-credit-card"></i> Pay Now
+            </button>
+            <button class="btn-booking-primary" data-action="rate" style="display: none;">
+                <i class="fas fa-star"></i> Rate Vendor
+            </button>
+            <button class="btn-booking-secondary" data-action="cancel" style="display: none;">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+        </div>
+    </div>
+</template>

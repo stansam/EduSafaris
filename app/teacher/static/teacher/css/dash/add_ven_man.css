@@ -1,0 +1,1049 @@
+/* ============================================
+   BOOKING DETAILS MODAL STYLES
+   ============================================ */
+
+.bdm-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10001;
+    padding: 20px;
+    animation: bdmFadeIn 0.3s ease;
+}
+
+@keyframes bdmFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.bdm-modal-container {
+    background: #fff;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 900px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    animation: bdmSlideUp 0.3s ease;
+}
+
+@keyframes bdmSlideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.bdm-modal-header {
+    padding: 25px 30px;
+    border-bottom: 2px solid #ecf0f1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bdm-modal-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.bdm-modal-title i {
+    color: #3498db;
+}
+
+.bdm-btn-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #95a5a6;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.bdm-btn-close:hover {
+    background: #ecf0f1;
+    color: #e74c3c;
+}
+
+.bdm-modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 30px;
+}
+
+.bdm-loading {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.bdm-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    animation: bdmSpin 1s linear infinite;
+}
+
+@keyframes bdmSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Status Bar */
+.bdm-status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    margin-bottom: 25px;
+    color: #fff;
+}
+
+.bdm-status-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.bdm-status-badge {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.9);
+    color: #2c3e50;
+}
+
+.bdm-booking-id {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.bdm-action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.bdm-action-btn {
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 13px;
+}
+
+.bdm-action-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Info Grid */
+.bdm-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.bdm-info-card,
+.bdm-section-card {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+}
+
+.bdm-info-card h4,
+.bdm-section-card h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0 0 15px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.bdm-info-card h4 i,
+.bdm-section-card h4 i {
+    color: #3498db;
+}
+
+.bdm-section-card {
+    margin-bottom: 20px;
+}
+
+.bdm-info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.bdm-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.bdm-info-row:last-child {
+    border-bottom: none;
+}
+
+.bdm-label {
+    font-size: 13px;
+    color: #7f8c8d;
+    font-weight: 600;
+    flex-shrink: 0;
+    margin-right: 15px;
+}
+
+.bdm-value {
+    font-size: 14px;
+    color: #2c3e50;
+    font-weight: 600;
+    text-align: right;
+}
+
+.bdm-capitalize {
+    text-transform: capitalize;
+}
+
+/* Financial Card */
+.bdm-financial-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+}
+
+.bdm-financial-card h4 {
+    color: #fff;
+}
+
+.bdm-financial-card h4 i {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.bdm-financial-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+}
+
+.bdm-financial-item {
+    text-align: center;
+}
+
+.bdm-financial-label {
+    display: block;
+    font-size: 13px;
+    opacity: 0.9;
+    margin-bottom: 8px;
+}
+
+.bdm-financial-value {
+    display: block;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.bdm-success {
+    color: #2ecc71;
+}
+
+.bdm-warning {
+    color: #f39c12;
+}
+
+/* Payment List */
+.bdm-payment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.bdm-payment-item {
+    background: #fff;
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #e0e0e0;
+}
+
+.bdm-payment-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.bdm-payment-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: #3498db;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 18px;
+}
+
+.bdm-payment-icon.success {
+    background: #27ae60;
+}
+
+.bdm-payment-icon.failed {
+    background: #e74c3c;
+}
+
+.bdm-payment-details h5 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0 0 4px 0;
+}
+
+.bdm-payment-details p {
+    font-size: 12px;
+    color: #7f8c8d;
+    margin: 0;
+}
+
+.bdm-payment-amount {
+    font-size: 18px;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+/* Timeline */
+.bdm-timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.bdm-timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e0e0e0;
+}
+
+.bdm-timeline-item {
+    position: relative;
+    padding-bottom: 25px;
+}
+
+.bdm-timeline-item:last-child {
+    padding-bottom: 0;
+}
+
+.bdm-timeline-dot {
+    position: absolute;
+    left: -26px;
+    top: 0;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #3498db;
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 2px #e0e0e0;
+}
+
+.bdm-timeline-content {
+    background: #fff;
+    border-radius: 8px;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+}
+
+.bdm-timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.bdm-timeline-action {
+    font-size: 14px;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.bdm-timeline-time {
+    font-size: 12px;
+    color: #7f8c8d;
+}
+
+.bdm-timeline-description {
+    font-size: 13px;
+    color: #5a6c7d;
+    margin: 0;
+}
+
+.bdm-modal-footer {
+    padding: 20px 30px;
+    border-top: 2px solid #ecf0f1;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.bdm-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.bdm-btn-secondary {
+    background: #ecf0f1;
+    color: #7f8c8d;
+}
+
+.bdm-btn-secondary:hover {
+    background: #bdc3c7;
+    color: #2c3e50;
+}
+
+/* ============================================
+   VENDOR STATISTICS MODAL STYLES
+   ============================================ */
+
+.vsm-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10002;
+    padding: 20px;
+    animation: vsmFadeIn 0.3s ease;
+}
+
+@keyframes vsmFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.vsm-modal-container {
+    background: #fff;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 900px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    animation: vsmSlideUp 0.3s ease;
+}
+
+@keyframes vsmSlideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.vsm-modal-header,
+.vsm-modal-footer {
+    padding: 25px 30px;
+    border-bottom: 2px solid #ecf0f1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.vsm-modal-footer {
+    border-bottom: none;
+    border-top: 2px solid #ecf0f1;
+}
+
+.vsm-modal-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.vsm-modal-title i {
+    color: #3498db;
+}
+
+.vsm-btn-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #95a5a6;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.vsm-btn-close:hover {
+    background: #ecf0f1;
+    color: #e74c3c;
+}
+
+.vsm-modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 30px;
+}
+
+.vsm-loading {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.vsm-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    animation: vsmSpin 1s linear infinite;
+}
+
+@keyframes vsmSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Stats Grid */
+.vsm-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.vsm-stat-card {
+    border-radius: 12px;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: #fff;
+}
+
+.vsm-stat-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.vsm-stat-success {
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+}
+
+.vsm-stat-warning {
+    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+}
+
+.vsm-stat-info {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+}
+
+.vsm-stat-icon {
+    font-size: 40px;
+    opacity: 0.8;
+}
+
+.vsm-stat-value {
+    display: block;
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.vsm-stat-label {
+    display: block;
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+/* Section Card */
+.vsm-section-card {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 20px;
+    border: 1px solid #e0e0e0;
+}
+
+.vsm-section-card h4 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0 0 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.vsm-section-card h4 i {
+    color: #3498db;
+}
+
+.vsm-financial-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.vsm-financial-item {
+    text-align: center;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+}
+
+.vsm-financial-label {
+    display: block;
+    font-size: 14px;
+    color: #7f8c8d;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.vsm-financial-value {
+    display: block;
+    font-size: 28px;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.vsm-success {
+    color: #27ae60;
+}
+
+.vsm-warning {
+    color: #f39c12;
+}
+
+/* Chart Bars */
+.vsm-chart-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.vsm-chart-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.vsm-chart-label {
+    min-width: 100px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #2c3e50;
+    text-transform: capitalize;
+}
+
+.vsm-chart-bar-container {
+    flex: 1;
+    height: 30px;
+    background: #e0e0e0;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+}
+
+.vsm-chart-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3498db 0%, #2980b9 100%);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 13px;
+    transition: width 0.5s ease;
+}
+
+.vsm-chart-count {
+    min-width: 40px;
+    text-align: right;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+/* Type List */
+.vsm-type-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.vsm-type-item {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+}
+
+.vsm-type-name {
+    display: block;
+    font-size: 14px;
+    color: #7f8c8d;
+    margin-bottom: 8px;
+    text-transform: capitalize;
+    font-weight: 600;
+}
+
+.vsm-type-count {
+    display: block;
+    font-size: 28px;
+    font-weight: 700;
+    color: #3498db;
+}
+
+/* Export Section */
+.vsm-export-section {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 25px;
+}
+
+.vsm-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.vsm-btn-export {
+    background: #27ae60;
+    color: #fff;
+}
+
+.vsm-btn-export:hover {
+    background: #229954;
+}
+
+.vsm-btn-print {
+    background: #3498db;
+    color: #fff;
+}
+
+.vsm-btn-print:hover {
+    background: #2980b9;
+}
+
+.vsm-btn-secondary {
+    background: #ecf0f1;
+    color: #7f8c8d;
+}
+
+.vsm-btn-secondary:hover {
+    background: #bdc3c7;
+    color: #2c3e50;
+}
+
+/* ============================================
+   CHECK AVAILABILITY MODAL STYLES
+   ============================================ */
+
+.cam-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10003;
+    padding: 20px;
+    animation: camFadeIn 0.3s ease;
+}
+
+@keyframes camFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.cam-modal-container {
+    background: #fff;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    animation: camSlideUp 0.3s ease;
+}
+
+.cam-modal-small {
+    max-width: 500px;
+}
+
+@keyframes camSlideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.cam-modal-header,
+.cam-modal-footer {
+    padding: 25px 30px;
+    border-bottom: 2px solid #ecf0f1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cam-modal-footer {
+    border-bottom: none;
+    border-top: 2px solid #ecf0f1;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.cam-modal-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.cam-modal-title i {
+    color: #3498db;
+}
+
+.cam-btn-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #95a5a6;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.cam-btn-close:hover {
+    background: #ecf0f1;
+    color: #e74c3c;
+}
+
+.cam-modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 30px;
+}
+
+.cam-form-group {
+    margin-bottom: 20px;
+}
+
+.cam-form-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.cam-label {
+    display: block;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 8px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cam-label.required::after {
+    content: '*';
+    color: #e74c3c;
+}
+
+.cam-label i {
+    color: #3498db;
+}
+
+.cam-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.cam-input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.cam-results {
+    margin-top: 25px;
+    padding-top: 25px;
+    border-top: 2px solid #ecf0f1;
+}
+
+.cam-result-card {
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.cam-result-card.available {
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+    color: #fff;
+}
+
+.cam-result-card.unavailable {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    color: #fff;
+}
+
+.cam-result-icon {
+    font-size: 60px;
+    margin-bottom: 15px;
+}
+
+.cam-result-card h3 {
+    font-size: 24px;
+    margin: 0 0 10px 0;
+}
+
+.cam-result-card p {
+    font-size: 14px;
+    opacity: 0.9;
+    margin: 0;
+}
+
+.cam-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cam-btn-secondary {
+    background: #ecf0f1;
+    color: #7f8c8d;
+}
+
+.cam-btn-secondary:hover {
+    background: #bdc3c7;
+    color: #2c3e50;
+}
+
+.cam-btn-primary {
+    background: #3498db;
+    color: #fff;
+}
+
+.cam-btn-primary:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 768px) {
+    .bdm-modal-container,
+    .vsm-modal-container,
+    .cam-modal-container {
+        max-width: 100%;
+        max-height: 100vh;
+        border-radius: 0;
+    }
+
+    .bdm-info-grid,
+    .vsm-stats-grid,
+    .vsm-financial-grid,
+    .vsm-type-list {
+        grid-template-columns: 1fr;
+    }
+
+    .bdm-status-bar {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .bdm-action-buttons {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .cam-form-row {
+        grid-template-columns: 1fr;
+    }
+}

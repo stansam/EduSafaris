@@ -249,3 +249,39 @@
     cursor: default;
   }
 }
+
+/* Add themed background images */
+.providers-join-card[data-category="tour"] .providers-join-card-front {
+  background: url('/main/static/main/assets/who/muse.jpg') center/cover no-repeat;
+}
+
+.providers-join-card[data-category="education"] .providers-join-card-front {
+  background: url('/main/static/main/assets/who/kids.webp') center/cover no-repeat;
+}
+
+.providers-join-card[data-category="activity"] .providers-join-card-front {
+  background: url('/main/static/main/assets/who/ke.jpeg') center/cover no-repeat;
+}
+
+/* Add a subtle dark overlay for text contrast */
+.providers-join-card-front::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 20px;
+  transition: background 0.3s ease;
+  z-index: 0;
+}
+
+.providers-join-card:hover .providers-join-card-front::before {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* Ensure text sits above overlay */
+.providers-join-card-front h3,
+.providers-join-card-front p {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+}

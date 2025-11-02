@@ -1,5 +1,50 @@
-<div class="teach-trips-empty-state">
-    <div class="teach-trips-empty-icon">👥</div>
-    <h3>Participants Management</h3>
-    <p>View and manage all trip participants here</p>
+
+<div class="ptm-container">
+    <!-- Trip Sidebar -->
+    <aside class="ptm-trip-sidebar" id="ptmTripSidebar">
+        <div class="ptm-sidebar-header">
+            <h2>Your Trips</h2>
+            <div class="ptm-sidebar-search">
+                <input type="text" id="ptmTripSearch" placeholder="Search trips...">
+                <span class="ptm-sidebar-search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+            </div>
+        </div>
+        <div class="ptm-trips-list" id="ptmTripsList">
+            <div class="ptm-loading">
+                <div class="ptm-spinner"></div>
+                <p style="margin-top: 16px;">Loading trips...</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="ptm-main-content">
+        <button class="ptm-btn ptm-btn-secondary ptm-mobile-toggle" id="ptmMobileToggle">
+            ☰ Trips
+        </button>
+
+        <div id="ptmMainContent">
+            <div class="ptm-empty-state" style="padding: 120px 20px;">
+                <div class="ptm-empty-icon">👥</div>
+                <h3 class="ptm-empty-title">Select a Trip</h3>
+                <p class="ptm-empty-text">Choose a trip from the sidebar to view its participants</p>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Participant Detail Modal -->
+<div class="ptm-modal" id="ptmDetailModal">
+    <div class="ptm-modal-content">
+        <div class="ptm-modal-header">
+            <h2 class="ptm-modal-title" id="ptmModalTitle">Participant Details</h2>
+            <button class="ptm-modal-close" id="ptmModalClose">×</button>
+        </div>
+        <div class="ptm-modal-body" id="ptmModalBody">
+            <div class="ptm-loading">
+                <div class="ptm-spinner"></div>
+                <p style="margin-top: 16px;">Loading details...</p>
+            </div>
+        </div>
+    </div>
 </div>

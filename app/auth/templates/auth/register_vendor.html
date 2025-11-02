@@ -1,0 +1,413 @@
+{% extends "register_base.html" %}
+
+{% block title %}Vendor Registration{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('auth.static', filename='css/register_vendor.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="registration-wrapper">
+    <div class="registration-container">
+        <!-- Left Panel -->
+        <div class="info-panel">
+            <div class="info-content">
+                <div class="logo-section">
+                    <a href="{{ url_for('main.index') }}" class="back-link">← Back to Home</a>
+                </div>
+                
+                <div class="illustration">
+                    <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Background -->
+                        <circle cx="200" cy="200" r="180" fill="#8b5cf6" opacity="0.1"/>
+                        
+                        <!-- Business building -->
+                        <rect x="120" y="150" width="160" height="180" fill="#8b5cf6" rx="10"/>
+                        <rect x="135" y="170" width="30" height="35" fill="#a78bfa"/>
+                        <rect x="185" y="170" width="30" height="35" fill="#a78bfa"/>
+                        <rect x="235" y="170" width="30" height="35" fill="#a78bfa"/>
+                        <rect x="135" y="220" width="30" height="35" fill="#a78bfa"/>
+                        <rect x="185" y="220" width="30" height="35" fill="#a78bfa"/>
+                        <rect x="235" y="220" width="30" height="35" fill="#a78bfa"/>
+                        
+                        <!-- Door -->
+                        <rect x="175" y="280" width="50" height="50" fill="#c084fc" rx="5"/>
+                        <circle cx="215" cy="305" r="3" fill="#fbbf24"/>
+                        
+                        <!-- Awning -->
+                        <path d="M 110 150 L 120 140 L 280 140 L 290 150 Z" fill="#c084fc"/>
+                        
+                        <!-- Sign -->
+                        <rect x="160" y="100" width="80" height="30" fill="#fbbf24" rx="5"/>
+                        <text x="200" y="120" text-anchor="middle" fill="#8b5cf6" font-size="16" font-weight="bold">VENDOR</text>
+                        
+                        <!-- People/customers -->
+                        <circle cx="80" cy="280" r="18" fill="#6366f1"/>
+                        <rect x="68" y="298" width="24" height="35" rx="12" fill="#818cf8"/>
+                        
+                        <circle cx="320" cy="290" r="18" fill="#ec4899"/>
+                        <rect x="308" y="308" width="24" height="35" rx="12" fill="#f472b6"/>
+                        
+                        <!-- Decorative stars -->
+                        <path d="M60,100 L65,115 L80,120 L65,125 L60,140 L55,125 L40,120 L55,115 Z" fill="#fbbf24" opacity="0.7"/>
+                        <path d="M340,130 L343,140 L353,143 L343,146 L340,156 L337,146 L327,143 L337,140 Z" fill="#10b981" opacity="0.7"/>
+                    </svg>
+                </div>
+                
+                <div class="info-text">
+                    <h1>Grow Your Business</h1>
+                    <p>Partner with schools and expand your reach in the educational travel sector.</p>
+                    
+                    <div class="benefits">
+                        <div class="benefit-item">
+                            <span class="benefit-icon">
+                                <!-- 🎯 -->
+                                 <img src="{{url_for('main.static', filename='main/assets/bullseye-arrow.png')}}" alt="Bullseye icon" width="31" height="31">
+                            </span>
+                            <span>Direct School Access</span>
+                        </div>
+                        <div class="benefit-item">
+                            <span class="benefit-icon">
+                                <!-- 📊 -->
+                                 <i class="fas fa-square-poll-vertical"></i>
+                            </span>
+                            <span>Booking Management</span>
+                        </div>
+                        <div class="benefit-item">
+                            <span class="benefit-icon">
+                                <!-- 💰 -->
+                                 <i class="fas fa-sack-dollar"></i>
+                            </span>
+                            <span>Revenue Tracking</span>
+                        </div>
+                        <div class="benefit-item">
+                            <span class="benefit-icon">
+                                <!-- ⭐ -->
+                                 <i class="fas fa-star"></i>
+                            </span>
+                            <span>Build Reputation</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel - Form -->
+        <div class="form-panel">
+            <div class="form-container">
+                <div class="form-header">
+                    <h2>Create Vendor Account</h2>
+                    <p>Register your business with us</p>
+                </div>
+
+                <div id="alert-container"></div>
+
+                <form id="vendorRegistrationForm" class="registration-form" novalidate>
+                    <!-- Progress Indicator -->
+                    <div class="progress-indicator">
+                        <div class="progress-step active" data-step="1">
+                            <div class="step-number">1</div>
+                            <div class="step-label">Personal</div>
+                        </div>
+                        <div class="progress-line"></div>
+                        <div class="progress-step" data-step="2">
+                            <div class="step-number">2</div>
+                            <div class="step-label">Business</div>
+                        </div>
+                        <div class="progress-line"></div>
+                        <div class="progress-step" data-step="3">
+                            <div class="step-number">3</div>
+                            <div class="step-label">Details</div>
+                        </div>
+                        <div class="progress-line"></div>
+                        <div class="progress-step" data-step="4">
+                            <div class="step-number">4</div>
+                            <div class="step-label">Security</div>
+                        </div>
+                    </div>
+
+                    <!-- Step 1: Personal Information -->
+                    <div class="form-step active" data-step="1">
+                        <h3 class="step-title">Personal Information</h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="first_name">First Name <span class="required">*</span></label>
+                                <input type="text" id="first_name" name="first_name" required>
+                                <span class="error-message"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="last_name">Last Name <span class="required">*</span></label>
+                                <input type="text" id="last_name" name="last_name" required>
+                                <span class="error-message"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address <span class="required">*</span></label>
+                            <input type="email" id="email" name="email" required>
+                            <span class="error-message"></span>
+                            <span class="input-hint">Your personal email for account access</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Phone Number <span class="required">*</span></label>
+                            <input type="tel" id="phone" name="phone" placeholder="+1234567890" required>
+                            <span class="error-message"></span>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url_for('auth.register') }}'">Back</button>
+                            <button type="button" class="btn btn-primary" onclick="nextStep(2)">Next Step</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Business Information -->
+                    <div class="form-step" data-step="2">
+                        <h3 class="step-title">Business Information</h3>
+                        
+                        <div class="form-group">
+                            <label for="business_name">Business Name <span class="required">*</span></label>
+                            <input type="text" id="business_name" name="business_name" required>
+                            <span class="error-message"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="business_type">Business Type <span class="required">*</span></label>
+                            <select id="business_type" name="business_type" required>
+                                <option value="">Select business type</option>
+                                <option value="transportation">Transportation</option>
+                                <option value="accommodation">Accommodation</option>
+                                <option value="activities">Activities & Excursions</option>
+                                <option value="catering">Catering</option>
+                                <option value="equipment">Equipment Rental</option>
+                                <option value="other">Other Services</option>
+                            </select>
+                            <span class="error-message"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Business Description <span class="required">*</span></label>
+                            <textarea id="description" name="description" rows="4" placeholder="Describe your business and services..." required></textarea>
+                            <span class="error-message"></span>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="contact_email">Business Email <span class="required">*</span></label>
+                                <input type="email" id="contact_email" name="contact_email" required>
+                                <span class="error-message"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="contact_phone">Business Phone <span class="required">*</span></label>
+                                <input type="tel" id="contact_phone" name="contact_phone" placeholder="+1234567890" required>
+                                <span class="error-message"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="website">Website</label>
+                            <input type="url" id="website" name="website" placeholder="https://www.example.com">
+                            <span class="error-message"></span>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" onclick="previousStep(1)">Previous</button>
+                            <button type="button" class="btn btn-primary" onclick="nextStep(3)">Next Step</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Business Details -->
+                    <div class="form-step" data-step="3">
+                        <h3 class="step-title">Business Details & Location</h3>
+                        
+                        <div class="form-group">
+                            <label for="address_line1">Address Line 1</label>
+                            <input type="text" id="address_line1" name="address_line1">
+                            <span class="error-message"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="address_line2">Address Line 2</label>
+                            <input type="text" id="address_line2" name="address_line2">
+                            <span class="error-message"></span>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="city">City <span class="required">*</span></label>
+                                <input type="text" id="city" name="city" required>
+                                <span class="error-message"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="state">State/Province</label>
+                                <input type="text" id="state" name="state">
+                                <span class="error-message"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="postal_code">Postal Code</label>
+                                <input type="text" id="postal_code" name="postal_code">
+                                <span class="error-message"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="country">Country <span class="required">*</span></label>
+                                <input type="text" id="country" name="country" required>
+                                <span class="error-message"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="capacity">Capacity</label>
+                                <input type="number" id="capacity" name="capacity" min="1" placeholder="Maximum capacity">
+                                <span class="error-message"></span>
+                                <span class="input-hint">Maximum number of people you can accommodate</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="license_number">License Number</label>
+                                <input type="text" id="license_number" name="license_number">
+                                <span class="error-message"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="specializations">Specializations</label>
+                            <input type="text" id="specializations" name="specializations" placeholder="e.g., School trips, Sports events, Cultural tours">
+                            <span class="error-message"></span>
+                            <span class="input-hint">Separate multiple items with commas</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="insurance_details">Insurance Details</label>
+                            <textarea id="insurance_details" name="insurance_details" rows="3" placeholder="Provide your insurance information..."></textarea>
+                            <span class="error-message"></span>
+                        </div>
+
+                        <div class="pricing-section">
+                            <h4 class="subsection-title">Pricing Information (Optional)</h4>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="base_price">Base Price ($)</label>
+                                    <input type="number" id="base_price" name="base_price" min="0" step="0.01" placeholder="0.00">
+                                    <span class="error-message"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="price_per_person">Price Per Person ($)</label>
+                                    <input type="number" id="price_per_person" name="price_per_person" min="0" step="0.01" placeholder="0.00">
+                                    <span class="error-message"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="pricing_notes">Pricing Notes</label>
+                                <textarea id="pricing_notes" name="pricing_notes" rows="2" placeholder="Additional pricing information or conditions..."></textarea>
+                                <span class="error-message"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" onclick="previousStep(2)">Previous</button>
+                            <button type="button" class="btn btn-primary" onclick="nextStep(4)">Next Step</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Security -->
+                    <div class="form-step" data-step="4">
+                        <h3 class="step-title">Account Security</h3>
+                        
+                        <div class="form-group">
+                            <label for="password">Password <span class="required">*</span></label>
+                            <div class="password-input-wrapper">
+                                <input type="password" id="password" name="password" required>
+                                <button type="button" class="toggle-password" data-target="password">
+                                    <span class="eye-icon">
+                                        <!-- 👁️ -->
+                                         <i class="fas fa-eye"></i>
+                                    </span>
+                                </button>
+                            </div>
+                            <span class="error-message"></span>
+                            <div class="password-strength">
+                                <div class="strength-bar">
+                                    <div class="strength-fill"></div>
+                                </div>
+                                <span class="strength-text"></span>
+                            </div>
+                            <div class="password-requirements">
+                                <div class="requirement" data-requirement="length">
+                                    <span class="requirement-icon">○</span>
+                                    <span>At least 8 characters</span>
+                                </div>
+                                <div class="requirement" data-requirement="uppercase">
+                                    <span class="requirement-icon">○</span>
+                                    <span>One uppercase letter</span>
+                                </div>
+                                <div class="requirement" data-requirement="lowercase">
+                                    <span class="requirement-icon">○</span>
+                                    <span>One lowercase letter</span>
+                                </div>
+                                <div class="requirement" data-requirement="number">
+                                    <span class="requirement-icon">○</span>
+                                    <span>One number</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirm_password">Confirm Password <span class="required">*</span></label>
+                            <div class="password-input-wrapper">
+                                <input type="password" id="confirm_password" name="confirm_password" required>
+                                <button type="button" class="toggle-password" data-target="confirm_password">
+                                    <span class="eye-icon">
+                                        <!-- 👁️ -->
+                                         <i class="fas fa-eye"></i>
+                                    </span>
+                                </button>
+                            </div>
+                            <span class="error-message"></span>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="terms" name="terms" required>
+                                <span class="checkbox-custom"></span>
+                                <span class="checkbox-text">I agree to the <a href="#" target="_blank">Terms of Service</a> and <a href="#" target="_blank">Privacy Policy</a> <span class="required">*</span></span>
+                            </label>
+                            <span class="error-message"></span>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" onclick="previousStep(3)">Previous</button>
+                            <button type="submit" class="btn btn-primary btn-submit">
+                                <span class="btn-text">Create Account</span>
+                                <span class="btn-loader" style="display: none;">
+                                    <span class="spinner"></span>
+                                    Creating...
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="form-footer">
+                    <p>Already have an account? <a href="{{ url_for('auth.login') }}">Sign In</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('auth.static', filename='js/register_vendor.js') }}"></script>
+{% endblock %}

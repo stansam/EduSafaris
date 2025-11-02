@@ -1,0 +1,124 @@
+<!-- View Child Profile Modal -->
+<div id="viewChildModal" class="modal-child-overlay" style="display: none;">
+    <div class="modal-child-container" style="max-width: 900px;">
+        <div class="modal-child-header">
+            <h2><i class="fas fa-user"></i> <span id="viewChildName">Child Profile</span></h2>
+            <button class="modal-child-close" onclick="closeViewChildModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="modal-child-form">
+            <!-- Loading State -->
+            <div id="viewChildLoading" class="loading-state" style="display: none;">
+                <div class="spinner"></div>
+                <p>Loading profile...</p>
+            </div>
+            
+            <!-- Error State -->
+            <div id="viewChildError" class="error-state" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p id="viewChildErrorMessage"></p>
+                <button class="btn-retry" onclick="loadChildProfile(currentViewChildId)">
+                    <i class="fas fa-redo"></i> Retry
+                </button>
+            </div>
+            
+            <!-- Profile Content -->
+            <div id="viewChildContent" style="display: none;">
+                <!-- Medical Alerts -->
+                <div id="viewChildMedicalAlert" class="profile-child-alert" style="display: none;">
+                    <div class="profile-child-alert-title">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Medical Information
+                    </div>
+                    <div class="profile-child-alert-content" id="viewChildMedicalContent"></div>
+                </div>
+                
+                <!-- Current Trip Section -->
+                <div class="form-child-section">
+                    <h3 class="section-child-title">
+                        <i class="fas fa-plane"></i> Current Trip
+                    </h3>
+                    <div class="profile-child-section">
+                        <div id="viewChildTripInfo"></div>
+                    </div>
+                </div>
+                
+                <!-- Personal Information -->
+                <div class="form-child-section">
+                    <h3 class="section-child-title">
+                        <i class="fas fa-user"></i> Personal Information
+                    </h3>
+                    <div class="profile-child-section">
+                        <div class="profile-child-info-grid" id="viewChildPersonalInfo"></div>
+                    </div>
+                </div>
+                
+                <!-- Contact Information -->
+                <div class="form-child-section">
+                    <h3 class="section-child-title">
+                        <i class="fas fa-phone"></i> Contact Information
+                    </h3>
+                    <div class="profile-child-section">
+                        <div class="profile-child-info-grid" id="viewChildContactInfo"></div>
+                    </div>
+                </div>
+                
+                <!-- Emergency Contacts -->
+                <div class="form-child-section">
+                    <h3 class="section-child-title">
+                        <i class="fas fa-phone-alt"></i> Emergency Contacts
+                    </h3>
+                    <div class="profile-child-section">
+                        <div id="viewChildEmergencyContacts"></div>
+                    </div>
+                </div>
+                
+                <!-- Medical Information -->
+                <div class="form-child-section">
+                    <h3 class="section-child-title">
+                        <i class="fas fa-heartbeat"></i> Medical Information
+                    </h3>
+                    <div class="profile-child-section">
+                        <div id="viewChildMedicalInfo"></div>
+                    </div>
+                </div>
+                
+                <!-- Documents -->
+                <div class="form-child-section">
+                    <h3 class="section-child-title">
+                        <i class="fas fa-file-alt"></i> Documents
+                    </h3>
+                    <div id="viewChildDocuments" class="document-child-list"></div>
+                </div>
+                
+                <!-- Consent Forms -->
+                <div class="form-child-section">
+                    <h3 class="section-child-title">
+                        <i class="fas fa-file-signature"></i> Consent Forms
+                    </h3>
+                    <div id="viewChildConsents" class="consent-child-list"></div>
+                </div>
+                
+                <!-- Trip History -->
+                <div class="form-child-section">
+                    <h3 class="section-child-title">
+                        <i class="fas fa-history"></i> Trip History
+                    </h3>
+                    <div id="viewChildTripHistory"></div>
+                </div>
+            </div>
+            
+            <!-- Actions -->
+            <div class="modal-child-actions">
+                <button type="button" class="btn-child-cancel" onclick="closeViewChildModal()">
+                    <i class="fas fa-times"></i> Close
+                </button>
+                <button type="button" class="btn-child-submit" onclick="openUpdateChildModalFromView()">
+                    <i class="fas fa-edit"></i> Edit Profile
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

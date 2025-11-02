@@ -13,6 +13,10 @@ from app.models.payment import Payment
 from app.models.notification import Notification
 from app.models.emergency import Emergency
 from app.models.advertisement import Advertisement
+from app.models.document import Document
+from app.models.review import Review
+from app.models.message import Message
+from app.models.activity_log import ActivityLog
 
 __all__ = [
     'BaseModel',
@@ -27,4 +31,8 @@ __all__ = [
     'Notification', 
     'Emergency', 
     'Advertisement'
+    'Document',
+    'Review',
+    'Message',
+    'ActivityLog'
 ]

@@ -31,7 +31,7 @@
                 <i class="fas fa-credit-card"></i>
             </div>
         </div>
-        <div class="stat-value">$750</div>
+        <div class="stat-value">Kshs. 750</div>
     </div>
 
     <div class="stat-card teal" onclick="switchTab('notifications')">
@@ -45,94 +45,4 @@
     </div>
 </div>
 
-<div class="tabs-container">
-    <div class="tabs-header">
-        <button class="tab-btn active" data-tab="my-children">My Children</button>
-        <button class="tab-btn" data-tab="trips">Trips</button>
-        <button class="tab-btn" data-tab="payments">Payments</button>
-        <button class="tab-btn" data-tab="notifications">Notifications</button>
-    </div>
 
-    <div class="tab-content">
-        <div class="tab-pane active" id="my-children">
-            <div class="children-grid">
-                <div class="child-card">
-                    <div class="child-header">
-                        <div class="child-name-section">
-                            <div class="child-name">Emma Chen</div>
-                            <span class="status-badge">confirmed</span>
-                        </div>
-                        <i class="fas fa-users child-icon"></i>
-                    </div>
-
-                    <div class="trip-info-section">
-                        <div class="trip-label">Next Trip</div>
-                        <div class="trip-name">Serengeti Wildlife Adventure</div>
-                        <div class="trip-dates">2025-03-15 to 2025-03-22</div>
-                    </div>
-
-                    <div class="action-buttons">
-                        <button class="btn btn-secondary" onclick="viewConsent('Emma Chen', 'Serengeti Wildlife Adventure')">
-                            <i class="fas fa-file-alt"></i> View Consent
-                        </button>
-                        <button class="btn btn-secondary">
-                            <i class="fas fa-credit-card"></i> Paid
-                        </button>
-                    </div>
-
-                    <div class="medical-info">
-                        <div class="medical-label">Medical Info:</div>
-                        <div class="medical-detail">Mild peanut allergy</div>
-                    </div>
-                </div>
-
-                <div class="child-card">
-                    <div class="child-header">
-                        <div class="child-name-section">
-                            <div class="child-name">Emma Chen</div>
-                            <span class="status-badge">confirmed</span>
-                        </div>
-                        <i class="fas fa-users child-icon"></i>
-                    </div>
-
-                    <div class="trip-info-section">
-                        <div class="trip-label">Next Trip</div>
-                        <div class="trip-name">Kilimanjaro Base Camp Trek</div>
-                        <div class="trip-dates">2025-04-10 to 2025-04-17</div>
-                    </div>
-
-                    <div class="action-buttons">
-                        <button class="btn btn-primary" onclick="signConsent('Emma Chen', 'Kilimanjaro Base Camp Trek')">
-                            <i class="fas fa-file-signature"></i> Sign Consent
-                        </button>
-                        <button class="btn btn-secondary">
-                            <i class="fas fa-credit-card"></i> Paid
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="tab-pane" id="trips">
-            <div class="empty-state">
-                <i class="fas fa-map-marked-alt"></i>
-                <p>Trips view - Coming soon</p>
-            </div>
-        </div>
-
-        <div class="tab-pane" id="payments">
-            <div class="empty-state">
-                <i class="fas fa-wallet"></i>
-                <p>Payment history - Coming soon</p>
-            </div>
-        </div>
-
-        <div class="tab-pane" id="notifications">
-            <div class="empty-state">
-                <i class="fas fa-bell"></i>
-                <p>No new notifications</p>
-            </div>
-        </div>
-    </div>
-</div>
-</div>

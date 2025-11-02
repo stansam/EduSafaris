@@ -38,10 +38,12 @@ class Trip(BaseModel):
     
     # Relationships
     participants = db.relationship('Participant', backref='trip', lazy='select', cascade='all, delete-orphan')
-    bookings = db.relationship('Booking', backref='trip', lazy='dynamic', cascade='all, delete-orphan')
+    vendor_bookings = db.relationship('VendorBooking', backref='trip', lazy='dynamic', cascade='all, delete-orphan')
     locations = db.relationship('Location', backref='trip', lazy='select', cascade='all, delete-orphan')
-    payments = db.relationship('Payment', backref='trip', lazy='dynamic')
+    payments = db.relationship('Payment', back_populates='trip', lazy='dynamic', cascade='all, delete-orphan')
     advertisements = db.relationship('Advertisement', backref='trip', lazy='dynamic')
+    child_bookings = db.relationship('ChildBooking', back_populates='trip', lazy='dynamic', cascade='all, delete-orphan')
+
     
     # Indexes
     __table_args__ = (
@@ -120,12 +122,16 @@ class Trip(BaseModel):
             'itinerary': self.itinerary,
             'start_date': self.start_date.isoformat() if self.start_date else None,
             'end_date': self.end_date.isoformat() if self.end_date else None,
+            'registration_deadline': self.registration_deadline.isoformat() if self.registration_deadline else None,
             'duration_days': self.duration_days,
             'max_participants': self.max_participants,
+            'min_participants': self.min_participants,
             'current_participants': self.current_participants,
             'available_spots': self.available_spots,
             'price_per_student': float(self.price_per_student),
             'status': self.status,
+            'medical_info_required': self.medical_info_required,
+            'consent_required': self.consent_required,
             'category': self.category,
             'grade_level': self.grade_level,
             'registration_open': self.registration_open,

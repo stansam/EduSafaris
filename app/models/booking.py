@@ -3,8 +3,8 @@ from sqlalchemy import Numeric
 from app.extensions import db
 from app.models.base import BaseModel
 
-class Booking(BaseModel):
-    __tablename__ = 'bookings'
+class VendorBooking(BaseModel):
+    __tablename__ = 'vendor_bookings'
     
     # Status and Type
     status = db.Column(db.Enum('pending', 'confirmed', 'in_progress', 'completed', 'cancelled', 
@@ -35,7 +35,7 @@ class Booking(BaseModel):
     vendor_id = db.Column(db.Integer, db.ForeignKey('vendors.id'), nullable=False)
     
     # Relationships
-    payments = db.relationship('Payment', backref='booking', lazy='dynamic')
+    payments = db.relationship('Payment', back_populates='booking', lazy='dynamic', cascade='all, delete-orphan')
     
     # Indexes
     __table_args__ = (
@@ -97,3 +97,72 @@ class Booking(BaseModel):
     
     def __repr__(self):
         return f'<Booking {self.id} - {self.booking_type}>'
+    
+class ChildBooking(BaseModel):
+    __tablename__ = 'child_bookings'
+    
+    # Foreign Keys
+    child_id = db.Column(db.Integer, db.ForeignKey('participants.id', name='fk_booking_child_id'), nullable=False)
+    trip_id = db.Column(db.Integer, db.ForeignKey('trips.id', name='fk_booking_trip_id'), nullable=False)
+    parent_id = db.Column(db.Integer, db.ForeignKey('users.id', name='fk_booking_parent_id'), nullable=False)
+    
+    # Booking Details
+    booking_date = db.Column(db.DateTime, default=datetime.utcnow)
+    status = db.Column(db.Enum('pending', 'confirmed', 'cancelled', 'completed', 
+                               name='booking_status'), default='pending', nullable=False)
+    payment_status = db.Column(db.Enum('pending', 'partial', 'paid', 'refunded', 
+                                       name='booking_payment_status'), default='pending', nullable=False)
+    amount_due = db.Column(Numeric(10, 2), default=0)
+    amount_paid = db.Column(Numeric(10, 2), default=0)
+    payment_reference = db.Column(db.String(100))
+    
+    # Notes and Flags
+    remarks = db.Column(db.Text)
+    consent_signed = db.Column(db.Boolean, default=False)
+    
+    # Relationships
+    trip = db.relationship('Trip', backref=db.backref('child_bookings', lazy='dynamic', cascade='all, delete-orphan'))
+    child = db.relationship('Participant', backref=db.backref('bookings', lazy='dynamic', cascade='all, delete-orphan'))
+    parent = db.relationship('User', backref=db.backref('child_bookings', lazy='dynamic'))
+    
+    # Indexes
+    __table_args__ = (
+        db.Index('idx_childbooking_trip', 'trip_id'),
+        db.Index('idx_childbooking_parent', 'parent_id'),
+        db.Index('idx_childbooking_child', 'child_id'),
+    )
+
+    def confirm_booking(self):
+        """Confirm booking and link participant to the trip"""
+        self.status = 'confirmed'
+        self.payment_status = 'partial' if self.amount_paid > 0 else 'pending'
+        self.child.status = 'confirmed'
+        self.child.trip_id = self.trip_id
+        db.session.commit()
+    
+    def add_payment(self, amount):
+        """Add payment and update status"""
+        self.amount_paid = (self.amount_paid or 0) + amount
+        if self.amount_paid >= self.amount_due:
+            self.payment_status = 'paid'
+        elif self.amount_paid > 0:
+            self.payment_status = 'partial'
+        db.session.commit()
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'child': self.child.serialize() if self.child else None,
+            'trip': self.trip.serialize() if self.trip else None,
+            'parent': self.parent.serialize() if self.parent else None,
+            'booking_date': self.booking_date.isoformat() if self.booking_date else None,
+            'status': self.status,
+            'payment_status': self.payment_status,
+            'amount_due': float(self.amount_due) if self.amount_due else 0,
+            'amount_paid': float(self.amount_paid) if self.amount_paid else 0,
+            'remarks': self.remarks,
+            'consent_signed': self.consent_signed
+        }
+
+    def __repr__(self):
+        return f"<ChildBooking child={self.child_id} trip={self.trip_id} status={self.status}>"

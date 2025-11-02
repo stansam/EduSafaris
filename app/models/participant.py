@@ -1,7 +1,7 @@
 from datetime import datetime
 from sqlalchemy import Numeric
 from app.extensions import db
-from app.models.base import BaseModel
+from app.models import BaseModel
 
 class Participant(BaseModel):
     __tablename__ = 'participants'
@@ -49,17 +49,23 @@ class Participant(BaseModel):
     internal_notes = db.Column(db.Text)  # For staff use only
     
     # Foreign Keys
-    trip_id = db.Column(db.Integer, db.ForeignKey('trips.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))  # User who registered them (parent/teacher)
+    trip_id = db.Column(db.Integer, db.ForeignKey('trips.id', name='fk_participant_trip_id'), nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', name='fk_participant_user_id'))  
+    parent_id = db.Column(db.Integer, db.ForeignKey('users.id', name='fk_participant_parent_id')) # User who registered them (parent) 
     
     # Relationships
     consents = db.relationship('Consent', backref='participant', lazy='dynamic')
+    payments = db.relationship('Payment', back_populates='participant', lazy='dynamic', cascade='all, delete-orphan')  
+    locations = db.relationship('Location', backref='participant', lazy='dynamic')
+    child_bookings = db.relationship('ChildBooking', back_populates='child', lazy='dynamic')
     
     # Indexes
     __table_args__ = (
         db.Index('idx_participant_trip', 'trip_id'),
         db.Index('idx_participant_status', 'status'),
         db.Index('idx_participant_payment_status', 'payment_status'),
+        db.Index('idx_participant_user', 'user_id'),  
+        db.Index('idx_participant_parent', 'parent_id'),
     )
     
     @property
@@ -82,6 +88,12 @@ class Participant(BaseModel):
         if not self.trip:
             return 0
         return float(self.trip.price_per_student - (self.amount_paid or 0))
+    
+    @property
+    def total_paid(self):
+        """Calculate total amount paid from payment records"""
+        completed_payments = self.payments.filter_by(status='completed').all()
+        return sum(float(payment.amount) for payment in completed_payments)
     
     def confirm_participation(self):
         """Confirm participant's spot on the trip"""
@@ -113,7 +125,15 @@ class Participant(BaseModel):
         
         # Check for signed consent forms
         signed_consents = self.consents.filter_by(is_signed=True).count()
-        return signed_consents > 0
+        required_consents = self.consents.filter_by(is_required=True).count()
+
+        return signed_consents >= required_consents if required_consents > 0 else False
+    
+    def get_latest_location(self):
+        """Get participant's most recent location"""
+        from app.models.location import Location
+        return self.locations.filter_by(is_valid=True)\
+                            .order_by(Location.timestamp.desc()).first()
     
     def serialize(self):
         return {
@@ -132,7 +152,9 @@ class Participant(BaseModel):
             'registration_date': self.registration_date.isoformat() if self.registration_date else None,
             'has_medical_info': bool(self.medical_conditions or self.medications or self.allergies),
             'has_all_consents': self.has_all_consents(),
-            'trip_id': self.trip_id
+            'trip_id': self.trip_id,
+            'parent_id': self.parent_id,
+            'parent': self.parent.serialize() if self.parent else None
         }
     
     def __repr__(self):
