@@ -78,21 +78,75 @@ class ActivityLog(BaseModel):
     
     @classmethod
     def log_payment(cls, payment, user_id):
-        """Log payment action"""
+        """Log payment action dynamically based on payment type"""
+        from app.models import RegistrationPayment, ServicePayment, AdvertisementPayment
+        entity_type = payment.__class__.__name__  # Detects: 'RegistrationPayment', 'ServicePayment', etc.
+        trip_id = None
+        description = None
+        category = 'payment'
+        new_values = {
+            'amount': float(payment.amount),
+            'currency': payment.currency,
+            'status': payment.status,
+            'payment_method': payment.payment_method,
+            'reference_number': payment.reference_number,
+            'transaction_id': payment.transaction_id
+        }
+
+        # --- Case 1: Parent paying for child registration ---
+        if isinstance(payment, RegistrationPayment):
+            trip_id = getattr(payment.registration, 'trip_id', None)
+            description = (
+                f"Parent payment for trip registration "
+                f"(Reg ID: {payment.registration_id}, Parent ID: {payment.parent_id})"
+            )
+            new_values.update({
+                'registration_id': payment.registration_id,
+                'parent_id': payment.parent_id
+            })
+
+        # --- Case 2: Teacher paying vendor for a service ---
+        elif isinstance(payment, ServicePayment):
+            trip_id = payment.trip_id
+            description = (
+                f"Service payment to vendor '{payment.vendor.business_name}' "
+                f"for trip '{payment.trip.title if payment.trip else 'N/A'}'"
+            )
+            category = 'vendor_payment'
+            new_values.update({
+                'vendor_id': payment.vendor_id,
+                'trip_id': payment.trip_id,
+                'service_booking_id': payment.service_booking_id
+            })
+
+        # --- Case 3: Advertisement campaign payment ---
+        elif isinstance(payment, AdvertisementPayment):
+            description = (
+                f"Advertisement payment for campaign ID {payment.advertisement_id} "
+                f"({payment.billing_period_start} to {payment.billing_period_end})"
+            )
+            category = 'advertisement_payment'
+            new_values.update({
+                'advertisement_id': payment.advertisement_id,
+                'billing_period_start': str(payment.billing_period_start),
+                'billing_period_end': str(payment.billing_period_end),
+            })
+
+        else:
+            description = f"Generic payment of {payment.amount} {payment.currency}"
+
+        # --- Create the activity log ---
         return cls.log_action(
             action='payment_processed',
             user_id=user_id,
-            entity_type='payment',
+            entity_type=entity_type,
             entity_id=payment.id,
-            description=f"Payment of {payment.amount} {payment.currency} processed",
-            category='payment',
-            trip_id=payment.trip_id,
-            new_values={
-                'amount': float(payment.amount),
-                'status': payment.status,
-                'payment_method': payment.payment_method
-            }
+            description=description,
+            category=category,
+            trip_id=trip_id,
+            new_values=new_values
         )
+
     
     @classmethod
     def log_consent(cls, consent, user_id):
@@ -129,20 +183,42 @@ class ActivityLog(BaseModel):
         )
     
     @classmethod
-    def log_booking(cls, booking, user_id, action_type='created'):
-        """Log booking action"""
+    def log_trip_registration(cls, registration, user_id, action_type='created'):
+        """Log parent booking their child into a trip"""
         return cls.log_action(
-            action=f'booking_{action_type}',
+            action=f'trip_registration_{action_type}',
             user_id=user_id,
-            entity_type='booking',
-            entity_id=booking.id,
-            description=f"Booking {action_type}: {booking.booking_type}",
+            entity_type='trip_registration',
+            entity_id=registration.id,
+            description=f"Trip registration {action_type} for participant '{registration.participant.full_name}'",
             category='booking',
+            trip_id=registration.trip_id,
+            new_values={
+                'status': registration.status,
+                'payment_status': registration.payment_status,
+                'amount_paid': float(registration.amount_paid or 0),
+                'participant_id': registration.participant_id,
+                'parent_id': registration.parent_id
+            }
+        )
+
+
+    @classmethod
+    def log_service_booking(cls, booking, user_id, action_type='created'):
+        """Log teacher booking a vendor/service for a trip"""
+        return cls.log_action(
+            action=f'service_booking_{action_type}',
+            user_id=user_id,
+            entity_type='service_booking',
+            entity_id=booking.id,
+            description=f"Service booking {action_type} with vendor ID {booking.vendor_id}",
+            category='vendor_booking',
             trip_id=booking.trip_id,
             new_values={
                 'status': booking.status,
-                'booking_type': booking.booking_type,
-                'vendor_id': booking.vendor_id
+                'service_type': booking.service_type,
+                'vendor_id': booking.vendor_id,
+                'total_amount': float(booking.total_amount or 0)
             }
         )
     
@@ -157,7 +233,7 @@ class ActivityLog(BaseModel):
             user_id=user_id,
             entity_type='trip',
             entity_id=trip.id,
-            description=f"Trip {action_type}: {trip.title}",
+            description=f"Trip '{trip.title}' {action_type} by user {user_id}",
             category='trip',
             trip_id=trip.id,
             old_values=old_vals,

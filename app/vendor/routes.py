@@ -6,7 +6,7 @@ import os
 from sqlalchemy import or_, and_
 
 from app.extensions import db
-from app.vendor.models import Vendor, Advertisement, Booking
+from app.vendor.models import Vendor, Advertisement, ServiceBooking as Booking
 from app.models.user import User
 from app.models.trip import Trip
 

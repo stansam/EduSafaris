@@ -189,7 +189,7 @@ class TripDetailsManager {
         if (this.tripData.is_full) {
             statusBanner.innerHTML = '<i class="fas fa-users"></i> This trip is currently full';
             statusBanner.classList.add('trip-status-full');
-        } else if (!this.tripData.registration_open) {
+        } else if (!this.tripData.registration_is_open) {
             statusBanner.innerHTML = '<i class="fas fa-calendar-times"></i> Registration is closed';
             statusBanner.classList.add('trip-status-closed');
         } else if (this.tripData.available_spots <= 5) {

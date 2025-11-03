@@ -5,7 +5,7 @@ from sqlalchemy import func, and_, or_
 from app.extensions import db
 from app.models import (
     User, Trip, Participant, Consent, Notification, 
-    Location, Emergency, Payment, Booking
+    Location, Emergency, ServicePayment as Payment, ServiceBooking as Booking
 )
 from app.teacher import teacher_bp
 

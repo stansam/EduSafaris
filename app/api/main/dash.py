@@ -36,7 +36,7 @@ def get_featured_trips():
         query = Trip.query.filter_by(featured=True)
         
         # Filter by status - only active trips
-        query = query.filter(Trip.status.in_(['active', 'in_progress']))
+        query = query.filter(Trip.status.in_(['published', 'registration_open', 'in_progress']))
         
         # Filter out past trips unless specified
         if not include_past:
@@ -97,44 +97,6 @@ def get_featured_trips():
             'success': False,
             'error': 'An error occurred while fetching featured trips'
         }), 500
-
-
-# @trips_bp.route('/trips/<int:trip_id>', methods=['GET'])
-# def get_trips_details(trip_id):
-#     """Get detailed information about a specific trip"""
-#     try:
-#         trip = Trip.query.get(trip_id)
-        
-#         if not trip:
-#             return jsonify({
-#                 'success': False,
-#                 'error': 'Trip not found'
-#             }), 404
-        
-#         # Serialize with full details
-#         trip_data = trip.serialize()
-#         trip_data.update({
-#             'itinerary': trip.itinerary,
-#             'medical_info_required': trip.medical_info_required,
-#             'consent_required': trip.consent_required,
-#             'registration_deadline': trip.registration_deadline.isoformat() if trip.registration_deadline else None,
-#             'duration_text': f"{trip.duration_days} Day{'s' if trip.duration_days != 1 else ''}",
-#             'image_url': get_trip_image_url(trip),
-#             'rating': calculate_trip_rating(trip)
-#         })
-        
-#         return jsonify({
-#             'success': True,
-#             'data': trip_data
-#         }), 200
-        
-#     except Exception as e:
-#         print(f"Error fetching trip details: {str(e)}")
-        
-#         return jsonify({
-#             'success': False,
-#             'error': 'An error occurred while fetching trip details'
-#         }), 500
 
 
 @trips_bp.route('/trips/categories', methods=['GET'])

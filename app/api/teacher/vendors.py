@@ -7,7 +7,7 @@ import requests
 import base64
 from decimal import Decimal
 
-from app.models import Vendor, Booking, Payment, Trip, ActivityLog, Review
+from app.models import Vendor, ServiceBooking as Booking, ServicePayment as Payment, Trip, ActivityLog, Review
 from app.extensions import db
 from app.api import api_bp as teacher_vendor_bp
 from app.utils.utils import roles_required

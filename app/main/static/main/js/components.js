@@ -88,10 +88,10 @@ function toggleUserDropdown() {
 // Hide dropdown when clicking outside
 document.addEventListener('click', (e) => {
   const menu = document.querySelector('.edusafaris-user-menu');
-  if (!menu.contains(e.target)) {
-    document.getElementById('userDropdown').classList.remove('show');
-    document.querySelector('.edusafaris-user-info').classList.remove('active');
-  }
+    if (menu && !menu.contains(e.target)) {
+        document.getElementById('userDropdown').classList.remove('show');
+        document.querySelector('.edusafaris-user-info').classList.remove('active');
+    }
 });
 
 document.addEventListener("DOMContentLoaded", () => {

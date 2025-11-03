@@ -1,3 +1,3 @@
-from app.models import Vendor, Advertisement, Booking, BaseModel
+from app.models import Vendor, Advertisement, ServiceBooking, BaseModel
 
-__all__ = ['Vendor', 'Advertisement', 'Booking', 'BaseModel']
+__all__ = ['Vendor', 'Advertisement', 'ServiceBooking', 'BaseModel']

@@ -10,12 +10,12 @@ def register_blueprints(app):
     app.register_blueprint(auth_bp, url_prefix='/auth')
     
     # Profiles blueprint
-    from app.profiles import profiles_bp
-    app.register_blueprint(profiles_bp)
+    # from app.profiles import profiles_bp
+    # app.register_blueprint(profiles_bp)
     
     # Trips blueprint
-    from app.trips import trips_bp
-    app.register_blueprint(trips_bp, url_prefix='/trips')
+    # from app.trips import trips_bp
+    # app.register_blueprint(trips_bp, url_prefix='/trips')
     
     # Admin blueprint
     from app.admin import admin_bp
@@ -32,8 +32,8 @@ def register_blueprints(app):
     from app.parent_comm import parent_comm_bp
     app.register_blueprint(parent_comm_bp, url_prefix='/parents')
 
-    from app.safety import safety_bp
-    app.register_blueprint(safety_bp, url_prefix='/safety')
+    # from app.safety import safety_bp
+    # app.register_blueprint(safety_bp, url_prefix='/safety')
 
     from app.teacher import teacher_bp
     app.register_blueprint(teacher_bp, url_prefix='/teacher')

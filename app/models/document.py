@@ -38,7 +38,8 @@ class Document(BaseModel):
     trip_id = db.Column(db.Integer, db.ForeignKey('trips.id'))
     participant_id = db.Column(db.Integer, db.ForeignKey('participants.id'))
     vendor_id = db.Column(db.Integer, db.ForeignKey('vendors.id'))
-    booking_id = db.Column(db.Integer, db.ForeignKey('bookings.id'))
+    booking_id = db.Column(db.Integer, db.ForeignKey('service_bookings.id'))
+    # registration_id = db.Column(db.Integer, db.ForeignKey('trip_registrations.id'))
     
     # Indexes
     __table_args__ = (

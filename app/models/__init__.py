@@ -5,11 +5,13 @@ from app.models.base import BaseModel
 from app.models.user import User
 from app.models.trip import Trip
 from app.models.vendor import Vendor
-from app.models.booking import Booking
+from app.models.school import School
+from app.models.service_booking import ServiceBooking
+from app.models.trip_registration import TripRegistration
 from app.models.participant import Participant
 from app.models.consent import Consent
 from app.models.location import Location
-from app.models.payment import Payment
+from app.models.payment import BasePayment, ServicePayment, RegistrationPayment, AdvertisementPayment
 from app.models.notification import Notification
 from app.models.emergency import Emergency
 from app.models.advertisement import Advertisement
@@ -23,11 +25,16 @@ __all__ = [
     'User', 
     'Trip', 
     'Vendor', 
-    'Booking', 
+    'School',
+    'ServiceBooking', 
+    'TripRegistration', 
     'Participant', 
     'Consent', 
     'Location', 
-    'Payment', 
+    'BasePayment', 
+    'ServicePayment', 
+    'RegistrationPayment', 
+    'AdvertisementPayment', 
     'Notification', 
     'Emergency', 
     'Advertisement'

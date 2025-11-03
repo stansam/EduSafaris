@@ -5,7 +5,7 @@ from sqlalchemy import func, or_
 from app.extensions import db
 from app.models import (
      Trip, Participant, Consent, Notification, 
-    Payment
+    ServicePayment as Payment
 )
 from app.teacher import teacher_bp
 

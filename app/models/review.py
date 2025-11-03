@@ -44,7 +44,7 @@ class Review(BaseModel):
     reviewer_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     trip_id = db.Column(db.Integer, db.ForeignKey('trips.id'))
     vendor_id = db.Column(db.Integer, db.ForeignKey('vendors.id'))
-    booking_id = db.Column(db.Integer, db.ForeignKey('bookings.id'))
+    booking_id = db.Column(db.Integer, db.ForeignKey('service_bookings.id'))
     
     # Indexes
     __table_args__ = (

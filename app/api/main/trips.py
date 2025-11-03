@@ -39,10 +39,15 @@ def get_trips():
         # Start with base query
         query = Trip.query
         
-        # Apply status filter (default to active trips)
-        if status:
+        # Apply status filter 
+        if status == 'active':
+            # Show trips that are available/upcoming
+            query = query.filter(Trip.status.in_(['published', 'registration_open', 'registration_closed', 'full']))
+        elif status:
             query = query.filter(Trip.status == status)
-        
+
+        query = query.filter(Trip.is_published == True)
+
         # Apply search filter
         if search:
             search_pattern = f'%{search}%'
@@ -73,30 +78,51 @@ def get_trips():
                 query = query.filter(Trip.category == category)
         
         # Apply duration filter
+        # if duration and duration != 'all':
+        #     today = date.today()
+        #     if duration == 'half':
+        #         # Half day trips (duration_days == 0 or 1)
+        #         query = query.filter(
+        #             func.datediff(Trip.end_date, Trip.start_date) <= 0
+        #         )
+        #     elif duration == 'full':
+        #         # Full day trips (duration_days == 1)
+        #         query = query.filter(
+        #             func.datediff(Trip.end_date, Trip.start_date) == 0
+        #         )
+        #     elif duration == 'multi':
+        #         # Multi-day trips (2-6 days)
+        #         query = query.filter(
+        #             and_(
+        #                 func.datediff(Trip.end_date, Trip.start_date) >= 1,
+        #                 func.datediff(Trip.end_date, Trip.start_date) <= 5
+        #             )
+        #         )
+        #     elif duration == 'week':
+        #         # Week long trips (7+ days)
+        #         query = query.filter(
+        #             func.datediff(Trip.end_date, Trip.start_date) >= 6
+        #         )
+
         if duration and duration != 'all':
-            today = date.today()
             if duration == 'half':
-                # Half day trips (duration_days == 0 or 1)
-                query = query.filter(
-                    func.datediff(Trip.end_date, Trip.start_date) <= 0
-                )
+                # Half day trips (same day)
+                query = query.filter(Trip.start_date == Trip.end_date)
             elif duration == 'full':
-                # Full day trips (duration_days == 1)
-                query = query.filter(
-                    func.datediff(Trip.end_date, Trip.start_date) == 0
-                )
+                # Full day trips (same day)
+                query = query.filter(Trip.start_date == Trip.end_date)
             elif duration == 'multi':
                 # Multi-day trips (2-6 days)
                 query = query.filter(
                     and_(
-                        func.datediff(Trip.end_date, Trip.start_date) >= 1,
-                        func.datediff(Trip.end_date, Trip.start_date) <= 5
+                        Trip.end_date > Trip.start_date,
+                        func.julianday(Trip.end_date) - func.julianday(Trip.start_date) <= 5
                     )
                 )
             elif duration == 'week':
                 # Week long trips (7+ days)
                 query = query.filter(
-                    func.datediff(Trip.end_date, Trip.start_date) >= 6
+                    func.julianday(Trip.end_date) - func.julianday(Trip.start_date) >= 6
                 )
         
         # Apply price filters
@@ -112,15 +138,25 @@ def get_trips():
         # Apply sorting
         if sort_by == 'popular':
             # Sort by featured first, then by number of participants
-            query = query.outerjoin(Trip.participants).group_by(Trip.id)\
-                .order_by(Trip.featured.desc(), func.count(Trip.participants).desc())
+            # query = query.outerjoin(Trip.participants).group_by(Trip.id)\
+            #     .order_by(Trip.featured.desc(), func.count(Trip.participants).desc())
+            from app.models.trip_registration import TripRegistration
+    
+            query = query.outerjoin(TripRegistration)\
+                .filter(or_(TripRegistration.status == 'confirmed', TripRegistration.status == None))\
+                .group_by(Trip.id)\
+                .order_by(Trip.featured.desc(), func.count(TripRegistration.id).desc())
+            
         elif sort_by == 'price-low':
             query = query.order_by(Trip.price_per_student.asc())
         elif sort_by == 'price-high':
             query = query.order_by(Trip.price_per_student.desc())
         elif sort_by == 'duration':
+            # query = query.order_by(
+            #     func.datediff(Trip.end_date, Trip.start_date).asc()
+            # )
             query = query.order_by(
-                func.datediff(Trip.end_date, Trip.start_date).asc()
+                (func.julianday(Trip.end_date) - func.julianday(Trip.start_date)).asc()
             )
         elif sort_by == 'rating':
             # If you have ratings, implement here. For now, sort by featured
@@ -180,7 +216,7 @@ def get_trips_details(trip_id):
     try:
         trip = Trip.query.get_or_404(trip_id)
         
-        trip_data = trip.serialize()
+        trip_data = trip.serialize(include_details=True)
         trip_data['rating'] = 4.8  # Replace with actual rating
         trip_data['image_url'] = get_trip_image_url(trip)
         trip_data['itinerary'] = trip.itinerary or []
@@ -206,7 +242,9 @@ def get_trips_categories():
             Trip.category,
             func.count(Trip.id).label('count')
         ).filter(
-            Trip.status == 'active'
+            Trip.is_published == True,
+            Trip.status.in_(['published', 'registration_open', 'registration_closed', 'full']),
+            Trip.category.isnot(None)
         ).group_by(
             Trip.category
         ).all()
@@ -225,7 +263,6 @@ def get_trips_categories():
             'error': str(e)
         }), 500
 
-
 @trips_api.route('/price-range', methods=['GET'])
 def get_price_range():
     """Get min and max prices for filtering"""
@@ -234,7 +271,8 @@ def get_price_range():
             func.min(Trip.price_per_student).label('min_price'),
             func.max(Trip.price_per_student).label('max_price')
         ).filter(
-            Trip.status == 'active'
+            Trip.is_published == True,
+            Trip.status.in_(['published', 'registration_open', 'registration_closed', 'full'])
         ).first()
         
         return jsonify({
@@ -249,7 +287,6 @@ def get_price_range():
             'error': str(e)
         }), 500
 
-
 @trips_api.route('/grade-levels', methods=['GET'])
 def get_grade_levels():
     """Get all available grade levels"""
@@ -258,7 +295,8 @@ def get_grade_levels():
             Trip.grade_level,
             func.count(Trip.id).label('count')
         ).filter(
-            Trip.status == 'active',
+            Trip.is_published == True,
+            Trip.status.in_(['published', 'registration_open', 'registration_closed', 'full']),
             Trip.grade_level.isnot(None)
         ).group_by(
             Trip.grade_level
@@ -277,5 +315,4 @@ def get_grade_levels():
             'success': False,
             'error': str(e)
         }), 500
-
 

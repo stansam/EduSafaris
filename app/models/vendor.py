@@ -47,7 +47,7 @@ class Vendor(BaseModel):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     
     # Relationships
-    bookings = db.relationship('Booking', backref='vendor', lazy='dynamic')
+    service_bookings = db.relationship('ServiceBooking', back_populates='vendor', lazy='dynamic')
     
     # Indexes
     __table_args__ = (
