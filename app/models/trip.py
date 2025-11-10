@@ -298,6 +298,8 @@ class Trip(BaseModel):
             'status': self.status,
             'category': self.category,
             'grade_level': self.grade_level,
+            'min_age': self.min_age,
+            'max_age': self.max_age,
             'registration_is_open': self.registration_is_open,
             'is_full': self.is_full,
             'featured': self.featured,

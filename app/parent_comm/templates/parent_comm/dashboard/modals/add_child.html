@@ -10,7 +10,7 @@
         
         <form id="addChildForm" class="modal-child-form">
             <!-- Trip Selection -->
-            <div class="form-child-section">
+            <!-- <div class="form-child-section">
                 <h3 class="section-child-title">
                     <i class="fas fa-plane"></i> Trip Information
                 </h3>
@@ -21,7 +21,7 @@
                     </select>
                     <span class="form-child-error" id="addTripSelectError"></span>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Personal Information -->
             <div class="form-child-section">
@@ -38,6 +38,25 @@
                         <label for="addLastName" class="form-child-label required">Last Name</label>
                         <input type="text" id="addLastName" name="last_name" class="form-child-input" required>
                         <span class="form-child-error" id="addLastNameError"></span>
+                    </div>
+                </div>
+
+                <div class="form-child-row">
+                    <div class="form-child-group">
+                        <label for="addGender" class="form-child-label required">Gender</label>
+                        <select id="addGender" name="gender" class="form-child-input" required>
+                            <option value="">Select gender...</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                            <option value="prefer_not_to_say">Prefer not to say</option>
+                        </select>
+                        <span class="form-child-error" id="addGenderError"></span>
+                    </div>
+                    <div class="form-child-group">
+                        <label for="addDateOfBirth" class="form-child-label required">Date of Birth</label>
+                        <input type="date" id="addDateOfBirth" name="date_of_birth" class="form-child-input" required>
+                        <span class="form-child-error" id="addDateOfBirthError"></span>
                     </div>
                 </div>
                 
@@ -77,6 +96,30 @@
                         <input type="tel" id="addPhone" name="phone" class="form-child-input" placeholder="+254 700 000000">
                         <span class="form-child-error" id="addPhoneError"></span>
                     </div>
+                </div>
+            </div>
+
+            <!-- Emergency Contact Information -->
+            <div class="form-child-section">
+                <h3 class="section-child-title">
+                    <i class="fas fa-phone-alt"></i> Emergency Contact (Required)
+                </h3>
+                <div class="form-child-row">
+                    <div class="form-child-group">
+                        <label for="addEmergencyContact1Name" class="form-child-label required">Contact Name</label>
+                        <input type="text" id="addEmergencyContact1Name" name="emergency_contact_1_name" class="form-child-input" required>
+                        <span class="form-child-error" id="addEmergencyContact1NameError"></span>
+                    </div>
+                    <div class="form-child-group">
+                        <label for="addEmergencyContact1Phone" class="form-child-label required">Contact Phone</label>
+                        <input type="tel" id="addEmergencyContact1Phone" name="emergency_contact_1_phone" class="form-child-input" placeholder="+254 700 000000" required>
+                        <span class="form-child-error" id="addEmergencyContact1PhoneError"></span>
+                    </div>
+                </div>
+                <div class="form-child-group">
+                    <label for="addEmergencyContact1Relationship" class="form-child-label required">Relationship</label>
+                    <input type="text" id="addEmergencyContact1Relationship" name="emergency_contact_1_relationship" class="form-child-input" placeholder="e.g., Parent, Guardian" required>
+                    <span class="form-child-error" id="addEmergencyContact1RelationshipError"></span>
                 </div>
             </div>
 

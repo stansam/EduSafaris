@@ -71,7 +71,7 @@ class User(UserMixin, BaseModel):
     children = db.relationship('Participant', backref='parent', 
                               foreign_keys='Participant.parent_id', lazy='dynamic')
     registrations = db.relationship('TripRegistration', back_populates='parent', lazy='dynamic')
-    registration_payments = db.relationship('RegistrationPayment', backref='parent_user', 
+    registration_payments = db.relationship('RegistrationPayment', back_populates='parent', 
                                            foreign_keys='RegistrationPayment.parent_id', lazy='dynamic')
     
     # Communication
@@ -148,7 +148,7 @@ class User(UserMixin, BaseModel):
         elif self.is_vendor():
             return url_for('vendor.dashboard')
         elif self.is_parent():
-            return url_for('parent.dashboard')
+            return url_for('parent_comm.dashboard')
         else:
             return url_for('main.index')
     

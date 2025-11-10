@@ -1,11 +1,8 @@
-from flask import Blueprint, request, jsonify
+from flask import request, jsonify
 from flask_login import login_required, current_user
-from functools import wraps
 from sqlalchemy.exc import SQLAlchemyError
 from app.extensions import db
-from app.models.participant import Participant
-from app.models.trip import Trip
-from app.models.activity_log import ActivityLog
+from app.models import Participant, Trip, ActivityLog, TripRegistration, RegistrationPayment
 
 from app.api import api_bp as teacher_participants_bp 
 from app.utils.utils import roles_required
@@ -40,6 +37,56 @@ def verify_trip_ownership(trip_id):
         }, 500
 
 
+# @teacher_participants_bp.route('/participants/teacher/trips', methods=['GET'])
+# @login_required
+# @roles_required('teacher')
+# def get_teachers_trips():
+#     """
+#     Get all trips for the current teacher with participant statistics
+#     """
+#     try:
+#         include_stats = request.args.get('include_stats', 'false').lower() == 'true'
+        
+#         # Get all trips organized by the teacher
+#         trips = Trip.query.filter_by(organizer_id=current_user.id).all()
+        
+#         trips_data = []
+#         for trip in trips:
+#             trip_data = {
+#                 'id': trip.id,
+#                 'title': trip.title,
+#                 'start_date': trip.start_date.isoformat() if trip.start_date else None,
+#                 'end_date': trip.end_date.isoformat() if trip.end_date else None,
+#                 'status': trip.status
+#             }
+            
+#             if include_stats:
+#                 # Get registration statistics
+#                 registrations = TripRegistration.query.filter_by(trip_id=trip.id).all()
+#                 confirmed_registrations = [r for r in registrations if r.status == 'confirmed']
+#                 paid_registrations = [r for r in registrations if r.payment_status == 'paid']
+                
+#                 trip_data['participant_count'] = len(registrations)
+#                 trip_data['confirmed_count'] = len(confirmed_registrations)
+#                 trip_data['paid_count'] = len(paid_registrations)
+            
+#             trips_data.append(trip_data)
+        
+#         return jsonify({
+#             'success': True,
+#             'data': {
+#                 'trips': trips_data
+#             }
+#         }), 200
+    
+#     except Exception as e:
+#         return jsonify({
+#             'success': False,
+#             'error': 'Internal server error',
+#             'message': 'An unexpected error occurred'
+#         }), 500
+
+
 @teacher_participants_bp.route('/participants/trip/<int:trip_id>', methods=['GET'])
 @login_required
 @roles_required('teacher')
@@ -48,8 +95,8 @@ def get_trip_participants(trip_id):
     Get all participants for a specific trip organized by the teacher
     
     Query Parameters:
-    - status: Filter by participant status (registered, confirmed, cancelled, completed)
-    - payment_status: Filter by payment status (pending, partial, paid, refunded)
+    - status: Filter by registration status (pending, confirmed, waitlisted, cancelled, completed)
+    - payment_status: Filter by payment status (unpaid, partial, paid, refunded)
     - search: Search by participant name
     - page: Page number (default: 1)
     - per_page: Items per page (default: 20, max: 100)
@@ -71,9 +118,9 @@ def get_trip_participants(trip_id):
         sort_by = request.args.get('sort_by', 'registration_date', type=str)
         order = request.args.get('order', 'desc', type=str)
         
-        # Validate parameters
-        valid_statuses = ['registered', 'confirmed', 'cancelled', 'completed']
-        valid_payment_statuses = ['pending', 'partial', 'paid', 'refunded']
+        # Validate parameters - Use TripRegistration statuses
+        valid_statuses = ['pending', 'confirmed', 'waitlisted', 'cancelled', 'completed']
+        valid_payment_statuses = ['unpaid', 'partial', 'paid', 'refunded']
         valid_sort_fields = ['name', 'registration_date', 'payment_status', 'amount_paid']
         
         if status_filter and status_filter not in valid_statuses:
@@ -97,15 +144,17 @@ def get_trip_participants(trip_id):
                 'message': f'Invalid sort field. Must be one of: {", ".join(valid_sort_fields)}'
             }), 400
         
-        # Build query
-        query = Participant.query.filter_by(trip_id=trip_id)
+        # Build query - Join TripRegistration with Participant
+        query = db.session.query(TripRegistration, Participant)\
+            .join(Participant, TripRegistration.participant_id == Participant.id)\
+            .filter(TripRegistration.trip_id == trip_id)
         
-        # Apply filters
+        # Apply filters on TripRegistration
         if status_filter:
-            query = query.filter_by(status=status_filter)
+            query = query.filter(TripRegistration.status == status_filter)
         
         if payment_status_filter:
-            query = query.filter_by(payment_status=payment_status_filter)
+            query = query.filter(TripRegistration.payment_status == payment_status_filter)
         
         if search_query:
             search_pattern = f"%{search_query}%"
@@ -121,11 +170,11 @@ def get_trip_participants(trip_id):
         if sort_by == 'name':
             sort_column = Participant.first_name
         elif sort_by == 'registration_date':
-            sort_column = Participant.registration_date
+            sort_column = TripRegistration.registration_date
         elif sort_by == 'payment_status':
-            sort_column = Participant.payment_status
+            sort_column = TripRegistration.payment_status
         elif sort_by == 'amount_paid':
-            sort_column = Participant.amount_paid
+            sort_column = TripRegistration.amount_paid
         
         if order == 'desc':
             query = query.order_by(sort_column.desc())
@@ -136,16 +185,52 @@ def get_trip_participants(trip_id):
         pagination = query.paginate(page=page, per_page=per_page, error_out=False)
         
         # Calculate statistics
-        total_participants = Participant.query.filter_by(trip_id=trip_id).count()
-        confirmed_count = Participant.query.filter_by(trip_id=trip_id, status='confirmed').count()
-        paid_count = Participant.query.filter_by(trip_id=trip_id, payment_status='paid').count()
+        all_registrations = TripRegistration.query.filter_by(trip_id=trip_id).all()
+        total_participants = len(all_registrations)
+        confirmed_count = len([r for r in all_registrations if r.status == 'confirmed'])
+        paid_count = len([r for r in all_registrations if r.payment_status == 'paid'])
         
-        # Serialize participants
+        # Serialize participants with registration data
         participants_data = []
-        for participant in pagination.items:
-            data = participant.serialize()
-            # Add additional calculated fields
-            data['latest_location'] = participant.get_latest_location().serialize() if participant.get_latest_location() else None
+        for registration, participant in pagination.items:
+            # Get basic participant data
+            data = {
+                'id': participant.id,
+                'full_name': participant.full_name,
+                'first_name': participant.first_name,
+                'last_name': participant.last_name,
+                'email': participant.email,
+                'age': participant.age,
+                'grade_level': participant.grade_level,
+                'photo_url': participant.photo_url,
+                
+                # Registration data from TripRegistration
+                'status': registration.status,
+                'payment_status': registration.payment_status,
+                'registration_date': registration.registration_date.isoformat() if registration.registration_date else None,
+                'registration_number': registration.registration_number,
+                'amount_paid': float(registration.amount_paid or 0),
+                'total_amount': float(registration.total_amount),
+                'outstanding_balance': registration.outstanding_balance,
+                
+                # Consent status
+                'has_all_consents': registration.consent_signed,
+                'consent_signed': registration.consent_signed,
+                'medical_form_submitted': registration.medical_form_submitted,
+                
+                # Parent info
+                'parent': {
+                    'id': participant.parent.id,
+                    'full_name': participant.parent.full_name,
+                    'email': participant.parent.email,
+                    'phone': participant.parent.phone
+                } if participant.parent else None
+            }
+            
+            # Add latest location if available
+            latest_location = participant.get_latest_location()
+            data['latest_location'] = latest_location.serialize() if latest_location else None
+            
             participants_data.append(data)
         
         # Log activity
@@ -158,7 +243,7 @@ def get_trip_participants(trip_id):
                 description=f'Viewed participants list for trip: {trip.title}',
                 category='trip',
                 trip_id=trip_id,
-                metadata={
+                meta_data={
                     'filters': {
                         'status': status_filter,
                         'payment_status': payment_status_filter,
@@ -192,7 +277,7 @@ def get_trip_participants(trip_id):
                     'total_participants': total_participants,
                     'confirmed_participants': confirmed_count,
                     'fully_paid': paid_count,
-                    'trip_capacity': trip.max_participants if hasattr(trip, 'max_participants') else None
+                    'trip_capacity': trip.max_participants
                 },
                 'trip': {
                     'id': trip.id,
@@ -205,6 +290,7 @@ def get_trip_participants(trip_id):
     
     except SQLAlchemyError as e:
         db.session.rollback()
+        print(f"Database error: {str(e)}")
         return jsonify({
             'success': False,
             'error': 'Database error',
@@ -212,6 +298,10 @@ def get_trip_participants(trip_id):
         }), 500
     
     except Exception as e:
+        import traceback
+        print("Unexpected Error:", str(e))
+        traceback.print_exc() 
+
         return jsonify({
             'success': False,
             'error': 'Internal server error',
@@ -245,8 +335,30 @@ def get_participant_details(participant_id):
                 'message': f'No participant found with ID {participant_id}'
             }), 404
         
+        # Get the registration for this participant (assuming single active registration)
+        # registration = TripRegistration.query.filter_by(
+        #     participant_id=participant_id
+        # ).order_by(TripRegistration.registration_date.desc()).first()
+        registration = (
+            TripRegistration.query
+            .join(Trip)  # join with the Trip model
+            .filter(
+                TripRegistration.participant_id == participant_id,
+                Trip.organizer_id == current_user.id  
+            )
+            .order_by(TripRegistration.registration_date.desc())
+            .first()
+        )
+        
+        if not registration:
+            return jsonify({
+                'success': False,
+                'error': 'Registration not found',
+                'message': 'No registration found for this participant'
+            }), 404
+        
         # Verify trip ownership
-        trip, error_response, status_code = verify_trip_ownership(participant.trip_id)
+        trip, error_response, status_code = verify_trip_ownership(registration.trip_id)
         if error_response:
             return jsonify(error_response), status_code
         
@@ -260,6 +372,8 @@ def get_participant_details(participant_id):
             'age': participant.age,
             'grade_level': participant.grade_level,
             'student_id': participant.student_id,
+            'gender': participant.gender,
+            'school_name': participant.school_name,
             
             # Contact Information
             'contact': {
@@ -273,56 +387,59 @@ def get_participant_details(participant_id):
                 'medications': participant.medications,
                 'allergies': participant.allergies,
                 'dietary_restrictions': participant.dietary_restrictions,
-                'emergency_info': participant.emergency_medical_info
+                'emergency_info': participant.emergency_medical_info,
+                'blood_type': participant.blood_type,
+                'doctor_name': participant.doctor_name,
+                'doctor_phone': participant.doctor_phone
             },
             
             # Emergency Contacts
-            'emergency_contacts': [
-                {
-                    'name': participant.emergency_contact_1_name,
-                    'phone': participant.emergency_contact_1_phone,
-                    'relationship': participant.emergency_contact_1_relationship
-                } if participant.emergency_contact_1_name else None,
-                {
-                    'name': participant.emergency_contact_2_name,
-                    'phone': participant.emergency_contact_2_phone,
-                    'relationship': participant.emergency_contact_2_relationship
-                } if participant.emergency_contact_2_name else None
-            ],
+            'emergency_contacts': participant.emergency_contacts_list,
             
             # Status and Registration
-            'status': participant.status,
-            'registration_date': participant.registration_date.isoformat() if participant.registration_date else None,
-            'confirmation_date': participant.confirmation_date.isoformat() if participant.confirmation_date else None,
+            'status': registration.status,
+            'registration_date': registration.registration_date.isoformat() if registration.registration_date else None,
+            'registration_number': registration.registration_number,
+            'confirmed_date': registration.confirmed_date.isoformat() if registration.confirmed_date else None,
+            'cancelled_date': registration.cancelled_date.isoformat() if registration.cancelled_date else None,
+            'cancellation_reason': registration.cancellation_reason,
             
             # Payment Information
             'payment': {
-                'status': participant.payment_status,
-                'amount_paid': float(participant.amount_paid) if participant.amount_paid else 0,
-                'outstanding_balance': participant.outstanding_balance,
-                'total_paid': participant.total_paid,
+                'status': registration.payment_status,
+                'amount_paid': float(registration.amount_paid or 0),
+                'total_amount': float(registration.total_amount),
+                'outstanding_balance': registration.outstanding_balance,
+                'currency': registration.currency,
+                'payment_plan': registration.payment_plan,
+                'payment_deadline': registration.payment_deadline.isoformat() if registration.payment_deadline else None,
                 'payment_history': [
                     {
                         'id': payment.id,
                         'amount': float(payment.amount),
-                        'date': payment.created_at.isoformat() if payment.created_at else None,
+                        'date': payment.payment_date.isoformat() if payment.payment_date else None,
                         'status': payment.status,
-                        'payment_method': payment.payment_method if hasattr(payment, 'payment_method') else None
+                        'payment_method': payment.payment_method,
+                        'reference_number': payment.reference_number,
+                        'transaction_id': payment.transaction_id
                     }
-                    for payment in participant.payments.order_by(db.desc('created_at')).all()
+                    for payment in registration.payments.order_by(RegistrationPayment.payment_date.desc()).all()
                 ]
             },
             
             # Consent Forms
             'consents': {
-                'has_all_required': participant.has_all_consents(),
+                'has_all_required': registration.is_documentation_complete,
+                'consent_signed': registration.consent_signed,
+                'medical_form_submitted': registration.medical_form_submitted,
                 'forms': [
                     {
                         'id': consent.id,
-                        'title': consent.title if hasattr(consent, 'title') else None,
+                        'title': consent.title,
                         'is_signed': consent.is_signed,
-                        'signed_date': consent.signed_at.isoformat() if hasattr(consent, 'signed_at') and consent.signed_at else None,
-                        'signer_name': consent.signer_name if hasattr(consent, 'signer_name') else None
+                        'signed_date': consent.signed_date.isoformat() if consent.signed_at else None,
+                        'signer_name': consent.signer_name,
+                        'signer_relationship': consent.signer_relationship
                     }
                     for consent in participant.consents.all()
                 ]
@@ -336,7 +453,11 @@ def get_participant_details(participant_id):
             
             # Special Requirements
             'special_requirements': participant.special_requirements,
-            'internal_notes': participant.internal_notes,
+            'behavioral_notes': participant.behavioral_notes,
+            
+            # Registration Notes
+            'parent_notes': registration.parent_notes,
+            'admin_notes': registration.admin_notes,
             
             # Trip Information
             'trip': {
@@ -344,11 +465,16 @@ def get_participant_details(participant_id):
                 'title': trip.title,
                 'start_date': trip.start_date.isoformat() if trip.start_date else None,
                 'end_date': trip.end_date.isoformat() if trip.end_date else None,
-                'price_per_student': float(trip.price_per_student) if hasattr(trip, 'price_per_student') and trip.price_per_student else None
+                'price_per_student': float(trip.price_per_student)
             },
             
             # Parent Information
-            'parent': participant.parent.serialize() if participant.parent else None,
+            'parent': {
+                'id': participant.parent.id,
+                'full_name': participant.parent.full_name,
+                'email': participant.parent.email,
+                'phone': participant.parent.phone
+            } if participant.parent else None,
             
             # Timestamps
             'created_at': participant.created_at.isoformat() if participant.created_at else None,
@@ -364,7 +490,7 @@ def get_participant_details(participant_id):
                 entity_id=participant_id,
                 description=f'Viewed details for participant: {participant.full_name}',
                 category='user',
-                trip_id=participant.trip_id,
+                trip_id=registration.trip_id,
                 ip_address=request.remote_addr,
                 user_agent=request.headers.get('User-Agent'),
                 request_method=request.method,
@@ -380,6 +506,7 @@ def get_participant_details(participant_id):
     
     except SQLAlchemyError as e:
         db.session.rollback()
+        print(f"Database error: {str(e)}")
         return jsonify({
             'success': False,
             'error': 'Database error',
@@ -387,6 +514,9 @@ def get_participant_details(participant_id):
         }), 500
     
     except Exception as e:
+        import traceback
+        print("Unexpected Error:", str(e))
+        traceback.print_exc()
         return jsonify({
             'success': False,
             'error': 'Internal server error',
@@ -399,10 +529,10 @@ def get_participant_details(participant_id):
 @roles_required('teacher')
 def delete_participant(participant_id):
     """
-    Delete a participant from a trip
+    Delete a participant registration from a trip
     
     Notes:
-    - This will also delete associated consents, payments, and locations due to cascade rules
+    - Deletes the TripRegistration record, not the Participant itself
     - Cannot delete confirmed participants without confirmation
     - Logs the deletion for audit purposes
     """
@@ -417,54 +547,70 @@ def delete_participant(participant_id):
                 'message': f'No participant found with ID {participant_id}'
             }), 404
         
+        # Get the registration
+        registration = TripRegistration.query.filter_by(
+            participant_id=participant_id
+        ).order_by(TripRegistration.registration_date.desc()).first()
+        
+        if not registration:
+            return jsonify({
+                'success': False,
+                'error': 'Registration not found',
+                'message': 'No registration found for this participant'
+            }), 404
+        
         # Verify trip ownership
-        trip, error_response, status_code = verify_trip_ownership(participant.trip_id)
+        trip, error_response, status_code = verify_trip_ownership(registration.trip_id)
         if error_response:
             return jsonify(error_response), status_code
         
         # Check if force delete is requested for confirmed participants
         force_delete = request.args.get('force', 'false').lower() == 'true'
         
-        if participant.status == 'confirmed' and not force_delete:
+        if registration.status == 'confirmed' and not force_delete:
             return jsonify({
                 'success': False,
                 'error': 'Confirmation required',
                 'message': 'This participant is confirmed. Use force=true to delete.',
                 'data': {
                     'participant_id': participant_id,
-                    'status': participant.status,
+                    'status': registration.status,
                     'requires_force': True
                 }
             }), 400
         
-        # Store participant data for logging before deletion
+        # Store data for logging before deletion
         participant_data = {
             'id': participant.id,
             'full_name': participant.full_name,
             'email': participant.email,
-            'status': participant.status,
-            'payment_status': participant.payment_status,
-            'amount_paid': float(participant.amount_paid) if participant.amount_paid else 0,
-            'trip_id': participant.trip_id,
+            'registration_id': registration.id,
+            'registration_number': registration.registration_number,
+            'status': registration.status,
+            'payment_status': registration.payment_status,
+            'amount_paid': float(registration.amount_paid or 0),
+            'trip_id': registration.trip_id,
             'trip_title': trip.title
         }
         
-        # Delete participant (cascades to related records)
-        db.session.delete(participant)
+        # Delete registration (this will cascade to payments)
+        # Note: We're deleting the registration, not the participant
+        # The participant record remains for historical purposes
+        db.session.delete(registration)
         db.session.commit()
         
         # Log the deletion
         try:
             ActivityLog.log_action(
-                action='participant_deleted',
+                action='participant_registration_deleted',
                 user_id=current_user.id,
-                entity_type='participant',
-                entity_id=participant_id,
-                description=f'Deleted participant: {participant_data["full_name"]} from trip: {trip.title}',
-                category='user',
-                trip_id=participant.trip_id,
+                entity_type='trip_registration',
+                entity_id=registration.id,
+                description=f'Deleted registration for participant: {participant_data["full_name"]} from trip: {trip.title}',
+                category='booking',
+                trip_id=registration.trip_id,
                 old_values=participant_data,
-                metadata={
+                meta_data={
                     'force_delete': force_delete,
                     'deleted_by': current_user.full_name
                 },
@@ -479,27 +625,29 @@ def delete_participant(participant_id):
         
         return jsonify({
             'success': True,
-            'message': 'Participant deleted successfully',
+            'message': 'Participant registration deleted successfully',
             'data': {
-                'deleted_participant': participant_data,
+                'deleted_registration': participant_data,
                 'timestamp': db.func.now()
             }
         }), 200
     
     except SQLAlchemyError as e:
         db.session.rollback()
+        print(f"Database error: {str(e)}")
         return jsonify({
             'success': False,
             'error': 'Database error',
-            'message': 'An error occurred while deleting the participant'
+            'message': 'An error occurred while deleting the participant registration'
         }), 500
     
     except Exception as e:
         db.session.rollback()
+        import traceback
+        print("Unexpected Error:", str(e))
+        traceback.print_exc()
         return jsonify({
             'success': False,
             'error': 'Internal server error',
             'message': 'An unexpected error occurred'
         }), 500
-
-

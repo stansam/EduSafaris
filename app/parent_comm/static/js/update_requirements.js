@@ -121,14 +121,14 @@ const UpdateRequirementsModal = (function() {
     }
 
     // Open Modal
-    function open(tripId, participantId) {
-        if (!tripId || !participantId) {
-            console.error('Trip ID and Participant ID are required');
+    function open(tripId, registrationId) {
+        if (!tripId || !registrationId) {
+            console.error('Trip ID and Registration ID are required');
             return;
         }
         
         state.currentTripId = tripId;
-        state.currentParticipantId = participantId;
+        state.currentParticipantId = registrationId;
         
         if (elements.overlay) {
             elements.overlay.classList.add('active');
@@ -136,7 +136,7 @@ const UpdateRequirementsModal = (function() {
         }
         
         resetForm();
-        loadParticipantData(tripId, participantId);
+        loadParticipantData(tripId, registrationId);
     }
 
     // Close Modal
@@ -257,7 +257,7 @@ const UpdateRequirementsModal = (function() {
             const formData = collectFormData();
             
             const response = await fetch(
-                `/api/parent/trips/${state.currentTripId}/participants/${state.currentParticipantId}/requirements`,
+                `/api/parent/trips/${state.currentTripId}/registrations/${state.currentParticipantId}/requirements`,
                 {
                     method: 'PUT',
                     headers: {

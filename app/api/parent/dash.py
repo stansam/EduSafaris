@@ -2,7 +2,7 @@ from flask import jsonify
 from flask_jwt_extended import jwt_required
 from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime
-from app.models.participant import Participant
+from app.models import Participant, TripRegistration, Consent
 from app.api.parent.children import get_current_user
 
 from app.api import api_bp as parent_bp 
@@ -27,23 +27,41 @@ def get_dashboard_summary():
         # Get all children
         children = Participant.query.filter_by(parent_id=user.id).all()
         
+        # Get all active registrations
+        active_registrations = TripRegistration.query.filter_by(
+            parent_id=user.id
+        ).filter(TripRegistration.status.in_(['pending', 'confirmed'])).all()
+
         # Calculate statistics
         total_children = len(children)
-        active_trips = sum(1 for c in children if c.status in ['registered', 'confirmed'])
-        pending_payments = sum(1 for c in children if c.payment_status in ['pending', 'partial'])
-        unsigned_consents = sum(1 for c in children if not c.has_all_consents())
+        active_trips = len(active_registrations)
+        pending_payments = TripRegistration.query.filter_by(
+            parent_id=user.id
+        ).filter(
+            TripRegistration.status.in_(['pending', 'confirmed']),
+            TripRegistration.payment_status.in_(['unpaid', 'partial'])
+        ).count()
+        
+        unsigned_consents = Consent.query.join(Participant).filter(
+            Participant.parent_id == user.id,
+            Consent.is_signed == False,
+            Consent.is_required == True
+        ).count()
         
         # Get upcoming trips
         upcoming_trips = []
-        for child in children:
-            if child.trip and child.trip.start_date and child.trip.start_date >= datetime.now().date():
+        for registration in active_registrations:
+            if registration.trip and registration.trip.start_date >= datetime.now().date():
                 trip_info = {
-                    'trip_id': child.trip.id,
-                    'trip_title': child.trip.title,
-                    'child_name': child.full_name,
-                    'start_date': child.trip.start_date.isoformat(),
-                    'status': child.status,
-                    'payment_status': child.payment_status
+                    'registration_id': registration.id,
+                    'registration_number': registration.registration_number,
+                    'trip_id': registration.trip.id,
+                    'trip_title': registration.trip.title,
+                    'child_name': registration.participant.full_name,
+                    'start_date': registration.trip.start_date.isoformat(),
+                    'status': registration.status,
+                    'payment_status': registration.payment_status,
+                    'outstanding_balance': registration.outstanding_balance
                 }
                 upcoming_trips.append(trip_info)
         

@@ -5,6 +5,7 @@ from sqlalchemy import func, case
 from app.extensions import db
 from app.models.trip import Trip
 from app.models.participant import Participant
+from app.models.trip_registration import TripRegistration
 from app.models.activity_log import ActivityLog
 from app.utils.utils import roles_required
 import csv
@@ -80,9 +81,9 @@ def get_teacher_trips():
         
         # Apply sorting
         if sort_by == 'participant_count' and include_stats:
-            # Join with participants for sorting by count
-            query = query.outerjoin(Participant).group_by(Trip.id)
-            sort_column = func.count(Participant.id)
+            # Join with TripRegistration for sorting by count
+            query = query.outerjoin(TripRegistration).group_by(Trip.id)
+            sort_column = func.count(TripRegistration.id)
         elif sort_by == 'title':
             sort_column = Trip.title
         elif sort_by == 'created_at':
@@ -109,31 +110,33 @@ def get_teacher_trips():
                 'description': trip.description,
                 'start_date': trip.start_date.isoformat() if trip.start_date else None,
                 'end_date': trip.end_date.isoformat() if trip.end_date else None,
-                'status': trip.status if hasattr(trip, 'status') else 'active',
-                'price_per_student': float(trip.price_per_student) if hasattr(trip, 'price_per_student') and trip.price_per_student else None,
-                'max_participants': trip.max_participants if hasattr(trip, 'max_participants') else None,
+                'status': trip.status,
+                'price_per_student': float(trip.price_per_student) if trip.price_per_student else None,
+                'max_participants': trip.max_participants,
                 'created_at': trip.created_at.isoformat() if trip.created_at else None
             }
             
             # Add participant statistics if requested
             if include_stats:
-                # Get participant counts with a single query per trip
-                participant_stats = db.session.query(
-                    func.count(Participant.id).label('total'),
-                    func.sum(case((Participant.status == 'confirmed', 1), else_=0)).label('confirmed'),
-                    func.sum(case((Participant.payment_status == 'paid', 1), else_=0)).label('paid'),
-                    func.sum(case((Participant.status == 'cancelled', 1), else_=0)).label('cancelled')
-                ).filter(Participant.trip_id == trip.id).first()
+                # Get registration counts with a single query per trip
+                registration_stats = db.session.query(
+                    func.count(TripRegistration.id).label('total'),
+                    func.sum(case((TripRegistration.status == 'confirmed', 1), else_=0)).label('confirmed'),
+                    func.sum(case((TripRegistration.payment_status == 'paid', 1), else_=0)).label('paid'),
+                    func.sum(case((TripRegistration.status == 'cancelled', 1), else_=0)).label('cancelled'),
+                    func.sum(case((TripRegistration.status == 'pending', 1), else_=0)).label('pending')
+                ).filter(TripRegistration.trip_id == trip.id).first()
                 
-                trip_dict['participant_count'] = participant_stats.total or 0
-                trip_dict['confirmed_count'] = participant_stats.confirmed or 0
-                trip_dict['paid_count'] = participant_stats.paid or 0
-                trip_dict['cancelled_count'] = participant_stats.cancelled or 0
+                trip_dict['participant_count'] = registration_stats.total or 0
+                trip_dict['confirmed_count'] = registration_stats.confirmed or 0
+                trip_dict['paid_count'] = registration_stats.paid or 0
+                trip_dict['cancelled_count'] = registration_stats.cancelled or 0
+                trip_dict['pending_count'] = registration_stats.pending or 0
                 
                 # Calculate capacity percentage
                 if trip_dict['max_participants']:
                     trip_dict['capacity_percentage'] = round(
-                        (trip_dict['participant_count'] / trip_dict['max_participants']) * 100, 
+                        (trip_dict['confirmed_count'] / trip_dict['max_participants']) * 100, 
                         1
                     )
                 else:
@@ -228,7 +231,7 @@ def export_participants(trip_id):
     Export participants for a specific trip to CSV format
     
     Query Parameters:
-    - status: Filter by participant status
+    - status: Filter by registration status
     - payment_status: Filter by payment status
     - search: Search by name or email
     - format: Export format (csv, xlsx) - currently only CSV supported
@@ -267,15 +270,17 @@ def export_participants(trip_id):
                 'message': 'Export format must be either csv or xlsx'
             }), 400
         
-        # Build query
-        query = Participant.query.filter_by(trip_id=trip_id)
+        # Build query - get registrations with participant data
+        query = db.session.query(TripRegistration, Participant).join(
+            Participant, TripRegistration.participant_id == Participant.id
+        ).filter(TripRegistration.trip_id == trip_id)
         
         # Apply filters
         if status_filter:
-            query = query.filter_by(status=status_filter)
+            query = query.filter(TripRegistration.status == status_filter)
         
         if payment_status_filter:
-            query = query.filter_by(payment_status=payment_status_filter)
+            query = query.filter(TripRegistration.payment_status == payment_status_filter)
         
         if search_query:
             search_pattern = f"%{search_query}%"
@@ -283,17 +288,18 @@ def export_participants(trip_id):
                 db.or_(
                     Participant.first_name.ilike(search_pattern),
                     Participant.last_name.ilike(search_pattern),
-                    Participant.email.ilike(search_pattern)
+                    Participant.email.ilike(search_pattern),
+                    TripRegistration.registration_number.ilike(search_pattern)
                 )
             )
         
         # Order by name
         query = query.order_by(Participant.last_name, Participant.first_name)
         
-        # Get all participants
-        participants = query.all()
+        # Get all registrations with participants
+        results = query.all()
         
-        if not participants:
+        if not results:
             return jsonify({
                 'success': False,
                 'error': 'No data',
@@ -302,14 +308,14 @@ def export_participants(trip_id):
         
         # Define available fields
         all_fields = [
-            'id', 'full_name', 'first_name', 'last_name', 'email', 'phone',
+            'registration_number', 'full_name', 'first_name', 'last_name', 'email', 'phone',
             'date_of_birth', 'age', 'grade_level', 'student_id',
-            'status', 'payment_status', 'amount_paid', 'outstanding_balance',
-            'registration_date', 'confirmation_date',
+            'registration_status', 'payment_status', 'total_amount', 'amount_paid', 'outstanding_balance',
+            'registration_date', 'confirmed_date',
+            'consent_signed', 'medical_form_submitted',
             'medical_conditions', 'medications', 'allergies', 'dietary_restrictions',
-            'emergency_contact_1_name', 'emergency_contact_1_phone', 'emergency_contact_1_relationship',
-            'emergency_contact_2_name', 'emergency_contact_2_phone', 'emergency_contact_2_relationship',
-            'special_requirements', 'has_all_consents'
+            'emergency_contact_name', 'emergency_contact_phone', 'emergency_contact_relationship',
+            'special_requirements'
         ]
         
         # Determine which fields to include
@@ -332,25 +338,43 @@ def export_participants(trip_id):
             writer.writerow(headers)
             
             # Write data rows
-            for participant in participants:
+            for registration, participant in results:
                 row = []
                 for field in fields_to_export:
-                    if field == 'full_name':
+                    # Registration fields
+                    if field == 'registration_number':
+                        value = registration.registration_number
+                    elif field == 'registration_status':
+                        value = registration.status
+                    elif field == 'payment_status':
+                        value = registration.payment_status
+                    elif field == 'total_amount':
+                        value = float(registration.total_amount) if registration.total_amount else 0
+                    elif field == 'amount_paid':
+                        value = float(registration.amount_paid) if registration.amount_paid else 0
+                    elif field == 'outstanding_balance':
+                        value = float(registration.outstanding_balance)
+                    elif field == 'registration_date':
+                        value = registration.registration_date.strftime('%Y-%m-%d %H:%M:%S') if registration.registration_date else ''
+                    elif field == 'confirmed_date':
+                        value = registration.confirmed_date.strftime('%Y-%m-%d %H:%M:%S') if registration.confirmed_date else ''
+                    elif field == 'consent_signed':
+                        value = 'Yes' if registration.consent_signed else 'No'
+                    elif field == 'medical_form_submitted':
+                        value = 'Yes' if registration.medical_form_submitted else 'No'
+                    # Participant fields
+                    elif field == 'full_name':
                         value = participant.full_name
                     elif field == 'age':
-                        value = participant.age or 'N/A'
-                    elif field == 'outstanding_balance':
-                        value = float(participant.outstanding_balance) if hasattr(participant, 'outstanding_balance') else 0
-                    elif field == 'amount_paid':
-                        value = float(participant.amount_paid) if participant.amount_paid else 0
-                    elif field == 'has_all_consents':
-                        value = 'Yes' if participant.has_all_consents() else 'No'
-                    elif field == 'registration_date':
-                        value = participant.registration_date.strftime('%Y-%m-%d %H:%M:%S') if participant.registration_date else ''
-                    elif field == 'confirmation_date':
-                        value = participant.confirmation_date.strftime('%Y-%m-%d %H:%M:%S') if participant.confirmation_date else ''
+                        value = participant.age if hasattr(participant, 'age') else 'N/A'
                     elif field == 'date_of_birth':
                         value = participant.date_of_birth.strftime('%Y-%m-%d') if participant.date_of_birth else ''
+                    elif field == 'emergency_contact_name':
+                        value = participant.emergency_contact_1_name if hasattr(participant, 'emergency_contact_1_name') else ''
+                    elif field == 'emergency_contact_phone':
+                        value = participant.emergency_contact_1_phone if hasattr(participant, 'emergency_contact_1_phone') else ''
+                    elif field == 'emergency_contact_relationship':
+                        value = participant.emergency_contact_1_relationship if hasattr(participant, 'emergency_contact_1_relationship') else ''
                     else:
                         value = getattr(participant, field, '')
                     
@@ -372,11 +396,11 @@ def export_participants(trip_id):
                     user_id=current_user.id,
                     entity_type='trip',
                     entity_id=trip_id,
-                    description=f'Exported {len(participants)} participants for trip: {trip.title}',
+                    description=f'Exported {len(results)} participants for trip: {trip.title}',
                     category='export',
                     trip_id=trip_id,
                     metadata={
-                        'participant_count': len(participants),
+                        'participant_count': len(results),
                         'filters': {
                             'status': status_filter,
                             'payment_status': payment_status_filter,
@@ -461,13 +485,21 @@ def export_all_participants():
                 'message': 'No trips found'
             }), 404
         
-        # Get all participants for these trips
+        # Get all registrations with participants for these trips
         trip_ids = [trip.id for trip in trips]
-        participants = Participant.query.filter(
-            Participant.trip_id.in_(trip_ids)
-        ).order_by(Participant.trip_id, Participant.last_name, Participant.first_name).all()
+        results = db.session.query(TripRegistration, Participant, Trip).join(
+            Participant, TripRegistration.participant_id == Participant.id
+        ).join(
+            Trip, TripRegistration.trip_id == Trip.id
+        ).filter(
+            TripRegistration.trip_id.in_(trip_ids)
+        ).order_by(
+            TripRegistration.trip_id, 
+            Participant.last_name, 
+            Participant.first_name
+        ).all()
         
-        if not participants:
+        if not results:
             return jsonify({
                 'success': False,
                 'error': 'No data',
@@ -480,32 +512,30 @@ def export_all_participants():
         
         # Write header
         headers = [
-            'Trip ID', 'Trip Title', 'Participant ID', 'Full Name', 'Email', 'Phone',
-            'Age', 'Grade', 'Status', 'Payment Status', 'Amount Paid', 'Balance',
-            'Registration Date', 'Has All Consents'
+            'Trip ID', 'Trip Title', 'Registration Number', 'Full Name', 'Email', 'Phone',
+            'Age', 'Grade', 'Registration Status', 'Payment Status', 'Amount Paid', 'Balance',
+            'Registration Date', 'Consent Signed', 'Medical Form Submitted'
         ]
         writer.writerow(headers)
         
-        # Create trip lookup
-        trip_lookup = {trip.id: trip.title for trip in trips}
-        
         # Write data
-        for participant in participants:
+        for registration, participant, trip in results:
             row = [
-                participant.trip_id,
-                trip_lookup.get(participant.trip_id, 'Unknown'),
-                participant.id,
+                trip.id,
+                trip.title,
+                registration.registration_number,
                 participant.full_name,
                 participant.email or '',
                 participant.phone or '',
-                participant.age or 'N/A',
+                participant.age if hasattr(participant, 'age') else 'N/A',
                 participant.grade_level or 'N/A',
-                participant.status,
-                participant.payment_status,
-                float(participant.amount_paid) if participant.amount_paid else 0,
-                float(participant.outstanding_balance) if hasattr(participant, 'outstanding_balance') else 0,
-                participant.registration_date.strftime('%Y-%m-%d %H:%M:%S') if participant.registration_date else '',
-                'Yes' if participant.has_all_consents() else 'No'
+                registration.status,
+                registration.payment_status,
+                float(registration.amount_paid) if registration.amount_paid else 0,
+                float(registration.outstanding_balance),
+                registration.registration_date.strftime('%Y-%m-%d %H:%M:%S') if registration.registration_date else '',
+                'Yes' if registration.consent_signed else 'No',
+                'Yes' if registration.medical_form_submitted else 'No'
             ]
             writer.writerow(row)
         
@@ -521,11 +551,11 @@ def export_all_participants():
                 action='export_all_participants',
                 user_id=current_user.id,
                 entity_type='trip',
-                description=f'Exported {len(participants)} participants from {len(trips)} trips',
+                description=f'Exported {len(results)} participants from {len(trips)} trips',
                 category='export',
                 metadata={
                     'trip_count': len(trips),
-                    'participant_count': len(participants),
+                    'participant_count': len(results),
                     'trip_ids': trip_ids
                 },
                 ip_address=request.remote_addr,
@@ -554,3 +584,4 @@ def export_all_participants():
             'error': 'Internal server error',
             'message': 'An unexpected error occurred'
         }), 500
+        

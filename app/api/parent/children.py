@@ -1,6 +1,5 @@
 from flask import request, jsonify, current_app
 from flask_login import current_user, login_required
-from flask_jwt_extended import jwt_required, get_jwt_identity
 from werkzeug.utils import secure_filename
 from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime
@@ -8,12 +7,7 @@ import os
 from decimal import Decimal
 
 from app.extensions import db
-from app.models.participant import Participant
-from app.models.consent import Consent
-from app.models.document import Document
-from app.models.activity_log import ActivityLog
-from app.models.user import User
-from app.models.trip import Trip
+from app.models import Participant, Consent, Document, ActivityLog, User, Trip, TripRegistration
 from app.config import BaseConfig
 
 from app.api import api_bp as parent_bp 
@@ -64,6 +58,10 @@ def validate_child_data(data, is_update=False):
         # Required fields for creation
         if not data.get('first_name'):
             errors.append('First name is required')
+        if not data.get('last_name'):
+            errors.append('Last name is required')
+        if not data.get('gender'):
+            errors.append('Gender is required')
         if not data.get('last_name'):
             errors.append('Last name is required')
         if not data.get('trip_id'):
@@ -127,13 +125,13 @@ def get_children_list():
         if status_filter:
             query = query.filter_by(status=status_filter)
         
-        trip_id = request.args.get('trip_id', type=int)
-        if trip_id:
-            query = query.filter_by(trip_id=trip_id)
+        # trip_id = request.args.get('trip_id', type=int)
+        # if trip_id:
+        #     query = query.filter_by(trip_id=trip_id)
         
-        payment_status = request.args.get('payment_status')
-        if payment_status:
-            query = query.filter_by(payment_status=payment_status)
+        # payment_status = request.args.get('payment_status')
+        # if payment_status:
+        #     query = query.filter_by(payment_status=payment_status)
         
         # Get children
         children = query.order_by(Participant.created_at.desc()).all()
@@ -142,15 +140,32 @@ def get_children_list():
         children_data = []
         for child in children:
             child_dict = child.serialize()
-            if child.trip:
-                child_dict['trip'] = {
-                    'id': child.trip.id,
-                    'title': child.trip.title,
-                    'destination': child.trip.destination,
-                    'start_date': child.trip.start_date.isoformat() if child.trip.start_date else None,
-                    'end_date': child.trip.end_date.isoformat() if child.trip.end_date else None,
-                    'status': child.trip.status
+            active_reg = child.registrations.filter(
+                TripRegistration.status.in_(['pending', 'confirmed'])
+            ).first()
+
+            # if child.trip:
+            #     child_dict['trip'] = {
+            #         'id': child.trip.id,
+            #         'title': child.trip.title,
+            #         'destination': child.trip.destination,
+            #         'start_date': child.trip.start_date.isoformat() if child.trip.start_date else None,
+            #         'end_date': child.trip.end_date.isoformat() if child.trip.end_date else None,
+            #         'status': child.trip.status
+            #     }
+
+            if active_reg and active_reg.trip:
+                child_dict['current_trip'] = {
+                    'id': active_reg.trip.id,
+                    'title': active_reg.trip.title,
+                    'destination': active_reg.trip.destination,
+                    'start_date': active_reg.trip.start_date.isoformat() if active_reg.trip.start_date else None,
+                    'end_date': active_reg.trip.end_date.isoformat() if active_reg.trip.end_date else None,
+                    'status': active_reg.status,
+                    'payment_status': active_reg.payment_status,
+                    'registration_number': active_reg.registration_number
                 }
+
             children_data.append(child_dict)
         
         return jsonify({
@@ -200,42 +215,71 @@ def get_child_profile(child_id):
             return jsonify(error), status_code
         
         # Get child details
-        child_data = child.serialize()
+        child_data = child.serialize(include_sensitive=True)
         
         # Add current trip details
-        if child.trip:
-            child_data['current_trip'] = {
-                'id': child.trip.id,
-                'title': child.trip.title,
-                'description': child.trip.description,
-                'destination': child.trip.destination,
-                'start_date': child.trip.start_date.isoformat() if child.trip.start_date else None,
-                'end_date': child.trip.end_date.isoformat() if child.trip.end_date else None,
-                'status': child.trip.status,
-                'price': float(child.trip.price_per_student) if child.trip.price_per_student else 0
-            }
+        # if child.trip:
+        #     child_data['current_trip'] = {
+        #         'id': child.trip.id,
+        #         'title': child.trip.title,
+        #         'description': child.trip.description,
+        #         'destination': child.trip.destination,
+        #         'start_date': child.trip.start_date.isoformat() if child.trip.start_date else None,
+        #         'end_date': child.trip.end_date.isoformat() if child.trip.end_date else None,
+        #         'status': child.trip.status,
+        #         'price': float(child.trip.price_per_student) if child.trip.price_per_student else 0
+        #     }
         
         # Get trip history (all trips this child participated in)
-        trip_history = Participant.query.filter_by(
-            first_name=child.first_name,
-            last_name=child.last_name,
-            parent_id=user.id
-        ).all()
+        # trip_history = Participant.query.filter_by(
+        #     first_name=child.first_name,
+        #     last_name=child.last_name,
+        #     parent_id=user.id
+        # ).all()
         
-        child_data['trip_history'] = []
-        for participant in trip_history:
-            if participant.trip:
-                child_data['trip_history'].append({
-                    'id': participant.id,
-                    'trip_id': participant.trip_id,
-                    'trip_title': participant.trip.title,
-                    'destination': participant.trip.destination,
-                    'start_date': participant.trip.start_date.isoformat() if participant.trip.start_date else None,
-                    'end_date': participant.trip.end_date.isoformat() if participant.trip.end_date else None,
-                    'status': participant.status,
-                    'payment_status': participant.payment_status,
-                    'amount_paid': float(participant.amount_paid) if participant.amount_paid else 0
-                })
+        # child_data['trip_history'] = []
+        # for participant in trip_history:
+        #     if participant.trip:
+        #         child_data['trip_history'].append({
+        #             'id': participant.id,
+        #             'trip_id': participant.trip_id,
+        #             'trip_title': participant.trip.title,
+        #             'destination': participant.trip.destination,
+        #             'start_date': participant.trip.start_date.isoformat() if participant.trip.start_date else None,
+        #             'end_date': participant.trip.end_date.isoformat() if participant.trip.end_date else None,
+        #             'status': participant.status,
+        #             'payment_status': participant.payment_status,
+        #             'amount_paid': float(participant.amount_paid) if participant.amount_paid else 0
+        #         })
+
+        active_reg = child.registrations.filter(
+            TripRegistration.status.in_(['pending', 'confirmed'])
+        ).first()
+        
+        if active_reg and active_reg.trip:
+            child_data['current_registration'] = {
+                'id': active_reg.id,
+                'registration_number': active_reg.registration_number,
+                'status': active_reg.status,
+                'payment_status': active_reg.payment_status,
+                'total_amount': float(active_reg.total_amount),
+                'amount_paid': float(active_reg.amount_paid or 0),
+                'outstanding_balance': active_reg.outstanding_balance,
+                'trip': {
+                    'id': active_reg.trip.id,
+                    'title': active_reg.trip.title,
+                    'description': active_reg.trip.description,
+                    'destination': active_reg.trip.destination,
+                    'start_date': active_reg.trip.start_date.isoformat() if active_reg.trip.start_date else None,
+                    'end_date': active_reg.trip.end_date.isoformat() if active_reg.trip.end_date else None,
+                    'status': active_reg.trip.status
+                }
+            }
+        
+        # Get all registrations history
+        all_registrations = child.registrations.order_by(TripRegistration.created_at.desc()).all()
+        child_data['registrations_history'] = [reg.serialize() for reg in all_registrations]
+        
         
         # Get documents
         documents = Document.get_participant_documents(child_id)
@@ -269,294 +313,6 @@ def get_child_profile(child_id):
             'details': str(e)
         }), 500
 
-
-# ============================================================================
-# ROUTES - ADD CHILD
-# ============================================================================
-
-@parent_bp.route('/parent/children', methods=['POST'])
-# @jwt_required()
-def add_child():
-    """
-    Register a new child for a trip
-    
-    Required JSON fields:
-        - first_name: Child's first name
-        - last_name: Child's last name
-        - trip_id: ID of the trip to register for
-    
-    Optional fields:
-        - date_of_birth: YYYY-MM-DD format
-        - grade_level: Grade or class
-        - email: Child's email
-        - phone: Contact number
-        - student_id: School student ID
-        - special_requirements: Any special needs
-    
-    Returns:
-        201: Child successfully registered
-        400: Validation error
-        404: Trip not found
-        500: Server error
-    """
-    try:
-        user, error, status_code = get_current_user()
-        if error:
-            return jsonify(error), status_code
-        
-        data = request.get_json()
-        if not data:
-            return jsonify({
-                'success': False,
-                'error': 'No data provided'
-            }), 400
-        
-        # Validate data
-        validation_errors = validate_child_data(data)
-        if validation_errors:
-            return jsonify({
-                'success': False,
-                'error': 'Validation failed',
-                'validation_errors': validation_errors
-            }), 400
-        
-        # Verify trip exists and is accepting registrations
-        trip = Trip.query.get(data['trip_id'])
-        if not trip:
-            return jsonify({
-                'success': False,
-                'error': 'Trip not found'
-            }), 404
-        
-        if trip.status == 'cancelled':
-            return jsonify({
-                'success': False,
-                'error': 'Cannot register for cancelled trip'
-            }), 400
-        
-        # Check if trip is full
-        if trip.max_participants:
-            current_participants = Participant.query.filter_by(
-                trip_id=trip.id,
-                status='confirmed'
-            ).count()
-            if current_participants >= trip.max_participants:
-                return jsonify({
-                    'success': False,
-                    'error': 'Trip is full'
-                }), 400
-        
-        # Create participant
-        child = Participant(
-            first_name=data['first_name'].strip(),
-            last_name=data['last_name'].strip(),
-            date_of_birth=datetime.strptime(data['date_of_birth'], '%Y-%m-%d').date() if data.get('date_of_birth') else None,
-            grade_level=data.get('grade_level'),
-            student_id=data.get('student_id'),
-            email=data.get('email'),
-            phone=data.get('phone'),
-            special_requirements=data.get('special_requirements'),
-            trip_id=data['trip_id'],
-            parent_id=user.id,
-            status='registered',
-            payment_status='pending',
-            registration_date=datetime.now()
-        )
-        
-        db.session.add(child)
-        db.session.commit()
-        
-        # Log activity
-        ActivityLog.log_action(
-            action='child_registered',
-            user_id=user.id,
-            entity_type='participant',
-            entity_id=child.id,
-            description=f"Registered {child.full_name} for {trip.title}",
-            category='participant',
-            trip_id=trip.id,
-            ip_address=request.remote_addr,
-            user_agent=request.headers.get('User-Agent')
-        )
-        
-        return jsonify({
-            'success': True,
-            'message': 'Child registered successfully',
-            'child': child.serialize()
-        }), 201
-        
-    except ValueError as e:
-        return jsonify({
-            'success': False,
-            'error': 'Invalid data format',
-            'details': str(e)
-        }), 400
-    except SQLAlchemyError as e:
-        db.session.rollback()
-        return jsonify({
-            'success': False,
-            'error': 'Database error occurred',
-            'details': str(e)
-        }), 500
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({
-            'success': False,
-            'error': 'An unexpected error occurred',
-            'details': str(e)
-        }), 500
-
-
-# ============================================================================
-# ROUTES - UPDATE CHILD PROFILE
-# ============================================================================
-
-@parent_bp.route('/parent/children/<int:child_id>', methods=['PUT', 'PATCH'])
-# @jwt_required()
-def update_child_profile(child_id):
-    """
-    Update child profile information
-    
-    Parameters:
-        - child_id: ID of the child to update
-    
-    Allowed JSON fields:
-        - first_name, last_name
-        - date_of_birth, grade_level, student_id
-        - email, phone
-        - medical_conditions, medications, allergies
-        - dietary_restrictions, emergency_medical_info
-        - emergency_contact_1_*, emergency_contact_2_*
-        - special_requirements
-    
-    Returns:
-        200: Profile updated successfully
-        400: Validation error
-        403: Unauthorized access
-        404: Child not found
-        500: Server error
-    """
-    try:
-        user, error, status_code = get_current_user()
-        if error:
-            return jsonify(error), status_code
-        
-        # Verify access
-        child, error, status_code = verify_parent_child_access(user.id, child_id)
-        if error:
-            return jsonify(error), status_code
-        
-        data = request.get_json()
-        if not data:
-            return jsonify({
-                'success': False,
-                'error': 'No data provided'
-            }), 400
-        
-        # Validate data
-        validation_errors = validate_child_data(data, is_update=True)
-        if validation_errors:
-            return jsonify({
-                'success': False,
-                'error': 'Validation failed',
-                'validation_errors': validation_errors
-            }), 400
-        
-        # Store old values for logging
-        old_values = {}
-        updated_fields = []
-        
-        # Update basic information
-        basic_fields = ['first_name', 'last_name', 'grade_level', 'student_id', 
-                       'email', 'phone', 'special_requirements']
-        for field in basic_fields:
-            if field in data:
-                old_values[field] = getattr(child, field)
-                setattr(child, field, data[field])
-                updated_fields.append(field)
-        
-        # Update date of birth
-        if 'date_of_birth' in data:
-            old_values['date_of_birth'] = child.date_of_birth.isoformat() if child.date_of_birth else None
-            child.date_of_birth = datetime.strptime(data['date_of_birth'], '%Y-%m-%d').date()
-            updated_fields.append('date_of_birth')
-        
-        # Update medical information
-        medical_fields = ['medical_conditions', 'medications', 'allergies', 
-                         'dietary_restrictions', 'emergency_medical_info']
-        for field in medical_fields:
-            if field in data:
-                old_values[field] = getattr(child, field)
-                setattr(child, field, data[field])
-                updated_fields.append(field)
-        
-        # Update emergency contacts
-        emergency_fields = [
-            'emergency_contact_1_name', 'emergency_contact_1_phone', 'emergency_contact_1_relationship',
-            'emergency_contact_2_name', 'emergency_contact_2_phone', 'emergency_contact_2_relationship'
-        ]
-        for field in emergency_fields:
-            if field in data:
-                old_values[field] = getattr(child, field)
-                setattr(child, field, data[field])
-                updated_fields.append(field)
-        
-        if not updated_fields:
-            return jsonify({
-                'success': False,
-                'error': 'No valid fields to update'
-            }), 400
-        
-        db.session.commit()
-        
-        # Log activity
-        ActivityLog.log_action(
-            action='child_profile_updated',
-            user_id=user.id,
-            entity_type='participant',
-            entity_id=child.id,
-            description=f"Updated profile for {child.full_name}",
-            category='participant',
-            trip_id=child.trip_id,
-            old_values=old_values,
-            new_values={field: getattr(child, field) for field in updated_fields},
-            ip_address=request.remote_addr,
-            user_agent=request.headers.get('User-Agent')
-        )
-        
-        return jsonify({
-            'success': True,
-            'message': 'Profile updated successfully',
-            'updated_fields': updated_fields,
-            'child': child.serialize()
-        }), 200
-        
-    except ValueError as e:
-        db.session.rollback()
-        return jsonify({
-            'success': False,
-            'error': 'Invalid data format',
-            'details': str(e)
-        }), 400
-    except SQLAlchemyError as e:
-        db.session.rollback()
-        return jsonify({
-            'success': False,
-            'error': 'Database error occurred',
-            'details': str(e)
-        }), 500
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({
-            'success': False,
-            'error': 'An unexpected error occurred',
-            'details': str(e)
-        }), 500
-
-
-# ============================================================================
-# ROUTES - DOCUMENT MANAGEMENT
-# ============================================================================
 
 @parent_bp.route('/parent/children/<int:child_id>/documents', methods=['POST'])
 # @jwt_required()

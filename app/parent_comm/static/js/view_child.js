@@ -111,9 +111,10 @@ function renderChildProfile(child) {
 // Render current trip
 function renderCurrentTrip(child) {
     const container = document.getElementById('viewChildTripInfo');
-    const trip = child.current_trip;
+    const registration = child.current_registration;  // Changed from current_trip
     
-    if (trip) {
+    if (registration && registration.trip) {
+        const trip = registration.trip;
         container.innerHTML = `
             <div class="profile-child-info-grid">
                 <div class="profile-child-info-item">
@@ -133,17 +134,33 @@ function renderCurrentTrip(child) {
                     <span class="profile-child-info-value">${formatDate(trip.end_date)}</span>
                 </div>
                 <div class="profile-child-info-item">
-                    <span class="profile-child-info-label">Status</span>
-                    <span class="profile-child-badge ${child.status}">${child.status || 'Registered'}</span>
+                    <span class="profile-child-info-label">Registration Status</span>
+                    <span class="profile-child-badge ${registration.status}">${registration.status || 'Registered'}</span>
                 </div>
                 <div class="profile-child-info-item">
                     <span class="profile-child-info-label">Payment Status</span>
-                    <span class="profile-child-badge ${child.payment_status}">${formatPaymentStatus(child.payment_status)}</span>
+                    <span class="profile-child-badge ${registration.payment_status}">${formatPaymentStatus(registration.payment_status)}</span>
+                </div>
+                <div class="profile-child-info-item">
+                    <span class="profile-child-info-label">Registration Number</span>
+                    <span class="profile-child-info-value">${escapeHtml(registration.registration_number || 'N/A')}</span>
+                </div>
+                <div class="profile-child-info-item">
+                    <span class="profile-child-info-label">Total Amount</span>
+                    <span class="profile-child-info-value">KES ${formatCurrency(registration.total_amount)}</span>
+                </div>
+                <div class="profile-child-info-item">
+                    <span class="profile-child-info-label">Amount Paid</span>
+                    <span class="profile-child-info-value">KES ${formatCurrency(registration.amount_paid || 0)}</span>
+                </div>
+                <div class="profile-child-info-item">
+                    <span class="profile-child-info-label">Outstanding Balance</span>
+                    <span class="profile-child-info-value">KES ${formatCurrency(registration.outstanding_balance || 0)}</span>
                 </div>
             </div>
         `;
     } else {
-        container.innerHTML = '<p style="color: #7f8c8d;">No active trip</p>';
+        container.innerHTML = '<p style="color: #7f8c8d;">No active trip registration</p>';
     }
 }
 
@@ -334,37 +351,46 @@ function renderConsents(consents) {
 }
 
 // Render trip history
-function renderTripHistory(history) {
+function renderTripHistory(child) {
     const container = document.getElementById('viewChildTripHistory');
+    const history = child.registrations_history || [];  // Changed from trip_history
     
     if (history.length === 0) {
-        container.innerHTML = '<p style="color: #7f8c8d;">No previous trips</p>';
+        container.innerHTML = '<p style="color: #7f8c8d;">No previous registrations</p>';
         return;
     }
     
     container.innerHTML = `
         <div class="profile-child-section">
-            ${history.map(trip => `
-                <div style="padding: 12px; border-bottom: 1px solid #ecf0f1;">
-                    <div style="display: flex; justify-content: space-between; align-items: start;">
-                        <div>
-                            <div style="font-weight: 600; color: #2c3e50; margin-bottom: 4px;">
-                                ${escapeHtml(trip.trip_title)}
+            ${history.map(registration => {
+                const trip = registration.trip;
+                return trip ? `
+                    <div style="padding: 12px; border-bottom: 1px solid #ecf0f1;">
+                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                            <div>
+                                <div style="font-weight: 600; color: #2c3e50; margin-bottom: 4px;">
+                                    ${escapeHtml(trip.title)}
+                                </div>
+                                <div style="font-size: 13px; color: #7f8c8d;">
+                                    ${formatDate(trip.start_date)} to ${formatDate(trip.end_date)}
+                                </div>
+                                <div style="font-size: 13px; color: #95a5a6; margin-top: 4px;">
+                                    Registration: ${escapeHtml(registration.registration_number || 'N/A')}
+                                </div>
                             </div>
-                            <div style="font-size: 13px; color: #7f8c8d;">
-                                ${formatDate(trip.start_date)} to ${formatDate(trip.end_date)}
+                            <div>
+                                <span class="status-badge ${registration.status}">${registration.status}</span>
+                                <div style="font-size: 12px; color: #7f8c8d; margin-top: 4px; text-align: right;">
+                                    Payment: ${formatPaymentStatus(registration.payment_status)}
+                                </div>
                             </div>
-                        </div>
-                        <div>
-                            <span class="status-badge ${trip.status}">${trip.status}</span>
                         </div>
                     </div>
-                </div>
-            `).join('')}
+                ` : '';
+            }).join('')}
         </div>
     `;
 }
-
 // Helper functions
 function getFileIcon(fileType) {
     if (fileType.includes('pdf')) return 'pdf';

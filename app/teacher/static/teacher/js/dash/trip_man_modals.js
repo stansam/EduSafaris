@@ -151,19 +151,34 @@ function tripCollectItineraryData(modalType) {
     
     if (days.length === 0) return null;
     
-    const itinerary = [];
+    // const itinerary = [];
+    // days.forEach((day, index) => {
+    //     const dayId = day.id.match(/\d+$/)?.[0];
+    //     const title = document.getElementById(`trip${modalType}DayTitle${dayId}`)?.value || '';
+    //     const activities = document.getElementById(`trip${modalType}DayActivities${dayId}`)?.value || '';
+        
+    //     if (title || activities) {
+    //         // itinerary.push({
+    //         //     day: index + 1,
+    //         //     title: title,
+    //         //     activities: activities
+    //         // });
+    //         itinerary[`day_${index + 1}`] = activities || title;
+    //     }
+    // });
+
+    const itinerary = {};  // Changed from array to object
     days.forEach((day, index) => {
         const dayId = day.id.match(/\d+$/)?.[0];
         const title = document.getElementById(`trip${modalType}DayTitle${dayId}`)?.value || '';
         const activities = document.getElementById(`trip${modalType}DayActivities${dayId}`)?.value || '';
         
         if (title || activities) {
-            // itinerary.push({
-            //     day: index + 1,
-            //     title: title,
-            //     activities: activities
-            // });
-            itinerary[`day_${index + 1}`] = activities || title;
+            // Store as object with day_N keys
+            itinerary[`day_${index + 1}`] = {
+                title: title,
+                activities: activities
+            };
         }
     });
     
@@ -244,13 +259,28 @@ async function tripLoadTripData(tripId) {
         //         document.getElementById(`tripeditDayActivities${counter}`).value = day.activities || '';
         //     });
         // }
+        // if (mockTripData.itinerary && typeof mockTripData.itinerary === 'object') {
+        //     Object.entries(mockTripData.itinerary).forEach(([dayKey, activities]) => {
+        //         tripAddItineraryDay('edit');
+        //         const counter = tripItineraryCounters.edit;
+
+        //         document.getElementById(`tripeditDayTitle${counter}`).value = dayKey.replace('_', ' ') || '';
+        //         document.getElementById(`tripeditDayActivities${counter}`).value = activities || '';
+        //     });
+        // }
         if (mockTripData.itinerary && typeof mockTripData.itinerary === 'object') {
-            Object.entries(mockTripData.itinerary).forEach(([dayKey, activities]) => {
+            Object.entries(mockTripData.itinerary).forEach(([dayKey, dayData]) => {
                 tripAddItineraryDay('edit');
                 const counter = tripItineraryCounters.edit;
-
-                document.getElementById(`tripeditDayTitle${counter}`).value = dayKey.replace('_', ' ') || '';
-                document.getElementById(`tripeditDayActivities${counter}`).value = activities || '';
+                
+                // Handle both formats: string or object
+                if (typeof dayData === 'string') {
+                    document.getElementById(`tripeditDayTitle${counter}`).value = dayKey.replace('_', ' ') || '';
+                    document.getElementById(`tripeditDayActivities${counter}`).value = dayData || '';
+                } else if (typeof dayData === 'object') {
+                    document.getElementById(`tripeditDayTitle${counter}`).value = dayData.title || '';
+                    document.getElementById(`tripeditDayActivities${counter}`).value = dayData.activities || '';
+                }
             });
         }
         
@@ -287,7 +317,13 @@ async function tripHandleCreateSubmit(event) {
             medical_info_required: document.getElementById('tripCreateMedicalInfo').checked,
             consent_required: document.getElementById('tripCreateConsent').checked,
             status: document.getElementById('tripCreateStatus').value,
-            itinerary: tripCollectItineraryData('create')
+            itinerary: tripCollectItineraryData('create'),
+            destination_country: document.getElementById('tripCreateDestinationCountry')?.value.trim() || null,
+            meeting_point: document.getElementById('tripCreateMeetingPoint')?.value.trim() || null,
+            registration_start_date: document.getElementById('tripCreateRegStartDate')?.value || null,
+            transportation_included: document.getElementById('tripCreateTransportation')?.checked ?? true,
+            meals_included: document.getElementById('tripCreateMeals')?.checked ?? true,
+            accommodation_included: document.getElementById('tripCreateAccommodation')?.checked ?? false,
         };
         
         // Make API call

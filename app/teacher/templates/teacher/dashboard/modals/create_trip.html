@@ -28,6 +28,18 @@
                     </div>
 
                     <div class="trip-form-group">
+                        <label class="trip-form-label">Destination Country</label>
+                        <input type="text" id="tripCreateDestinationCountry" class="trip-form-input" 
+                                placeholder="e.g., Kenya" maxlength="100">
+                    </div>
+
+                    <div class="trip-form-group">
+                        <label class="trip-form-label">Meeting Point</label>
+                        <input type="text" id="tripCreateMeetingPoint" class="trip-form-input" 
+                                placeholder="e.g., School Main Gate" maxlength="300">
+                    </div>
+
+                    <div class="trip-form-group">
                         <label class="trip-form-label">Description</label>
                         <textarea id="tripCreateDescription" class="trip-form-textarea" 
                                     placeholder="Describe the trip, activities, and what students will learn..."></textarea>
@@ -68,6 +80,12 @@
                     </div>
 
                     <div class="trip-form-row">
+
+                        <div class="trip-form-group">
+                            <label class="trip-form-label">Registration Start Date</label>
+                            <input type="date" id="tripCreateRegStartDate" class="trip-form-input">
+                        </div>
+
                         <div class="trip-form-group">
                             <label class="trip-form-label">Registration Deadline</label>
                             <input type="date" id="tripCreateRegDeadline" class="trip-form-input">
@@ -121,11 +139,34 @@
                         </label>
                     </div>
 
+                    <div class="trip-form-checkbox-group">
+                        <input type="checkbox" id="tripCreateTransportation" class="trip-form-checkbox" checked>
+                        <label for="tripCreateTransportation" class="trip-form-checkbox-label">
+                            Transportation Included
+                        </label>
+                    </div>
+
+                    <div class="trip-form-checkbox-group">
+                        <input type="checkbox" id="tripCreateMeals" class="trip-form-checkbox" checked>
+                        <label for="tripCreateMeals" class="trip-form-checkbox-label">
+                            Meals Included
+                        </label>
+                    </div>
+
+                    <div class="trip-form-checkbox-group">
+                        <input type="checkbox" id="tripCreateAccommodation" class="trip-form-checkbox">
+                        <label for="tripCreateAccommodation" class="trip-form-checkbox-label">
+                            Accommodation Included
+                        </label>
+                    </div>
+                    
                     <div class="trip-form-group">
                         <label class="trip-form-label">Status</label>
                         <select id="tripCreateStatus" class="trip-form-select">
                             <option value="draft" selected>Draft</option>
-                            <option value="active">Active</option>
+                            <!-- <option value="active">Active</option> -->
+                            <option value="published">Published</option>
+                            <option value="registration_open">Registration Open</option>
                         </select>
                     </div>
                 </div>

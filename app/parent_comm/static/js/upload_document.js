@@ -214,7 +214,8 @@ document.getElementById('uploadDocumentForm').addEventListener('submit', async f
         
         // Send request
         xhr.open('POST', `/api/parent/children/${childId}/documents`);
-        xhr.setRequestHeader('Authorization', `Bearer ${getAuthToken()}`);
+        // xhr.setRequestHeader('Authorization', `Bearer ${getAuthToken()}`);
+        xhr.withCredentials = true;
         xhr.send(formData);
         
     } catch (error) {

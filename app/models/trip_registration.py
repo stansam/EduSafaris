@@ -93,6 +93,20 @@ class TripRegistration(BaseModel):
             (self.payment_status in ['paid', 'partial'])  # At least some payment made
         )
     
+    @classmethod
+    def latest_for_participant_and_teacher(cls, participant_id, teacher_id):
+        from app.models import Trip
+        return (
+            cls.query
+            .join(Trip)
+            .filter(
+                cls.participant_id == participant_id,
+                Trip.organizer_id == teacher_id
+            )
+            .order_by(cls.registration_date.desc())
+            .first()
+        )
+
     def generate_registration_number(self):
         """Generate unique registration number"""
         import random
@@ -111,7 +125,7 @@ class TripRegistration(BaseModel):
         
         # Update participant status
         self.participant.status = 'confirmed'
-        self.participant.trip_id = self.trip_id
+        # self.participant.trip_id = self.trip_id
         
         db.session.commit()
     

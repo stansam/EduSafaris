@@ -64,7 +64,7 @@ class ActivityLog(BaseModel):
             trip_id=trip_id,
             old_values=old_values,
             new_values=new_values,
-            metadata=metadata,
+            meta_data=metadata,
             ip_address=ip_address,
             user_agent=user_agent,
             request_method=request_method,

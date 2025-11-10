@@ -173,7 +173,7 @@ def update_trip(trip_id):
             setattr(trip, key, value)
         
         # Auto-update status based on capacity
-        if trip.is_full and trip.status == 'active':
+        if trip.is_full and trip.status in ['published', 'registration_open']:
             trip.status = 'full'
         
         # Commit changes

@@ -123,14 +123,14 @@ const CancelRegistrationModal = (function() {
     }
 
     // Open Modal
-    function open(tripId, participantId) {
-        if (!tripId || !participantId) {
-            console.error('Trip ID and Participant ID are required');
+    function open(tripId, registrationId) {
+        if (!tripId || !registrationId) {
+            console.error('Trip ID and Registration ID are required');
             return;
         }
         
         state.currentTripId = tripId;
-        state.currentParticipantId = participantId;
+        state.currentParticipantId = registrationId;
         
         if (elements.overlay) {
             elements.overlay.classList.add('active');
@@ -138,7 +138,7 @@ const CancelRegistrationModal = (function() {
         }
         
         resetForm();
-        loadParticipantData(tripId, participantId);
+        loadParticipantData(tripId, registrationId);
     }
 
     // Close Modal
@@ -252,7 +252,7 @@ const CancelRegistrationModal = (function() {
             const reason = elements.reasonTextarea?.value.trim() || '';
             
             const response = await fetch(
-                `/api/parent/trips/${state.currentTripId}/participants/${state.currentParticipantId}/cancel`,
+                `/api/parent/trips/${state.currentTripId}/registrations/${state.currentParticipantId}/cancel`,
                 {
                     method: 'POST',
                     headers: {

@@ -1,329 +1,217 @@
-<!-- Register Child Modal -->
-<div class="register-child-modal-overlay" id="registerChildModalOverlay">
-    <div class="register-child-modal-container">
-        <div class="register-child-modal-header">
-            <h2 class="register-child-modal-title">
-                <i class="fas fa-user-plus"></i>
-                Register Child for Trip
-            </h2>
-            <button class="register-child-modal-close" id="registerChildModalClose">
-                <i class="fas fa-times"></i>
+<!-- Trip Registration Modal -->
+<div id="tripRegistrationModal" class="modal-overlay" style="display: none;">
+    <div class="modal-container">
+        <!-- Modal Header -->
+        <div class="modal-header">
+            <h2 class="modal-title">Register for Trip</h2>
+            <button type="button" class="modal-close" onclick="closeTripRegistrationModal()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
             </button>
         </div>
 
-        <div class="register-child-modal-body" id="registerChildModalBody">
-            <!-- Trip Info -->
-            <div class="register-child-trip-info" id="registerChildTripInfo">
-                <div class="register-child-trip-card">
-                    <h3 id="registerChildTripTitle">Loading...</h3>
-                    <div class="register-child-trip-meta">
-                        <span><i class="fas fa-map-marker-alt"></i> <span id="registerChildTripDestination"></span></span>
-                        <span><i class="fas fa-calendar"></i> <span id="registerChildTripDate"></span></span>
-                        <span><i class="fas fa-dollar-sign"></i> <span id="registerChildTripPrice"></span></span>
+        <!-- Trip Information Display -->
+        <div id="tripInfoSection" class="trip-info-section">
+            <div class="trip-info-card">
+                <div class="trip-info-header">
+                    <h3 id="tripTitle" class="trip-title"></h3>
+                    <span id="tripPrice" class="trip-price"></span>
+                </div>
+                <div class="trip-info-details">
+                    <div class="info-item">
+                        <svg class="info-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        <span id="tripDates"></span>
                     </div>
+                    <div class="info-item">
+                        <svg class="info-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        <span id="tripLocation"></span>
+                    </div>
+                    <div class="info-item">
+                        <svg class="info-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        <span id="tripCapacity"></span>
+                    </div>
+                </div>
+                <div id="tripAgeRestriction" class="trip-age-restriction" style="display: none;">
+                    <svg class="info-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    <span id="tripAgeText"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Registration Form -->
+        <form id="tripRegistrationForm" class="registration-form">
+            <!-- Alert Messages -->
+            <div id="registrationAlert" class="alert" style="display: none;">
+                <div class="alert-content">
+                    <svg class="alert-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    <span id="registrationAlertMessage"></span>
                 </div>
             </div>
 
-            <!-- Registration Form -->
-            <form id="registerChildForm" class="register-child-form">
-                <!-- Personal Information -->
-                <div class="register-child-section">
-                    <h3 class="register-child-section-title">
-                        <i class="fas fa-user"></i>
-                        Personal Information
-                    </h3>
-                    
-                    <div class="register-child-form-grid">
-                        <div class="register-child-form-group">
-                            <label for="registerChildFirstName" class="register-child-label required">
-                                First Name
-                            </label>
-                            <input 
-                                type="text" 
-                                id="registerChildFirstName" 
-                                class="register-child-input"
-                                required
-                                maxlength="100"
-                            >
-                            <span class="register-child-error" id="registerChildFirstNameError"></span>
-                        </div>
-
-                        <div class="register-child-form-group">
-                            <label for="registerChildLastName" class="register-child-label required">
-                                Last Name
-                            </label>
-                            <input 
-                                type="text" 
-                                id="registerChildLastName" 
-                                class="register-child-input"
-                                required
-                                maxlength="100"
-                            >
-                            <span class="register-child-error" id="registerChildLastNameError"></span>
-                        </div>
-
-                        <div class="register-child-form-group">
-                            <label for="registerChildDOB" class="register-child-label required">
-                                Date of Birth
-                            </label>
-                            <input 
-                                type="date" 
-                                id="registerChildDOB" 
-                                class="register-child-input"
-                                required
-                            >
-                            <span class="register-child-error" id="registerChildDOBError"></span>
-                        </div>
-
-                        <div class="register-child-form-group">
-                            <label for="registerChildGradeLevel" class="register-child-label">
-                                Grade Level
-                            </label>
-                            <input 
-                                type="text" 
-                                id="registerChildGradeLevel" 
-                                class="register-child-input"
-                                maxlength="50"
-                            >
-                        </div>
-
-                        <div class="register-child-form-group">
-                            <label for="registerChildStudentId" class="register-child-label">
-                                Student ID
-                            </label>
-                            <input 
-                                type="text" 
-                                id="registerChildStudentId" 
-                                class="register-child-input"
-                                maxlength="50"
-                            >
-                        </div>
-
-                        <div class="register-child-form-group">
-                            <label for="registerChildEmail" class="register-child-label">
-                                Email
-                            </label>
-                            <input 
-                                type="email" 
-                                id="registerChildEmail" 
-                                class="register-child-input"
-                                maxlength="150"
-                            >
-                        </div>
-
-                        <div class="register-child-form-group">
-                            <label for="registerChildPhone" class="register-child-label">
-                                Phone
-                            </label>
-                            <input 
-                                type="tel" 
-                                id="registerChildPhone" 
-                                class="register-child-input"
-                                maxlength="20"
-                            >
-                        </div>
-                    </div>
+            <!-- Select Child Section -->
+            <div class="form-section">
+                <label class="form-label required">Select Child</label>
+                <div id="childrenList" class="children-list">
+                    <!-- Children cards will be dynamically inserted here -->
                 </div>
-
-                <!-- Medical Information -->
-                <div class="register-child-section">
-                    <h3 class="register-child-section-title">
-                        <i class="fas fa-heartbeat"></i>
-                        Medical Information
-                    </h3>
-                    
-                    <div class="register-child-form-grid">
-                        <div class="register-child-form-group register-child-full-width">
-                            <label for="registerChildMedicalConditions" class="register-child-label">
-                                Medical Conditions
-                            </label>
-                            <textarea 
-                                id="registerChildMedicalConditions" 
-                                class="register-child-textarea"
-                                rows="3"
-                                placeholder="Please list any medical conditions..."
-                            ></textarea>
-                        </div>
-
-                        <div class="register-child-form-group register-child-full-width">
-                            <label for="registerChildMedications" class="register-child-label">
-                                Current Medications
-                            </label>
-                            <textarea 
-                                id="registerChildMedications" 
-                                class="register-child-textarea"
-                                rows="3"
-                                placeholder="Please list any medications..."
-                            ></textarea>
-                        </div>
-
-                        <div class="register-child-form-group register-child-full-width">
-                            <label for="registerChildAllergies" class="register-child-label">
-                                Allergies
-                            </label>
-                            <textarea 
-                                id="registerChildAllergies" 
-                                class="register-child-textarea"
-                                rows="3"
-                                placeholder="Please list any allergies..."
-                            ></textarea>
-                        </div>
-
-                        <div class="register-child-form-group register-child-full-width">
-                            <label for="registerChildDietaryRestrictions" class="register-child-label">
-                                Dietary Restrictions
-                            </label>
-                            <textarea 
-                                id="registerChildDietaryRestrictions" 
-                                class="register-child-textarea"
-                                rows="3"
-                                placeholder="Please list any dietary restrictions..."
-                            ></textarea>
-                        </div>
-
-                        <div class="register-child-form-group register-child-full-width">
-                            <label for="registerChildEmergencyMedical" class="register-child-label">
-                                Emergency Medical Information
-                            </label>
-                            <textarea 
-                                id="registerChildEmergencyMedical" 
-                                class="register-child-textarea"
-                                rows="3"
-                                placeholder="Any additional emergency medical information..."
-                            ></textarea>
-                        </div>
-                    </div>
+                <div id="noChildrenMessage" class="no-children-message" style="display: none;">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <p>You don't have any registered children yet.</p>
+                    <button type="button" class="btn-link" onclick="navigateToAddChild()">Add a child profile</button>
                 </div>
+            </div>
 
-                <!-- Emergency Contacts -->
-                <div class="register-child-section">
-                    <h3 class="register-child-section-title">
-                        <i class="fas fa-phone-alt"></i>
-                        Emergency Contacts
-                    </h3>
-                    
-                    <div class="register-child-subsection">
-                        <h4 class="register-child-subsection-title">Primary Contact</h4>
-                        <div class="register-child-form-grid">
-                            <div class="register-child-form-group">
-                                <label for="registerChildEmergency1Name" class="register-child-label">
-                                    Name
-                                </label>
-                                <input 
-                                    type="text" 
-                                    id="registerChildEmergency1Name" 
-                                    class="register-child-input"
-                                    maxlength="100"
-                                >
+            <!-- Payment Plan Section -->
+            <div class="form-section">
+                <label class="form-label required">Payment Plan</label>
+                <div class="payment-plan-options">
+                    <label class="payment-plan-card">
+                        <input type="radio" name="payment_plan" value="full" checked>
+                        <div class="payment-plan-content">
+                            <div class="payment-plan-header">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                                    <line x1="1" y1="10" x2="23" y2="10"></line>
+                                </svg>
+                                <span class="payment-plan-title">Full Payment</span>
                             </div>
-
-                            <div class="register-child-form-group">
-                                <label for="registerChildEmergency1Phone" class="register-child-label">
-                                    Phone
-                                </label>
-                                <input 
-                                    type="tel" 
-                                    id="registerChildEmergency1Phone" 
-                                    class="register-child-input"
-                                    maxlength="20"
-                                >
-                            </div>
-
-                            <div class="register-child-form-group">
-                                <label for="registerChildEmergency1Relationship" class="register-child-label">
-                                    Relationship
-                                </label>
-                                <input 
-                                    type="text" 
-                                    id="registerChildEmergency1Relationship" 
-                                    class="register-child-input"
-                                    maxlength="50"
-                                    placeholder="e.g., Mother, Father, Guardian"
-                                >
-                            </div>
+                            <p class="payment-plan-description">Pay the entire amount now</p>
+                            <span class="payment-plan-badge">Recommended</span>
                         </div>
-                    </div>
-
-                    <div class="register-child-subsection">
-                        <h4 class="register-child-subsection-title">Secondary Contact</h4>
-                        <div class="register-child-form-grid">
-                            <div class="register-child-form-group">
-                                <label for="registerChildEmergency2Name" class="register-child-label">
-                                    Name
-                                </label>
-                                <input 
-                                    type="text" 
-                                    id="registerChildEmergency2Name" 
-                                    class="register-child-input"
-                                    maxlength="100"
-                                >
+                    </label>
+                    <label class="payment-plan-card">
+                        <input type="radio" name="payment_plan" value="installment">
+                        <div class="payment-plan-content">
+                            <div class="payment-plan-header">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                </svg>
+                                <span class="payment-plan-title">Installment</span>
                             </div>
-
-                            <div class="register-child-form-group">
-                                <label for="registerChildEmergency2Phone" class="register-child-label">
-                                    Phone
-                                </label>
-                                <input 
-                                    type="tel" 
-                                    id="registerChildEmergency2Phone" 
-                                    class="register-child-input"
-                                    maxlength="20"
-                                >
-                            </div>
-
-                            <div class="register-child-form-group">
-                                <label for="registerChildEmergency2Relationship" class="register-child-label">
-                                    Relationship
-                                </label>
-                                <input 
-                                    type="text" 
-                                    id="registerChildEmergency2Relationship" 
-                                    class="register-child-input"
-                                    maxlength="50"
-                                    placeholder="e.g., Grandparent, Uncle, Family Friend"
-                                >
-                            </div>
+                            <p class="payment-plan-description">Pay in multiple installments</p>
                         </div>
-                    </div>
+                    </label>
                 </div>
+            </div>
 
-                <!-- Special Requirements -->
-                <div class="register-child-section">
-                    <h3 class="register-child-section-title">
-                        <i class="fas fa-clipboard-list"></i>
-                        Special Requirements
-                    </h3>
-                    
-                    <div class="register-child-form-group register-child-full-width">
-                        <label for="registerChildSpecialRequirements" class="register-child-label">
-                            Special Requirements or Accommodations
-                        </label>
-                        <textarea 
-                            id="registerChildSpecialRequirements" 
-                            class="register-child-textarea"
-                            rows="4"
-                            placeholder="Please describe any special requirements or accommodations needed..."
-                        ></textarea>
-                    </div>
+            <!-- Parent Notes Section -->
+            <div class="form-section">
+                <label for="parentNotes" class="form-label">
+                    Additional Notes
+                    <span class="form-label-hint">(Optional)</span>
+                </label>
+                <textarea 
+                    id="parentNotes" 
+                    name="parent_notes" 
+                    class="form-textarea"
+                    rows="4"
+                    placeholder="Any special requirements, allergies, or information we should know about..."
+                    maxlength="1000"
+                ></textarea>
+                <div class="character-count">
+                    <span id="notesCharCount">0</span>/1000
                 </div>
+            </div>
 
-                <!-- Alert Message -->
-                <div class="register-child-alert" id="registerChildAlert" style="display: none;">
-                    <i class="fas fa-exclamation-circle"></i>
-                    <span id="registerChildAlertMessage"></span>
+            <!-- Medical Information Warning -->
+            <div id="medicalWarning" class="medical-warning" style="display: none;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                <div>
+                    <strong>Medical Information Required</strong>
+                    <p>This trip requires complete medical information. Please update your child's profile before registering.</p>
                 </div>
-            </form>
-        </div>
+            </div>
 
-        <div class="register-child-modal-footer">
-            <button type="button" class="register-child-btn register-child-btn-secondary" id="registerChildCancelBtn">
-                <i class="fas fa-times"></i>
-                Cancel
-            </button>
-            <button type="submit" form="registerChildForm" class="register-child-btn register-child-btn-primary" id="registerChildSubmitBtn">
-                <i class="fas fa-check"></i>
-                Register Child
-            </button>
+            <!-- Terms and Conditions -->
+            <div class="form-section">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="termsAccepted" required>
+                    <span>I agree to the <a href="#" class="link" onclick="showTermsModal(); return false;">terms and conditions</a> and <a href="#" class="link" onclick="showPoliciesModal(); return false;">cancellation policy</a></span>
+                </label>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeTripRegistrationModal()">
+                    Cancel
+                </button>
+                <button type="submit" id="submitRegistrationBtn" class="btn btn-primary">
+                    <span class="btn-text">Register Now</span>
+                    <svg class="btn-loader" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+                        <line x1="12" y1="2" x2="12" y2="6"></line>
+                        <line x1="12" y1="18" x2="12" y2="22"></line>
+                        <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+                        <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+                        <line x1="2" y1="12" x2="6" y2="12"></line>
+                        <line x1="18" y1="12" x2="22" y2="12"></line>
+                        <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
+                        <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
+                    </svg>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div id="registrationSuccessModal" class="modal-overlay" style="display: none;">
+    <div class="modal-container modal-small">
+        <div class="success-content">
+            <div class="success-icon">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+            </div>
+            <h2 class="success-title">Registration Successful!</h2>
+            <p id="successMessage" class="success-message"></p>
+            
+            <div id="nextStepsSection" class="next-steps-section">
+                <h3>Next Steps:</h3>
+                <ul id="nextStepsList" class="next-steps-list"></ul>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeSuccessModal()">
+                    Close
+                </button>
+                <button type="button" class="btn btn-primary" onclick="viewRegistrationDetails()">
+                    View Details
+                </button>
+            </div>
         </div>
     </div>
 </div>

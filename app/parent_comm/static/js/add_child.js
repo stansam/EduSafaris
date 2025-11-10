@@ -96,9 +96,14 @@ function validateAddChildForm(formData) {
     const errors = [];
     
     // Trip validation
-    if (!formData.trip_id) {
-        showValidationError('addTripSelect', 'Please select a trip');
-        errors.push('Trip is required');
+    // if (!formData.trip_id) {
+    //     showValidationError('addTripSelect', 'Please select a trip');
+    //     errors.push('Trip is required');
+    // }
+
+    if (!formData.gender) {
+        showValidationError('addGender', 'Gender is required');
+        errors.push('Gender is required');
     }
     
     // Name validation
@@ -110,6 +115,35 @@ function validateAddChildForm(formData) {
     if (!formData.last_name || formData.last_name.trim().length < 2) {
         showValidationError('addLastName', 'Last name must be at least 2 characters');
         errors.push('Invalid last name');
+    }
+
+    // Date of birth validation 
+    // if (!formData.date_of_birth) {
+    //     showValidationError('addDateOfBirth', 'Date of birth is required');
+    //     errors.push('Date of birth is required');
+    // } else {
+    //     const dob = new Date(formData.date_of_birth);
+    //     const today = new Date();
+    //     if (dob > today) {
+    //         showValidationError('addDateOfBirth', 'Date of birth cannot be in the future');
+    //         errors.push('Invalid date of birth');
+    //     }
+    // }
+
+    // Emergency contact validation 
+    if (!formData.emergency_contact_1_name || formData.emergency_contact_1_name.trim().length < 2) {
+        showValidationError('addEmergencyContact1Name', 'Emergency contact name is required');
+        errors.push('Emergency contact name required');
+    }
+    
+    if (!formData.emergency_contact_1_phone || formData.emergency_contact_1_phone.trim().length < 10) {
+        showValidationError('addEmergencyContact1Phone', 'Valid phone number is required');
+        errors.push('Emergency contact phone required');
+    }
+    
+    if (!formData.emergency_contact_1_relationship || formData.emergency_contact_1_relationship.trim().length < 2) {
+        showValidationError('addEmergencyContact1Relationship', 'Relationship is required');
+        errors.push('Relationship required');
     }
     
     // Email validation
@@ -147,73 +181,112 @@ function validateAddChildForm(formData) {
 document.getElementById('addChildForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
-    // Clear previous errors
     clearAllErrors('add');
     
     // Get form data
     const formData = {
-        trip_id: document.getElementById('addTripSelect').value,
         first_name: document.getElementById('addFirstName').value.trim(),
         last_name: document.getElementById('addLastName').value.trim(),
         date_of_birth: document.getElementById('addDateOfBirth').value,
+        gender: 'other', // ADD GENDER FIELD TO FORM OR SET DEFAULT
         grade_level: document.getElementById('addGradeLevel').value.trim(),
         student_id: document.getElementById('addStudentId').value.trim(),
         email: document.getElementById('addEmail').value.trim(),
         phone: document.getElementById('addPhone').value.trim(),
-        special_requirements: document.getElementById('addSpecialRequirements').value.trim()
+        special_requirements: document.getElementById('addSpecialRequirements').value.trim(),
+        emergency_contact_1_name: document.getElementById('addEmergencyContact1Name').value.trim(), 
+        emergency_contact_1_phone: document.getElementById('addEmergencyContact1Phone').value.trim(),
+        emergency_contact_1_relationship: document.getElementById('addEmergencyContact1Relationship').value.trim()
     };
     
-    // Validate form
+    const tripId = document.getElementById('addTripSelect').value;
+    
+    // Validate
     const validationErrors = validateAddChildForm(formData);
     if (validationErrors.length > 0) {
         showNotification('Please correct the errors in the form', 'error');
         return;
     }
     
-    // Show loading state
     const submitBtn = document.getElementById('addChildSubmitBtn');
     const originalText = submitBtn.innerHTML;
     submitBtn.classList.add('loading');
     submitBtn.disabled = true;
     
     try {
-        const response = await fetch('/api/parent/children', {
+        // STEP 1: Create child profile
+        const createResponse = await fetch('/api/parent/children', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getAuthToken()}`
+                'Content-Type': 'application/json'
             },
+            credentials: 'include',
             body: JSON.stringify(formData)
         });
         
-        const data = await response.json();
+        const createData = await createResponse.json();
         
-        if (response.ok && data.success) {
-            showNotification(`${formData.first_name} ${formData.last_name} registered successfully!`, 'success');
-            closeAddChildModal();
-            refreshChildren();
-        } else {
-            // Handle validation errors from server
-            if (data.validation_errors && Array.isArray(data.validation_errors)) {
-                data.validation_errors.forEach(error => {
-                    showNotification(error, 'error');
+        if (!createResponse.ok || !createData.success) {
+            // Handle validation errors
+            if (createData.details && typeof createData.details === 'object') {
+                Object.entries(createData.details).forEach(([field, message]) => {
+                    showNotification(message, 'error');
                 });
             } else {
-                showNotification(data.error || 'Failed to register child', 'error');
+                showNotification(createData.error || 'Failed to create child profile', 'error');
             }
+            return;
         }
         
+        const childId = createData.data.id;
+        
+        // STEP 2: Register for trip if trip selected
+        if (tripId) {
+            const registerResponse = await fetch(`/api/parent/children/trips/${tripId}/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    participant_id: childId,
+                    payment_plan: 'full',
+                    parent_notes: formData.special_requirements
+                })
+            });
+            
+            const registerData = await registerResponse.json();
+            
+            if (!registerResponse.ok || !registerData.success) {
+                showNotification(
+                    `Child created but trip registration failed: ${registerData.error || 'Unknown error'}`, 
+                    'warning'
+                );
+            } else {
+                showNotification(
+                    `${formData.first_name} ${formData.last_name} created and registered successfully!`, 
+                    'success'
+                );
+            }
+        } else {
+            showNotification(
+                `${formData.first_name} ${formData.last_name} profile created successfully!`, 
+                'success'
+            );
+        }
+        
+        closeAddChildModal();
+        refreshChildren();
+        
     } catch (error) {
-        console.error('Error registering child:', error);
+        console.error('Error:', error);
         showNotification('Network error. Please check your connection and try again.', 'error');
     } finally {
-        // Reset button state
         submitBtn.classList.remove('loading');
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalText;
     }
 });
-
 // Close modal when clicking outside
 document.getElementById('addChildModal').addEventListener('click', function(e) {
     if (e.target === this) {

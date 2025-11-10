@@ -74,8 +74,11 @@ function renderChildren(children) {
 // Create individual child card HTML
 function createChildCard(child) {
     const statusClass = child.status ? child.status.toLowerCase() : 'registered';
-    const paymentStatus = child.payment_status || 'pending';
-    const trip = child.trip || {};
+    // const paymentStatus = child.payment_status || 'pending';
+    // const trip = child.trip || {};
+    const currentTrip = child.current_trip;
+    const paymentStatus = currentTrip ? currentTrip.payment_status : 'unpaid';
+    const registrationStatus = currentTrip ? currentTrip.status : null;
     
     return `
         <div class="child-card" data-child-id="${child.id}">
@@ -87,13 +90,16 @@ function createChildCard(child) {
                 <i class="fas fa-child child-icon"></i>
             </div>
             
-            ${trip.title ? `
+            ${currentTrip ? `
                 <div class="trip-info-section">
                     <div class="trip-label">Current Trip</div>
-                    <div class="trip-name">${escapeHtml(trip.title)}</div>
-                    ${trip.start_date ? `
-                        <div class="trip-dates">${formatDate(trip.start_date)} to ${formatDate(trip.end_date)}</div>
+                    <div class="trip-name">${escapeHtml(currentTrip.title)}</div>
+                    ${currentTrip.start_date ? `
+                        <div class="trip-dates">${formatDate(currentTrip.start_date)} to ${formatDate(currentTrip.end_date)}</div>
                     ` : ''}
+                    <div class="trip-meta">
+                        <span class="status-badge ${registrationStatus}">${registrationStatus || 'Registered'}</span>
+                    </div>
                 </div>
             ` : '<div class="trip-info-section"><div class="trip-label">No active trip</div></div>'}
             
@@ -122,16 +128,25 @@ function createChildCard(child) {
                 </button>
             </div>
             
-            <div class="info-row">
-                <span class="info-label"><i class="fas fa-money-bill-wave"></i> Payment</span>
-                <span class="payment-badge ${paymentStatus}">${formatPaymentStatus(paymentStatus)}</span>
-            </div>
-            
-            ${child.amount_paid ? `
+            ${currentTrip ? `
                 <div class="info-row">
-                    <span class="info-label">Amount Paid</span>
-                    <span class="info-value">KES ${formatCurrency(child.amount_paid)}</span>
+                    <span class="info-label"><i class="fas fa-money-bill-wave"></i> Payment</span>
+                    <span class="payment-badge ${paymentStatus}">${formatPaymentStatus(paymentStatus)}</span>
                 </div>
+                
+                ${currentTrip.amount_paid ? `
+                    <div class="info-row">
+                        <span class="info-label">Amount Paid</span>
+                        <span class="info-value">KES ${formatCurrency(currentTrip.amount_paid)}</span>
+                    </div>
+                ` : ''}
+                
+                ${currentTrip.registration_number ? `
+                    <div class="info-row">
+                        <span class="info-label">Registration #</span>
+                        <span class="info-value">${escapeHtml(currentTrip.registration_number)}</span>
+                    </div>
+                ` : ''}
             ` : ''}
         </div>
     `;
@@ -144,8 +159,9 @@ async function loadTripsForFilter() {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getAuthToken()}`
-            }
+                // 'Authorization': `Bearer ${getAuthToken()}`
+            },
+            credentials: 'include'
         });
         
         if (response.ok) {

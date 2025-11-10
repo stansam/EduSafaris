@@ -1,552 +1,647 @@
-// Register Child Modal Module
-const RegisterChildModal = (function() {
-    'use strict';
+// Global state
+let currentTripData = null;
+let registerChildrenData = [];
+let selectedChildId = null;
+let registrationResult = null;
 
-    // State
-    const state = {
-        currentTripId: null,
-        tripData: null,
-        submitting: false
-    };
-
-    // DOM Elements
-    const elements = {
-        overlay: null,
-        close: null,
-        cancelBtn: null,
-        form: null,
-        submitBtn: null,
-        alert: null,
-        alertMessage: null,
+/**
+ * Open trip registration modal
+ * @param {number} tripId - The trip ID
+ * @param {object} tripData - Optional trip data object
+ */
+async function openTripRegistrationModal(tripId, tripData = null) {
+    try {
+        const modal = document.getElementById('tripRegistrationModal');
         
-        // Trip Info
-        tripTitle: null,
-        tripDestination: null,
-        tripDate: null,
-        tripPrice: null,
+        // Reset form
+        resetRegistrationForm();
         
-        // Form Fields
-        firstName: null,
-        lastName: null,
-        dob: null,
-        gradeLevel: null,
-        studentId: null,
-        email: null,
-        phone: null,
-        medicalConditions: null,
-        medications: null,
-        allergies: null,
-        dietaryRestrictions: null,
-        emergencyMedical: null,
-        emergency1Name: null,
-        emergency1Phone: null,
-        emergency1Relationship: null,
-        emergency2Name: null,
-        emergency2Phone: null,
-        emergency2Relationship: null,
-        specialRequirements: null,
+        // Show modal with loading state
+        modal.style.display = 'flex';
+        showAlert('info', 'Loading trip details...');
         
-        // Error spans
-        firstNameError: null,
-        lastNameError: null,
-        dobError: null
-    };
-
-    // Initialize
-    function init() {
-        try {
-            cacheDOM();
-            bindEvents();
-        } catch (error) {
-            console.error('Failed to initialize RegisterChildModal:', error);
-        }
-    }
-
-    // Cache DOM Elements
-    function cacheDOM() {
-        elements.overlay = document.getElementById('registerChildModalOverlay');
-        elements.close = document.getElementById('registerChildModalClose');
-        elements.cancelBtn = document.getElementById('registerChildCancelBtn');
-        elements.form = document.getElementById('registerChildForm');
-        elements.submitBtn = document.getElementById('registerChildSubmitBtn');
-        elements.alert = document.getElementById('registerChildAlert');
-        elements.alertMessage = document.getElementById('registerChildAlertMessage');
-        
-        // Trip Info
-        elements.tripTitle = document.getElementById('registerChildTripTitle');
-        elements.tripDestination = document.getElementById('registerChildTripDestination');
-        elements.tripDate = document.getElementById('registerChildTripDate');
-        elements.tripPrice = document.getElementById('registerChildTripPrice');
-        
-        // Form Fields
-        elements.firstName = document.getElementById('registerChildFirstName');
-        elements.lastName = document.getElementById('registerChildLastName');
-        elements.dob = document.getElementById('registerChildDOB');
-        elements.gradeLevel = document.getElementById('registerChildGradeLevel');
-        elements.studentId = document.getElementById('registerChildStudentId');
-        elements.email = document.getElementById('registerChildEmail');
-        elements.phone = document.getElementById('registerChildPhone');
-        elements.medicalConditions = document.getElementById('registerChildMedicalConditions');
-        elements.medications = document.getElementById('registerChildMedications');
-        elements.allergies = document.getElementById('registerChildAllergies');
-        elements.dietaryRestrictions = document.getElementById('registerChildDietaryRestrictions');
-        elements.emergencyMedical = document.getElementById('registerChildEmergencyMedical');
-        elements.emergency1Name = document.getElementById('registerChildEmergency1Name');
-        elements.emergency1Phone = document.getElementById('registerChildEmergency1Phone');
-        elements.emergency1Relationship = document.getElementById('registerChildEmergency1Relationship');
-        elements.emergency2Name = document.getElementById('registerChildEmergency2Name');
-        elements.emergency2Phone = document.getElementById('registerChildEmergency2Phone');
-        elements.emergency2Relationship = document.getElementById('registerChildEmergency2Relationship');
-        elements.specialRequirements = document.getElementById('registerChildSpecialRequirements');
-        
-        // Error spans
-        elements.firstNameError = document.getElementById('registerChildFirstNameError');
-        elements.lastNameError = document.getElementById('registerChildLastNameError');
-        elements.dobError = document.getElementById('registerChildDOBError');
-    }
-
-    // Bind Events
-    function bindEvents() {
-        // Close modal
-        if (elements.close) {
-            elements.close.addEventListener('click', close);
+        // Load trip data if not provided
+        if (!tripData) {
+            tripData = await fetchTripDetails(tripId);
         }
         
-        if (elements.cancelBtn) {
-            elements.cancelBtn.addEventListener('click', close);
-        }
+        currentTripData = tripData;
         
-        if (elements.overlay) {
-            elements.overlay.addEventListener('click', (e) => {
-                if (e.target === elements.overlay) {
-                    close();
-                }
-            });
-        }
+        // Populate trip information
+        populateTripInfo(tripData);
         
-        // Form submission
-        if (elements.form) {
-            elements.form.addEventListener('submit', handleSubmit);
-        }
+        // Load children
+        await loadRegisterChildren(tripId);
         
-        // Real-time validation
-        if (elements.firstName) {
-            elements.firstName.addEventListener('blur', () => validateField('firstName'));
-            elements.firstName.addEventListener('input', () => clearFieldError('firstName'));
-        }
-        
-        if (elements.lastName) {
-            elements.lastName.addEventListener('blur', () => validateField('lastName'));
-            elements.lastName.addEventListener('input', () => clearFieldError('lastName'));
-        }
-        
-        if (elements.dob) {
-            elements.dob.addEventListener('blur', () => validateField('dob'));
-            elements.dob.addEventListener('input', () => clearFieldError('dob'));
-        }
-        
-        if (elements.email) {
-            elements.email.addEventListener('blur', () => validateEmail());
-        }
-        
-        // Keyboard events
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && elements.overlay && elements.overlay.classList.contains('active')) {
-                close();
-            }
-        });
-    }
-
-    // Open Modal
-    function open(tripId) {
-        if (!tripId) {
-            console.error('Trip ID is required');
-            return;
-        }
-        
-        state.currentTripId = tripId;
-        
-        if (elements.overlay) {
-            elements.overlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-        
-        resetForm();
-        loadTripInfo(tripId);
-    }
-
-    // Close Modal
-    function close() {
-        if (elements.overlay) {
-            elements.overlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-        
-        state.currentTripId = null;
-        state.tripData = null;
-        resetForm();
-    }
-
-    // Load Trip Info
-    async function loadTripInfo(tripId) {
-        try {
-            const response = await fetch(`/api/parent/trips/${tripId}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'include'
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to load trip information');
-            }
-
-            const result = await response.json();
-
-            if (result.success && result.data) {
-                state.tripData = result.data;
-                displayTripInfo(result.data);
-            }
-        } catch (error) {
-            console.error('Error loading trip info:', error);
-            showAlert('Failed to load trip information', 'error');
-        }
-    }
-
-    // Display Trip Info
-    function displayTripInfo(trip) {
-        if (elements.tripTitle) {
-            elements.tripTitle.textContent = trip.title || 'Trip';
-        }
-        
-        if (elements.tripDestination) {
-            elements.tripDestination.textContent = trip.destination || 'N/A';
-        }
-        
-        if (elements.tripDate) {
-            elements.tripDate.textContent = formatDate(trip.start_date);
-        }
-        
-        if (elements.tripPrice) {
-            elements.tripPrice.textContent = `$${formatNumber(trip.price_per_student)}`;
-        }
-    }
-
-    // Handle Form Submit
-    async function handleSubmit(e) {
-        e.preventDefault();
-        
-        if (state.submitting) return;
-        
-        // Validate form
-        if (!validateForm()) {
-            showAlert('Please fix the errors in the form', 'error');
-            return;
-        }
-        
-        state.submitting = true;
-        setSubmitButtonLoading(true);
+        // Hide loading alert
         hideAlert();
         
-        try {
-            const formData = collectFormData();
-            
-            const response = await fetch(`/api/parent/trips/${state.currentTripId}/register`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'include',
-                body: JSON.stringify(formData)
-            });
-
-            const result = await response.json();
-
-            if (response.ok && result.success) {
-                // Success
-                if (typeof TripsManager !== 'undefined' && TripsManager.showToast) {
-                    TripsManager.showToast('Child registered successfully!', 'success');
-                }
-                
-                if (typeof TripsManager !== 'undefined' && TripsManager.refreshTrips) {
-                    TripsManager.refreshTrips();
-                }
-                
-                if (typeof TripsManager !== 'undefined' && TripsManager.refreshRegistrations) {
-                    TripsManager.refreshRegistrations();
-                }
-                
-                close();
-            } else {
-                // Error from server
-                let errorMessage = result.message || 'Failed to register child';
-                
-                if (result.errors) {
-                    const errors = Object.values(result.errors);
-                    if (errors.length > 0) {
-                        errorMessage = errors.join(', ');
-                    }
-                }
-                
-                showAlert(errorMessage, 'error');
-            }
-        } catch (error) {
-            console.error('Error registering child:', error);
-            showAlert('An error occurred while registering. Please try again.', 'error');
-        } finally {
-            state.submitting = false;
-            setSubmitButtonLoading(false);
-        }
+    } catch (error) {
+        console.error('Error opening registration modal:', error);
+        showAlert('error', error.message || 'Failed to load trip details. Please try again.');
     }
-
-    // Validate Form
-    function validateForm() {
-        let isValid = true;
-        
-        // Required fields
-        if (!validateField('firstName')) isValid = false;
-        if (!validateField('lastName')) isValid = false;
-        if (!validateField('dob')) isValid = false;
-        
-        // Email validation if provided
-        if (elements.email && elements.email.value.trim()) {
-            if (!validateEmail()) isValid = false;
-        }
-        
-        return isValid;
-    }
-
-    // Validate Field
-    function validateField(fieldName) {
-        let element, errorElement, errorMessage;
-        
-        switch (fieldName) {
-            case 'firstName':
-                element = elements.firstName;
-                errorElement = elements.firstNameError;
-                errorMessage = 'First name is required';
-                break;
-            case 'lastName':
-                element = elements.lastName;
-                errorElement = elements.lastNameError;
-                errorMessage = 'Last name is required';
-                break;
-            case 'dob':
-                element = elements.dob;
-                errorElement = elements.dobError;
-                errorMessage = 'Date of birth is required';
-                
-                // Additional validation for DOB
-                if (element && element.value) {
-                    const dob = new Date(element.value);
-                    const today = new Date();
-                    
-                    if (dob > today) {
-                        errorMessage = 'Date of birth cannot be in the future';
-                    } else {
-                        // Check if child is at least 5 years old and not more than 25
-                        const age = today.getFullYear() - dob.getFullYear();
-                        if (age < 5) {
-                            errorMessage = 'Child must be at least 5 years old';
-                        } else if (age > 25) {
-                            errorMessage = 'Please enter a valid date of birth';
-                        } else {
-                            // Valid
-                            if (errorElement) {
-                                errorElement.classList.remove('show');
-                            }
-                            if (element) {
-                                element.classList.remove('error');
-                            }
-                            return true;
-                        }
-                    }
-                }
-                break;
-            default:
-                return true;
-        }
-        
-        if (!element) return true;
-        
-        const value = element.value.trim();
-        
-        if (!value) {
-            if (errorElement) {
-                errorElement.textContent = errorMessage;
-                errorElement.classList.add('show');
-            }
-            element.classList.add('error');
-            return false;
-        }
-        
-        if (errorElement) {
-            errorElement.classList.remove('show');
-        }
-        element.classList.remove('error');
-        return true;
-    }
-
-    // Validate Email
-    function validateEmail() {
-        if (!elements.email) return true;
-        
-        const value = elements.email.value.trim();
-        if (!value) return true; // Email is optional
-        
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        
-        if (!emailRegex.test(value)) {
-            elements.email.classList.add('error');
-            return false;
-        }
-        
-        elements.email.classList.remove('error');
-        return true;
-    }
-
-    // Clear Field Error
-    function clearFieldError(fieldName) {
-        let element, errorElement;
-        
-        switch (fieldName) {
-            case 'firstName':
-                element = elements.firstName;
-                errorElement = elements.firstNameError;
-                break;
-            case 'lastName':
-                element = elements.lastName;
-                errorElement = elements.lastNameError;
-                break;
-            case 'dob':
-                element = elements.dob;
-                errorElement = elements.dobError;
-                break;
-            default:
-                return;
-        }
-        
-        if (element) {
-            element.classList.remove('error');
-        }
-        
-        if (errorElement) {
-            errorElement.classList.remove('show');
-        }
-    }
-
-    // Collect Form Data
-    function collectFormData() {
-        return {
-            first_name: elements.firstName?.value.trim() || '',
-            last_name: elements.lastName?.value.trim() || '',
-            date_of_birth: elements.dob?.value || '',
-            grade_level: elements.gradeLevel?.value.trim() || '',
-            student_id: elements.studentId?.value.trim() || '',
-            email: elements.email?.value.trim() || '',
-            phone: elements.phone?.value.trim() || '',
-            medical_conditions: elements.medicalConditions?.value.trim() || '',
-            medications: elements.medications?.value.trim() || '',
-            allergies: elements.allergies?.value.trim() || '',
-            dietary_restrictions: elements.dietaryRestrictions?.value.trim() || '',
-            emergency_medical_info: elements.emergencyMedical?.value.trim() || '',
-            emergency_contact_1_name: elements.emergency1Name?.value.trim() || '',
-            emergency_contact_1_phone: elements.emergency1Phone?.value.trim() || '',
-            emergency_contact_1_relationship: elements.emergency1Relationship?.value.trim() || '',
-            emergency_contact_2_name: elements.emergency2Name?.value.trim() || '',
-            emergency_contact_2_phone: elements.emergency2Phone?.value.trim() || '',
-            emergency_contact_2_relationship: elements.emergency2Relationship?.value.trim() || '',
-            special_requirements: elements.specialRequirements?.value.trim() || ''
-        };
-    }
-
-    // Reset Form
-    function resetForm() {
-        if (elements.form) {
-            elements.form.reset();
-        }
-        
-        // Clear all error states
-        document.querySelectorAll('.register-child-input, .register-child-textarea').forEach(input => {
-            input.classList.remove('error');
-        });
-        
-        document.querySelectorAll('.register-child-error').forEach(error => {
-            error.classList.remove('show');
-        });
-        
-        hideAlert();
-    }
-
-    // Show Alert
-    function showAlert(message, type = 'error') {
-        if (!elements.alert || !elements.alertMessage) return;
-        
-        elements.alertMessage.textContent = message;
-        elements.alert.className = `register-child-alert ${type}`;
-        elements.alert.style.display = 'flex';
-        
-        // Scroll to alert
-        elements.alert.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-
-    // Hide Alert
-    function hideAlert() {
-        if (elements.alert) {
-            elements.alert.style.display = 'none';
-        }
-    }
-
-    // Set Submit Button Loading
-    function setSubmitButtonLoading(loading) {
-        if (!elements.submitBtn) return;
-        
-        if (loading) {
-            elements.submitBtn.classList.add('loading');
-            elements.submitBtn.disabled = true;
-        } else {
-            elements.submitBtn.classList.remove('loading');
-            elements.submitBtn.disabled = false;
-        }
-    }
-
-    // Utility Functions
-    function formatDate(dateString) {
-        if (!dateString) return 'N/A';
-        try {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-            });
-        } catch (error) {
-            return dateString;
-        }
-    }
-
-    function formatNumber(number) {
-        if (number === null || number === undefined) return '0.00';
-        return parseFloat(number).toLocaleString('en-US', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        });
-    }
-
-    // Return Public API
-    return {
-        init,
-        open,
-        close
-    };
-})();
-
-// Initialize when DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        RegisterChildModal.init();
-    });
-} else {
-    RegisterChildModal.init();
 }
+
+/**
+ * Fetch trip details from API
+ */
+async function fetchTripDetails(tripId) {
+    try {
+        const response = await fetch(`/api/parent/trips/${tripId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        const result = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(result.error || 'Failed to fetch trip details');
+        }
+        
+        return result.data || result;
+    } catch (error) {
+        console.error('Error fetching trip details:', error);
+        throw new Error('Unable to load trip details. Please check your connection.');
+    }
+}
+
+/**
+ * Populate trip information in the modal
+ */
+function populateTripInfo(trip) {
+    // Title
+    document.getElementById('tripTitle').textContent = trip.title || trip.name;
+    
+    // Price
+    const price = parseFloat(trip.price_per_student || trip.price || 0);
+    document.getElementById('tripPrice').textContent = formatCurrency(price);
+    
+    // Dates
+    const startDate = formatDate(trip.start_date);
+    const endDate = formatDate(trip.end_date);
+    document.getElementById('tripDates').textContent = `${startDate} - ${endDate}`;
+    
+    // Location
+    document.getElementById('tripLocation').textContent = trip.location || trip.destination || 'Not specified';
+    
+    // Capacity
+    const availableSpots = trip.available_spots || 0;
+    const totalCapacity = trip.capacity || 0;
+    const registered = totalCapacity - availableSpots;
+    document.getElementById('tripCapacity').textContent = 
+        `${registered}/${totalCapacity} registered (${availableSpots} spots left)`;
+    
+    // Age restrictions
+    const ageRestrictionDiv = document.getElementById('tripAgeRestriction');
+    const ageTextSpan = document.getElementById('tripAgeText');
+    
+    if (trip.min_age || trip.max_age) {
+        let ageText = 'Age requirement: ';
+        if (trip.min_age && trip.max_age) {
+            ageText += `${trip.min_age}-${trip.max_age} years`;
+        } else if (trip.min_age) {
+            ageText += `${trip.min_age}+ years`;
+        } else {
+            ageText += `Up to ${trip.max_age} years`;
+        }
+        ageTextSpan.textContent = ageText;
+        ageRestrictionDiv.style.display = 'flex';
+    } else {
+        ageRestrictionDiv.style.display = 'none';
+    }
+}
+
+/**
+ * Load children and check eligibility
+ */
+async function loadRegisterChildren(tripId) {
+    try {
+        // Fetch children
+        const response = await fetch('/api/parent/children', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        const result = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(result.error || 'Failed to fetch children');
+        }
+        
+        registerChildrenData = result.data || result.children || [];
+        
+        // Render children list
+        renderChildrenList(tripId);
+        
+    } catch (error) {
+        console.error('Error loading children:', error);
+        showAlert('error', 'Failed to load children. Please refresh the page.');
+    }
+}
+
+/**
+ * Render children list with eligibility checks
+ */
+function renderChildrenList(tripId) {
+    const childrenList = document.getElementById('childrenList');
+    const noChildrenMsg = document.getElementById('noChildrenMessage');
+    
+    if (!registerChildrenData || registerChildrenData.length === 0) {
+        childrenList.style.display = 'none';
+        noChildrenMsg.style.display = 'block';
+        return;
+    }
+    
+    childrenList.style.display = 'grid';
+    noChildrenMsg.style.display = 'none';
+    childrenList.innerHTML = '';
+    
+    registerChildrenData.forEach(child => {
+        const eligibility = checkChildEligibility(child, currentTripData);
+        const childCard = createChildCardRegister(child, eligibility);
+        childrenList.appendChild(childCard);
+    });
+}
+
+/**
+ * Check if child is eligible for trip
+ */
+function checkChildEligibility(child, trip) {
+    const issues = [];
+    
+    // Check age restrictions
+    const age = child.age || calculateAge(child.date_of_birth);
+    if (trip.min_age && age < trip.min_age) {
+        issues.push(`Must be at least ${trip.min_age} years old`);
+    }
+    if (trip.max_age && age > trip.max_age) {
+        issues.push(`Must be at most ${trip.max_age} years old`);
+    }
+    
+    // Check medical information
+    if (trip.medical_info_required && !child.has_complete_medical_info) {
+        issues.push('Complete medical information required');
+    }
+    
+    // Check if already registered
+    if (child.is_registered_for_trip) {
+        issues.push('Already registered for this trip');
+    }
+    
+    return {
+        eligible: issues.length === 0,
+        issues: issues,
+        age: age
+    };
+}
+
+/**
+ * Create child card element
+ */
+function createChildCardRegister(child, eligibility) {
+    const card = document.createElement('label');
+    card.className = `child-card ${!eligibility.eligible ? 'disabled' : ''}`;
+    
+    const initials = getInitials(child.first_name, child.last_name);
+    const fullName = `${child.first_name} ${child.last_name}`;
+    
+    let statusBadge = '';
+    if (child.is_registered_for_trip) {
+        statusBadge = '<span class="child-status-badge registered">Registered</span>';
+    } else if (!eligibility.eligible && !child.is_registered_for_trip) {
+        statusBadge = '<span class="child-status-badge incomplete">Ineligible</span>';
+    }
+    
+    let warningHtml = '';
+    if (!eligibility.eligible && eligibility.issues.length > 0) {
+        warningHtml = `
+            <div class="child-warning">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                ${eligibility.issues.join(', ')}
+            </div>
+        `;
+    }
+    
+    card.innerHTML = `
+        <input type="radio" name="child_selection" value="${child.id}" class="child-card-input" 
+               ${!eligibility.eligible ? 'disabled' : ''}>
+        ${statusBadge}
+        <div class="child-card-content">
+            <div class="child-avatar">${initials}</div>
+            <div class="child-info">
+                <h3 class="child-name">${fullName}</h3>
+                <div class="child-details">
+                    <span class="child-detail-item">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        ${eligibility.age} years old
+                    </span>
+                    ${child.grade_level ? `
+                        <span class="child-detail-item">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                            </svg>
+                            ${child.grade_level}
+                        </span>
+                    ` : ''}
+                </div>
+                ${warningHtml}
+            </div>
+        </div>
+    `;
+    
+    if (eligibility.eligible) {
+        card.addEventListener('click', () => selectChild(child.id));
+    }
+    
+    return card;
+}
+
+/**
+ * Select a child for registration
+ */
+function selectChild(childId) {
+    selectedChildId = childId;
+    
+    // Update UI
+    document.querySelectorAll('.child-card').forEach(card => {
+        card.classList.remove('selected');
+    });
+    
+    const selectedCard = document.querySelector(`input[value="${childId}"]`).closest('.child-card');
+    selectedCard.classList.add('selected');
+    
+    // Check medical info requirement
+    const child = registerChildrenData.find(c => c.id === childId);
+    const medicalWarning = document.getElementById('medicalWarning');
+    
+    if (currentTripData.medical_info_required && !child.has_complete_medical_info) {
+        medicalWarning.style.display = 'flex';
+    } else {
+        medicalWarning.style.display = 'none';
+    }
+}
+
+/**
+ * Handle form submission
+ */
+document.getElementById('tripRegistrationForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+        return;
+    }
+    
+    await submitRegistration();
+});
+
+/**
+ * Validate registration form
+ */
+function validateForm() {
+    // Check if child is selected
+    if (!selectedChildId) {
+        showAlert('error', 'Please select a child to register');
+        return false;
+    }
+    
+    // Check terms acceptance
+    const termsAccepted = document.getElementById('termsAccepted').checked;
+    if (!termsAccepted) {
+        showAlert('error', 'Please accept the terms and conditions');
+        return false;
+    }
+    
+    return true;
+}
+
+/**
+ * Submit registration to API
+ */
+async function submitRegistration() {
+    const submitBtn = document.getElementById('submitRegistrationBtn');
+    const btnText = submitBtn.querySelector('.btn-text');
+    const btnLoader = submitBtn.querySelector('.btn-loader');
+    
+    try {
+        // Show loading state
+        submitBtn.disabled = true;
+        btnText.style.display = 'none';
+        btnLoader.style.display = 'block';
+        hideAlert();
+        
+        // Prepare form data
+        const formData = {
+            participant_id: selectedChildId,
+            payment_plan: document.querySelector('input[name="payment_plan"]:checked').value,
+            parent_notes: document.getElementById('parentNotes').value.trim()
+        };
+        
+        // Submit to API
+        const response = await fetch(`/api/parent/children/trips/${currentTripData.id}/register`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
+        
+        const result = await response.json();
+        
+        if (!response.ok) {
+            // Handle specific error codes
+            if (result.code === 'ALREADY_REGISTERED') {
+                throw new Error('This child is already registered for this trip');
+            } else if (result.code === 'REGISTRATION_CLOSED') {
+                throw new Error('Registration is no longer open for this trip');
+            } else if (result.code === 'AGE_RESTRICTION') {
+                throw new Error(result.error || 'This child does not meet the age requirements');
+            } else if (result.code === 'INCOMPLETE_MEDICAL_INFO') {
+                throw new Error('Please update the child\'s medical information before registering');
+            } else {
+                throw new Error(result.error || 'Registration failed. Please try again.');
+            }
+        }
+        
+        // Store result for success modal
+        registrationResult = result;
+        
+        // Close registration modal and show success modal
+        closeTripRegistrationModal();
+        showSuccessModal(result);
+        
+    } catch (error) {
+        console.error('Registration error:', error);
+        showAlert('error', error.message || 'An unexpected error occurred. Please try again.');
+    } finally {
+        // Reset button state
+        submitBtn.disabled = false;
+        btnText.style.display = 'block';
+        btnLoader.style.display = 'none';
+    }
+}
+
+/**
+ * Show success modal
+ */
+function showSuccessModal(result) {
+    const modal = document.getElementById('registrationSuccessModal');
+    const successMessage = document.getElementById('successMessage');
+    const nextStepsList = document.getElementById('nextStepsList');
+    
+    // Get child name
+    const child = registerChildrenData.find(c => c.id === selectedChildId);
+    const childName = child ? `${child.first_name} ${child.last_name}` : 'your child';
+    
+    // Set message
+    const status = result.data?.status || 'pending';
+    if (status === 'waitlisted') {
+        successMessage.textContent = `${childName} has been added to the waitlist for ${currentTripData.title}. You'll be notified if a spot becomes available.`;
+    } else {
+        successMessage.textContent = `${childName} has been successfully registered for ${currentTripData.title}!`;
+    }
+    
+    // Build next steps
+    const nextSteps = result.next_steps || {};
+    nextStepsList.innerHTML = '';
+    
+    if (nextSteps.payment_required) {
+        const li = document.createElement('li');
+        li.textContent = `Complete payment of ${formatCurrency(nextSteps.amount_due)} ${nextSteps.payment_deadline ? 'by ' + formatDate(nextSteps.payment_deadline) : ''}`;
+        nextStepsList.appendChild(li);
+    }
+    
+    if (nextSteps.consent_required) {
+        const li = document.createElement('li');
+        li.textContent = 'Sign the consent form';
+        nextStepsList.appendChild(li);
+    }
+    
+    if (nextSteps.documents_required) {
+        const li = document.createElement('li');
+        li.textContent = 'Submit required documents';
+        nextStepsList.appendChild(li);
+    }
+    
+    if (nextStepsList.children.length === 0) {
+        document.getElementById('nextStepsSection').style.display = 'none';
+    } else {
+        document.getElementById('nextStepsSection').style.display = 'block';
+    }
+    
+    modal.style.display = 'flex';
+}
+
+/**
+ * Close registration modal
+ */
+function closeTripRegistrationModal() {
+    const modal = document.getElementById('tripRegistrationModal');
+    modal.style.display = 'none';
+    resetRegistrationForm();
+}
+
+/**
+ * Close success modal
+ */
+function closeSuccessModal() {
+    const modal = document.getElementById('registrationSuccessModal');
+    modal.style.display = 'none';
+    
+    // Refresh trips list or registration list
+    if (typeof refreshTripsDisplay === 'function') {
+        refreshTripsDisplay();
+    }
+    if (typeof refreshRegistrations === 'function') {
+        refreshRegistrations();
+    }
+}
+
+/**
+ * View registration details
+ */
+function viewRegistrationDetails() {
+    if (registrationResult && registrationResult.data) {
+        closeSuccessModal();
+        // Navigate to registration details page
+        window.location.href = `/parent/registrations/${registrationResult.data.id}`;
+    }
+}
+
+/**
+ * Reset registration form
+ */
+function resetRegistrationForm() {
+    document.getElementById('tripRegistrationForm').reset();
+    selectedChildId = null;
+    currentTripData = null;
+    
+    // Reset child selection
+    document.querySelectorAll('.child-card').forEach(card => {
+        card.classList.remove('selected');
+    });
+    
+    // Reset payment plan to full
+    document.querySelector('input[name="payment_plan"][value="full"]').checked = true;
+    
+    // Clear notes
+    document.getElementById('parentNotes').value = '';
+    updateCharacterCount();
+    
+    // Hide warnings and alerts
+    document.getElementById('medicalWarning').style.display = 'none';
+    hideAlert();
+}
+
+/**
+ * Show alert message
+ */
+function showAlert(type, message) {
+    const alert = document.getElementById('registrationAlert');
+    const alertMessage = document.getElementById('registrationAlertMessage');
+    
+    alert.className = `alert ${type}`;
+    alertMessage.textContent = message;
+    alert.style.display = 'block';
+    
+    // Scroll to alert
+    alert.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+/**
+ * Hide alert message
+ */
+function hideAlert() {
+    const alert = document.getElementById('registrationAlert');
+    alert.style.display = 'none';
+}
+
+/**
+ * Update character count for notes
+ */
+document.getElementById('parentNotes').addEventListener('input', updateCharacterCount);
+
+function updateCharacterCount() {
+    const textarea = document.getElementById('parentNotes');
+    const counter = document.getElementById('notesCharCount');
+    counter.textContent = textarea.value.length;
+}
+
+/**
+ * Navigate to add child page
+ */
+function navigateToAddChild() {
+    window.location.href = '/parent/children/add';
+}
+
+/**
+ * Show terms modal (placeholder)
+ */
+function showTermsModal() {
+    alert('Terms and conditions modal would open here');
+}
+
+/**
+ * Show policies modal (placeholder)
+ */
+function showPoliciesModal() {
+    alert('Cancellation policy modal would open here');
+}
+
+/**
+ * Utility: Calculate age from date of birth
+ */
+function calculateAge(dateOfBirth) {
+    if (!dateOfBirth) return 0;
+    
+    const dob = new Date(dateOfBirth);
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    const monthDiff = today.getMonth() - dob.getMonth();
+    
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+        age--;
+    }
+    
+    return age;
+}
+
+/**
+ * Utility: Get initials from names
+ */
+function getInitials(firstName, lastName) {
+    const first = firstName ? firstName.charAt(0).toUpperCase() : '';
+    const last = lastName ? lastName.charAt(0).toUpperCase() : '';
+    return first + last;
+}
+
+/**
+ * Utility: Format currency
+ */
+function formatCurrency(amount) {
+    return new Intl.NumberFormat('en-KE', {
+        style: 'currency',
+        currency: 'KES'
+    }).format(amount);
+}
+
+/**
+ * Utility: Format date
+ */
+function formatDate(dateString) {
+    if (!dateString) return 'Not specified';
+    
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+    }).format(date);
+}
+
+/**
+ * Close modal when clicking outside
+ */
+document.addEventListener('click', function(e) {
+    const registrationModal = document.getElementById('tripRegistrationModal');
+    const successModal = document.getElementById('registrationSuccessModal');
+    
+    if (e.target === registrationModal) {
+        closeTripRegistrationModal();
+    }
+    
+    if (e.target === successModal) {
+        closeSuccessModal();
+    }
+});
+
+/**
+ * Close modal on escape key
+ */
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        const registrationModal = document.getElementById('tripRegistrationModal');
+        const successModal = document.getElementById('registrationSuccessModal');
+        
+        if (registrationModal.style.display === 'flex') {
+            closeTripRegistrationModal();
+        }
+        
+        if (successModal.style.display === 'flex') {
+            closeSuccessModal();
+        }
+    }
+});

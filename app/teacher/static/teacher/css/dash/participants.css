@@ -146,7 +146,7 @@
     display: flex;
     flex-direction: column;
     background: #f8f9fa;
-    overflow: hidden;
+    overflow: auto;
     position: relative;
 }
 
@@ -326,8 +326,10 @@
 .ptm-table-wrapper {
     background: white;
     border-radius: 10px;
-    overflow: hidden;
+    /* overflow: hidden; */
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    max-height: 500px; 
+    overflow-y: auto; 
 }
 
 .ptm-table {
@@ -341,7 +343,7 @@
 }
 
 .ptm-table th {
-    padding: 16px;
+    padding: 8px;
     text-align: left;
     font-size: 12px;
     font-weight: 600;

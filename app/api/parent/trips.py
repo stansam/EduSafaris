@@ -6,10 +6,7 @@ from datetime import datetime, date
 from decimal import Decimal
 
 from app.extensions import db
-from app.models.trip import Trip
-from app.models.participant import Participant
-from app.models.user import User
-from app.models.activity_log import ActivityLog
+from app.models import Trip, Participant, ActivityLog, TripRegistration
 from app.utils.utils import roles_required
 from app.api import api_bp as parent_trips_bp 
 
@@ -370,191 +367,97 @@ def get_trip_itinerary(trip_id):
         return error_response('An error occurred while fetching trip itinerary', 500)
 
 
-# 5. Register Child for Trip
-@parent_trips_bp.route('/parent/trips/<int:trip_id>/register', methods=['POST'])
-@roles_required('admin', 'parent')
-def register_child(trip_id):
-    """Register a child for a trip"""
-    try:
-        user_id = current_user.id
-        data = request.get_json()
-        
-        # Validate request data
-        if not data:
-            return error_response('No data provided', 400)
-        
-        required_fields = ['first_name', 'last_name', 'date_of_birth']
-        missing_fields = [field for field in required_fields if not data.get(field)]
-        if missing_fields:
-            return error_response(
-                'Missing required fields',
-                400,
-                {'missing_fields': missing_fields}
-            )
-        
-        # Get trip
-        trip = Trip.query.get(trip_id)
-        if not trip:
-            return error_response('Trip not found', 404)
-        
-        # Validate trip status
-        if trip.status != 'active':
-            return error_response('Trip is not available for registration', 400)
-        
-        # Check if registration is open
-        if not trip.registration_open:
-            if trip.is_full:
-                return error_response('Trip is full', 400)
-            elif trip.registration_deadline and trip.registration_deadline < date.today():
-                return error_response('Registration deadline has passed', 400)
-            else:
-                return error_response('Registration is not open for this trip', 400)
-        
-        # Validate date of birth
-        try:
-            dob = datetime.strptime(data['date_of_birth'], '%Y-%m-%d').date()
-            if dob > date.today():
-                return error_response('Date of birth cannot be in the future', 400)
-        except ValueError:
-            return error_response('Invalid date format for date of birth. Use YYYY-MM-DD', 400)
-        
-        # Check for duplicate registration
-        existing_participant = Participant.query.filter_by(
-            trip_id=trip_id,
-            parent_id=user_id,
-            first_name=data['first_name'],
-            last_name=data['last_name'],
-            date_of_birth=dob,
-            status='confirmed'
-        ).first()
-        
-        if existing_participant:
-            return error_response('This child is already registered for this trip', 400)
-        
-        # Create participant
-        participant = Participant(
-            trip_id=trip_id,
-            parent_id=user_id,
-            first_name=data['first_name'].strip(),
-            last_name=data['last_name'].strip(),
-            date_of_birth=dob,
-            grade_level=data.get('grade_level', '').strip(),
-            student_id=data.get('student_id', '').strip(),
-            email=data.get('email', '').strip(),
-            phone=data.get('phone', '').strip(),
-            medical_conditions=data.get('medical_conditions', '').strip(),
-            medications=data.get('medications', '').strip(),
-            allergies=data.get('allergies', '').strip(),
-            dietary_restrictions=data.get('dietary_restrictions', '').strip(),
-            emergency_medical_info=data.get('emergency_medical_info', '').strip(),
-            emergency_contact_1_name=data.get('emergency_contact_1_name', '').strip(),
-            emergency_contact_1_phone=data.get('emergency_contact_1_phone', '').strip(),
-            emergency_contact_1_relationship=data.get('emergency_contact_1_relationship', '').strip(),
-            emergency_contact_2_name=data.get('emergency_contact_2_name', '').strip(),
-            emergency_contact_2_phone=data.get('emergency_contact_2_phone', '').strip(),
-            emergency_contact_2_relationship=data.get('emergency_contact_2_relationship', '').strip(),
-            special_requirements=data.get('special_requirements', '').strip(),
-            status='registered'
-        )
-        
-        db.session.add(participant)
-        db.session.commit()
-        
-        # Log activity
-        try:
-            ActivityLog.log_action(
-                action='participant_registered',
-                user_id=user_id,
-                entity_type='participant',
-                entity_id=participant.id,
-                description=f"Registered {participant.full_name} for trip: {trip.title}",
-                category='trip',
-                trip_id=trip_id,
-                new_values={
-                    'participant_name': participant.full_name,
-                    'trip_title': trip.title
-                },
-                ip_address=request.remote_addr,
-                user_agent=request.headers.get('User-Agent')
-            )
-        except Exception as log_error:
-            current_app.logger.warning(f"Failed to log activity: {str(log_error)}")
-        
-        return success_response(
-            participant.serialize(),
-            'Child registered successfully',
-            201
-        )
-        
-    except Exception as e:
-        db.session.rollback()
-        current_app.logger.error(f"Error registering child: {str(e)}", exc_info=True)
-        return error_response('An error occurred while registering child', 500)
-
-
 # 6. Cancel Trip Registration
-@parent_trips_bp.route('/parent/trips/<int:trip_id>/participants/<int:participant_id>/cancel', methods=['POST'])
+@parent_trips_bp.route('/parent/trips/<int:trip_id>/registrations/<int:registration_id>/cancel', methods=['POST'])
 @roles_required('admin', 'parent')
-def cancel_registration(trip_id, participant_id):
+def cancel_registration(trip_id, registration_id):
     """Cancel a child's registration for a trip"""
     try:
         user_id = current_user.id
         data = request.get_json() or {}
         
         # Get participant
-        participant = Participant.query.get(participant_id)
-        if not participant:
-            return error_response('Participant not found', 404)
+        # participant = Participant.query.get(participant_id)
+        # if not participant:
+        #     return error_response('Participant not found', 404)
+        
+        # # Verify ownership
+        # if participant.parent_id != user_id:
+        #     return error_response('You do not have permission to cancel this registration', 403)
+        
+        # # Verify trip match
+        # if participant.trip_id != trip_id:
+        #     return error_response('Participant does not belong to this trip', 400)
+        
+        # # Check if already cancelled
+        # if participant.status == 'cancelled':
+        #     return error_response('Registration is already cancelled', 400)
+        
+        # # Check if trip has already started or completed
+        # trip = participant.trip
+        # if trip.start_date <= date.today():
+        #     return error_response('Cannot cancel registration for a trip that has already started', 400)
+        
+        # # Store old status for logging
+        # old_status = participant.status
+        
+        # # Cancel registration
+        # participant.cancel_participation()
+        
+        # # Add cancellation reason if provided
+        # if data.get('cancellation_reason'):
+        #     participant.internal_notes = f"Cancellation reason: {data['cancellation_reason']}"
+        #     db.session.commit()
+
+        # Get registration
+        registration = TripRegistration.query.get(registration_id)
+        if not registration:
+            return error_response('Registration not found', 404)
         
         # Verify ownership
-        if participant.parent_id != user_id:
+        if registration.parent_id != user_id:
             return error_response('You do not have permission to cancel this registration', 403)
         
         # Verify trip match
-        if participant.trip_id != trip_id:
-            return error_response('Participant does not belong to this trip', 400)
+        if registration.trip_id != trip_id:
+            return error_response('Registration does not belong to this trip', 400)
         
         # Check if already cancelled
-        if participant.status == 'cancelled':
+        if registration.status == 'cancelled':
             return error_response('Registration is already cancelled', 400)
         
-        # Check if trip has already started or completed
-        trip = participant.trip
+        # Check if trip has started
+        trip = registration.trip
         if trip.start_date <= date.today():
             return error_response('Cannot cancel registration for a trip that has already started', 400)
         
-        # Store old status for logging
-        old_status = participant.status
-        
         # Cancel registration
-        participant.cancel_participation()
-        
-        # Add cancellation reason if provided
-        if data.get('cancellation_reason'):
-            participant.internal_notes = f"Cancellation reason: {data['cancellation_reason']}"
-            db.session.commit()
+        old_status = registration.status
+        registration.cancel_registration(data.get('cancellation_reason'))
         
         # Log activity
         try:
-            ActivityLog.log_action(
-                action='participant_cancelled',
-                user_id=user_id,
-                entity_type='participant',
-                entity_id=participant_id,
-                description=f"Cancelled registration for {participant.full_name} from trip: {trip.title}",
-                category='trip',
-                trip_id=trip_id,
-                old_values={'status': old_status},
-                new_values={'status': 'cancelled'},
-                metadata={'reason': data.get('cancellation_reason')},
-                ip_address=request.remote_addr,
-                user_agent=request.headers.get('User-Agent')
-            )
+            # ActivityLog.log_action(
+            #     action='participant_cancelled',
+            #     user_id=user_id,
+            #     entity_type='participant',
+            #     entity_id=participant_id,
+            #     description=f"Cancelled registration for {participant.full_name} from trip: {trip.title}",
+            #     category='trip',
+            #     trip_id=trip_id,
+            #     old_values={'status': old_status},
+            #     new_values={'status': 'cancelled'},
+            #     metadata={'reason': data.get('cancellation_reason')},
+            #     ip_address=request.remote_addr,
+            #     user_agent=request.headers.get('User-Agent')
+            # )
+            ActivityLog.log_trip_registration(registration, user_id, 'cancelled')
+            
         except Exception as log_error:
             current_app.logger.warning(f"Failed to log activity: {str(log_error)}")
         
         return success_response(
-            participant.serialize(),
+            registration.serialize(),
             'Registration cancelled successfully'
         )
         
@@ -578,33 +481,39 @@ def get_trip_registrations(trip_id):
             return error_response('Trip not found', 404)
         
         # Get all participants registered by this parent for this trip
-        participants = Participant.query.filter_by(
+        # participants = Participant.query.filter_by(
+        #     trip_id=trip_id,
+        #     parent_id=user_id
+        # ).order_by(Participant.created_at.desc()).all()
+        registrations = TripRegistration.query.filter_by(
             trip_id=trip_id,
             parent_id=user_id
-        ).order_by(Participant.created_at.desc()).all()
+        ).order_by(TripRegistration.created_at.desc()).all()
+        registrations_data = [reg.serialize() for reg in registrations]
+
         
-        participants_data = []
-        for participant in participants:
-            p_data = participant.serialize()
-            # Add additional registration details
-            p_data['has_medical_info'] = bool(
-                participant.medical_conditions or 
-                participant.medications or 
-                participant.allergies
-            )
-            p_data['has_emergency_contacts'] = bool(
-                participant.emergency_contact_1_name and 
-                participant.emergency_contact_1_phone
-            )
-            participants_data.append(p_data)
+        # participants_data = []
+        # for participant in participants:
+        #     p_data = participant.serialize()
+        #     # Add additional registration details
+        #     p_data['has_medical_info'] = bool(
+        #         participant.medical_conditions or 
+        #         participant.medications or 
+        #         participant.allergies
+        #     )
+        #     p_data['has_emergency_contacts'] = bool(
+        #         participant.emergency_contact_1_name and 
+        #         participant.emergency_contact_1_phone
+        #     )
+        #     participants_data.append(p_data)
         
         return success_response({
             'trip': trip.serialize(),
-            'participants': participants_data,
-            'total_registrations': len(participants),
-            'confirmed_count': len([p for p in participants if p.status == 'confirmed']),
-            'pending_count': len([p for p in participants if p.status == 'registered']),
-            'cancelled_count': len([p for p in participants if p.status == 'cancelled'])
+            'registrations': registrations_data,
+            'total_registrations': len(registrations),
+            'confirmed_count': len([p for p in registrations if p.status == 'confirmed']),
+            'pending_count': len([p for p in registrations if p.status == 'pending']),
+            'cancelled_count': len([p for p in registrations if p.status == 'cancelled'])
         })
         
     except Exception as e:
@@ -613,9 +522,9 @@ def get_trip_registrations(trip_id):
 
 
 # 8. Add/Update Special Requirements
-@parent_trips_bp.route('/parent/trips/<int:trip_id>/participants/<int:participant_id>/requirements', methods=['PUT'])
+@parent_trips_bp.route('/parent/trips/<int:trip_id>/registrations/<int:registration_id>/requirements', methods=['PUT'])
 @roles_required('admin', 'parent')
-def update_special_requirements(trip_id, participant_id):
+def update_special_requirements(trip_id, registration_id):
     """Add or update special requirements for a participant"""
     try:
         user_id = current_user.id
@@ -625,17 +534,31 @@ def update_special_requirements(trip_id, participant_id):
             return error_response('No data provided', 400)
         
         # Get participant
-        participant = Participant.query.get(participant_id)
-        if not participant:
-            return error_response('Participant not found', 404)
+        # participant = Participant.query.get(participant_id)
+        # if not participant:
+        #     return error_response('Participant not found', 404)
         
-        # Verify ownership
-        if participant.parent_id != user_id:
-            return error_response('You do not have permission to update this participant', 403)
+        # # Verify ownership
+        # if participant.parent_id != user_id:
+        #     return error_response('You do not have permission to update this participant', 403)
         
-        # Verify trip match
-        if participant.trip_id != trip_id:
-            return error_response('Participant does not belong to this trip', 400)
+        # # Verify trip match
+        # if participant.trip_id != trip_id:
+        #     return error_response('Participant does not belong to this trip', 400)
+
+        registration = TripRegistration.query.get(registration_id)
+        if not registration:
+            return error_response('Registration not found', 404)
+        
+        # Verify ownership and trip match
+        if registration.parent_id != user_id:
+            return error_response('You do not have permission to update this registration', 403)
+        
+        if registration.trip_id != trip_id:
+            return error_response('Registration does not belong to this trip', 400)
+        
+        # Update participant details
+        participant = registration.participant
         
         # Store old values for logging
         old_values = {
@@ -673,7 +596,7 @@ def update_special_requirements(trip_id, participant_id):
                 action='participant_updated',
                 user_id=user_id,
                 entity_type='participant',
-                entity_id=participant_id,
+                entity_id=participant.id,
                 description=f"Updated requirements for {participant.full_name}",
                 category='trip',
                 trip_id=trip_id,
@@ -735,50 +658,72 @@ def get_all_registrations():
     try:
         user_id = current_user.id
         
-        # Get all participants registered by this parent
-        participants = Participant.query.filter_by(
-            parent_id=user_id
-        ).order_by(Participant.created_at.desc()).all()
+        # # Get all participants registered by this parent
+        # participants = Participant.query.filter_by(
+        #     parent_id=user_id
+        # ).order_by(Participant.created_at.desc()).all()
         
-        registrations_data = []
-        for participant in participants:
-            trip = participant.trip
-            if not trip:
-                continue
+        # registrations_data = []
+        # for participant in participants:
+        #     trip = participant.trip
+        #     if not trip:
+        #         continue
                 
-            registration = {
-                'participant_id': participant.id,
-                'participant_name': participant.full_name,
-                'participant_status': participant.status,
-                'trip_id': trip.id,
-                'trip_title': trip.title,
-                'destination': trip.destination,
-                'start_date': trip.start_date.isoformat() if trip.start_date else None,
-                'end_date': trip.end_date.isoformat() if trip.end_date else None,
-                'duration_days': trip.duration_days,
-                'price_per_student': float(trip.price_per_student) if trip.price_per_student else 0,
-                'registration_date': participant.created_at.isoformat() if participant.created_at else None,
-                'has_medical_info': bool(
-                    participant.medical_conditions or 
-                    participant.medications or 
-                    participant.allergies
-                ),
-                'has_dietary_info': bool(participant.dietary_restrictions),
-                'has_special_requirements': bool(participant.special_requirements)
-            }
-            registrations_data.append(registration)
+        #     registration = {
+        #         'participant_id': participant.id,
+        #         'participant_name': participant.full_name,
+        #         'participant_status': participant.status,
+        #         'trip_id': trip.id,
+        #         'trip_title': trip.title,
+        #         'destination': trip.destination,
+        #         'start_date': trip.start_date.isoformat() if trip.start_date else None,
+        #         'end_date': trip.end_date.isoformat() if trip.end_date else None,
+        #         'duration_days': trip.duration_days,
+        #         'price_per_student': float(trip.price_per_student) if trip.price_per_student else 0,
+        #         'registration_date': participant.created_at.isoformat() if participant.created_at else None,
+        #         'has_medical_info': bool(
+        #             participant.medical_conditions or 
+        #             participant.medications or 
+        #             participant.allergies
+        #         ),
+        #         'has_dietary_info': bool(participant.dietary_restrictions),
+        #         'has_special_requirements': bool(participant.special_requirements)
+        #     }
+        #     registrations_data.append(registration)
+        
+        # # Separate by status
+        # active_registrations = [r for r in registrations_data if r['participant_status'] in ['registered', 'confirmed']]
+        # cancelled_registrations = [r for r in registrations_data if r['participant_status'] == 'cancelled']
+        
+        # return success_response({
+        #     'registrations': registrations_data,
+        #     'active_registrations': active_registrations,
+        #     'cancelled_registrations': cancelled_registrations,
+        #     'total_count': len(registrations_data),
+        #     'active_count': len(active_registrations),
+        #     'cancelled_count': len(cancelled_registrations)
+        # })
+
+        registrations = TripRegistration.query.filter_by(
+            parent_id=user_id
+        ).order_by(TripRegistration.created_at.desc()).all()
+        
+        registrations_data = [reg.serialize() for reg in registrations]
         
         # Separate by status
-        active_registrations = [r for r in registrations_data if r['participant_status'] in ['registered', 'confirmed']]
-        cancelled_registrations = [r for r in registrations_data if r['participant_status'] == 'cancelled']
+        active_registrations = [r for r in registrations_data if r['status'] in ['pending', 'confirmed']]
+        cancelled_registrations = [r for r in registrations_data if r['status'] == 'cancelled']
+        completed_registrations = [r for r in registrations_data if r['status'] == 'completed']
         
         return success_response({
             'registrations': registrations_data,
             'active_registrations': active_registrations,
             'cancelled_registrations': cancelled_registrations,
+            'completed_registrations': completed_registrations,
             'total_count': len(registrations_data),
             'active_count': len(active_registrations),
-            'cancelled_count': len(cancelled_registrations)
+            'cancelled_count': len(cancelled_registrations),
+            'completed_count': len(completed_registrations)
         })
         
     except Exception as e:

@@ -32,8 +32,8 @@ async function loadChildForUpdate(childId) {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getAuthToken()}`
-            }
+            },
+            credentials: 'include'
         });
         
         if (!response.ok) {
@@ -190,8 +190,9 @@ document.getElementById('updateChildForm').addEventListener('submit', async func
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getAuthToken()}`
+                // 'Authorization': `Bearer ${getAuthToken()}`
             },
+            credentials: 'include',
             body: JSON.stringify(formData)
         });
         
