@@ -1,21 +1,12 @@
-/**
- * Vendor Registration Form Handler
- * Handles multi-step form, validation, and API communication
- */
-
 (function() {
     'use strict';
     
-    // State
     let currentStep = 1;
-    let formData = {};
     let emailCheckTimeout = null;
     
-    // DOM Elements
-    const form = document.getElementById('vendorRegistrationForm');
-    const alertContainer = document.getElementById('alert-container');
+    const form = document.getElementById('venVendorRegistrationForm');
+    const alertContainer = document.getElementById('venAlertContainer');
     
-    // Initialize
     document.addEventListener('DOMContentLoaded', init);
     
     function init() {
@@ -24,23 +15,24 @@
         setupPasswordToggle();
         setupEmailValidation();
         setupPhoneFormatting();
-        setupBusinessTypeHandler();
+        setupBusinessTypeValidation();
+        setupPricingValidation();
     }
     
     /**
-     * Setup form submission and validation
+     * Setup form event handlers
      */
     function setupFormHandlers() {
         if (!form) return;
         
         form.addEventListener('submit', handleSubmit);
         
-        // Real-time validation for all inputs
+        // Add validation on blur and input for error fields
         const inputs = form.querySelectorAll('input, textarea, select');
         inputs.forEach(input => {
             input.addEventListener('blur', () => validateField(input));
             input.addEventListener('input', () => {
-                if (input.classList.contains('error')) {
+                if (input.classList.contains('ven-error')) {
                     validateField(input);
                 }
             });
@@ -48,7 +40,7 @@
     }
     
     /**
-     * Validate individual field
+     * Validate individual form field
      */
     function validateField(field) {
         const value = field.value.trim();
@@ -56,13 +48,13 @@
         let isValid = true;
         let errorMessage = '';
         
-        // Required field check
+        // Check required fields
         if (field.hasAttribute('required') && !value) {
             isValid = false;
             errorMessage = 'This field is required';
         }
         
-        // Specific validations
+        // Specific field validations
         if (value) {
             switch(name) {
                 case 'email':
@@ -81,13 +73,6 @@
                     }
                     break;
                     
-                case 'website':
-                    if (!isValidURL(value)) {
-                        isValid = false;
-                        errorMessage = 'Please enter a valid URL (e.g., https://example.com)';
-                    }
-                    break;
-                    
                 case 'password':
                     const passwordValidation = validatePassword(value);
                     if (!passwordValidation.isValid) {
@@ -97,7 +82,7 @@
                     break;
                     
                 case 'confirm_password':
-                    const password = document.getElementById('password').value;
+                    const password = document.getElementById('venPassword').value;
                     if (value !== password) {
                         isValid = false;
                         errorMessage = 'Passwords do not match';
@@ -113,53 +98,61 @@
                     }
                     break;
                     
-                case 'capacity':
-                    if (value && (isNaN(value) || parseInt(value) <= 0)) {
+                case 'description':
+                    if (value.length < 20) {
                         isValid = false;
-                        errorMessage = 'Capacity must be a positive number';
+                        errorMessage = 'Description must be at least 20 characters';
+                    }
+                    break;
+                    
+                case 'website':
+                    if (!isValidURL(value)) {
+                        isValid = false;
+                        errorMessage = 'Please enter a valid URL (e.g., https://example.com)';
+                    }
+                    break;
+                    
+                case 'capacity':
+                    const capacity = parseInt(value);
+                    if (isNaN(capacity) || capacity < 1 || capacity > 10000) {
+                        isValid = false;
+                        errorMessage = 'Capacity must be between 1 and 10,000';
                     }
                     break;
                     
                 case 'base_price':
                 case 'price_per_person':
-                    if (value && (isNaN(value) || parseFloat(value) < 0)) {
+                    const price = parseFloat(value);
+                    if (isNaN(price) || price < 0) {
                         isValid = false;
-                        errorMessage = 'Price must be a valid positive number';
-                    }
-                    break;
-                    
-                case 'description':
-                    if (value.length < 20) {
-                        isValid = false;
-                        errorMessage = 'Description should be at least 20 characters';
+                        errorMessage = 'Price must be a positive number';
                     }
                     break;
             }
         }
         
-        // Update UI
         updateFieldStatus(field, isValid, errorMessage);
         return isValid;
     }
     
     /**
-     * Update field status visually
+     * Update field visual status
      */
     function updateFieldStatus(field, isValid, errorMessage) {
-        const errorElement = field.parentElement.querySelector('.error-message');
+        const errorElement = field.closest('.ven-form-group')?.querySelector('.ven-error-message');
         
         if (isValid) {
-            field.classList.remove('error');
-            field.classList.add('success');
+            field.classList.remove('ven-error');
+            field.classList.add('ven-success');
             if (errorElement) {
-                errorElement.classList.remove('active');
+                errorElement.classList.remove('ven-active');
             }
         } else {
-            field.classList.remove('success');
-            field.classList.add('error');
+            field.classList.remove('ven-success');
+            field.classList.add('ven-error');
             if (errorElement) {
                 errorElement.textContent = errorMessage;
-                errorElement.classList.add('active');
+                errorElement.classList.add('ven-active');
             }
         }
     }
@@ -193,10 +186,10 @@
     }
     
     /**
-     * Setup email availability check
+     * Setup email availability checking
      */
     function setupEmailValidation() {
-        const emailInput = document.getElementById('email');
+        const emailInput = document.getElementById('venEmail');
         if (!emailInput) return;
         
         emailInput.addEventListener('input', function() {
@@ -212,22 +205,20 @@
     }
     
     /**
-     * Check email availability via API
+     * Check if email is already registered
      */
     async function checkEmailAvailability(email) {
         try {
-            // const token = document.querySelector('meta[name="csrf-token"]').content;
-            const response = await fetch('/api/auth/check-email', {
+            const response = await fetch('/api/auth/checks-email', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    // 'X-CSRFToken': token
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ email })
             });
             
             const data = await response.json();
-            const emailInput = document.getElementById('email');
+            const emailInput = document.getElementById('venEmail');
             
             if (!data.available) {
                 updateFieldStatus(emailInput, false, 'This email is already registered');
@@ -241,7 +232,7 @@
      * Setup password strength indicator
      */
     function setupPasswordStrength() {
-        const passwordInput = document.getElementById('password');
+        const passwordInput = document.getElementById('venPassword');
         if (!passwordInput) return;
         
         passwordInput.addEventListener('input', function() {
@@ -253,7 +244,7 @@
     }
     
     /**
-     * Validate password and return strength
+     * Validate password against requirements
      */
     function validatePassword(password) {
         const requirements = {
@@ -277,16 +268,16 @@
     }
     
     /**
-     * Update password strength bar
+     * Update password strength visual indicator
      */
     function updatePasswordStrength(result) {
-        const strengthFill = document.querySelector('.strength-fill');
-        const strengthText = document.querySelector('.strength-text');
+        const strengthFill = document.querySelector('.ven-strength-fill');
+        const strengthText = document.querySelector('.ven-strength-text');
         
         if (!strengthFill || !strengthText) return;
         
-        strengthFill.className = 'strength-fill ' + result.strength;
-        strengthText.className = 'strength-text ' + result.strength;
+        strengthFill.className = 'ven-strength-fill ven-' + result.strength;
+        strengthText.className = 'ven-strength-text ven-' + result.strength;
         
         const strengthLabels = {
             weak: 'Weak',
@@ -302,12 +293,12 @@
      */
     function updatePasswordRequirements(result) {
         Object.entries(result.requirements).forEach(([key, met]) => {
-            const requirement = document.querySelector(`[data-requirement="${key}"]`);
+            const requirement = document.querySelector(`.ven-requirement[data-requirement="${key}"]`);
             if (requirement) {
                 if (met) {
-                    requirement.classList.add('met');
+                    requirement.classList.add('ven-met');
                 } else {
-                    requirement.classList.remove('met');
+                    requirement.classList.remove('ven-met');
                 }
             }
         });
@@ -317,19 +308,22 @@
      * Setup password visibility toggle
      */
     function setupPasswordToggle() {
-        const toggleButtons = document.querySelectorAll('.toggle-password');
+        const toggleButtons = document.querySelectorAll('.ven-toggle-password');
         
         toggleButtons.forEach(button => {
             button.addEventListener('click', function() {
                 const targetId = this.getAttribute('data-target');
                 const input = document.getElementById(targetId);
+                const icon = this.querySelector('i');
                 
                 if (input.type === 'password') {
                     input.type = 'text';
-                    this.querySelector('.eye-icon').textContent = '👁️‍🗨️';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
                 } else {
                     input.type = 'password';
-                    this.querySelector('.eye-icon').textContent = '👁️';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
                 }
             });
         });
@@ -344,7 +338,7 @@
         phoneInputs.forEach(input => {
             input.addEventListener('input', function(e) {
                 let value = e.target.value.replace(/\D/g, '');
-                if (value.length > 0 && !value.startsWith('+')) {
+                if (value.length > 0 && !e.target.value.startsWith('+')) {
                     value = '+' + value;
                 }
                 e.target.value = value;
@@ -353,58 +347,77 @@
     }
     
     /**
-     * Setup business type change handler
+     * Setup business type validation
      */
-    function setupBusinessTypeHandler() {
-        const businessTypeSelect = document.getElementById('business_type');
+    function setupBusinessTypeValidation() {
+        const businessTypeSelect = document.getElementById('venBusinessType');
         if (!businessTypeSelect) return;
         
         businessTypeSelect.addEventListener('change', function() {
-            console.log('Business type selected:', this.value);
-            // Could add conditional field visibility based on business type
+            validateField(this);
+        });
+    }
+    
+    /**
+     * Setup pricing field validation
+     */
+    function setupPricingValidation() {
+        const priceFields = ['venBasePrice', 'venPricePerson'];
+        
+        priceFields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (!field) return;
+            
+            field.addEventListener('input', function() {
+                // Allow only numbers and decimal point
+                this.value = this.value.replace(/[^0-9.]/g, '');
+                
+                // Prevent multiple decimal points
+                const parts = this.value.split('.');
+                if (parts.length > 2) {
+                    this.value = parts[0] + '.' + parts.slice(1).join('');
+                }
+                
+                // Limit to 2 decimal places
+                if (parts.length === 2 && parts[1].length > 2) {
+                    this.value = parts[0] + '.' + parts[1].substring(0, 2);
+                }
+            });
         });
     }
     
     /**
      * Navigate to next step
      */
-    window.nextStep = function(stepNumber) {
-        // Validate current step
+    window.venNextStep = function(stepNumber) {
         if (!validateStep(currentStep)) {
             showAlert('error', 'Please fill in all required fields correctly');
             return;
         }
         
-        // Update progress
         updateStepProgress(currentStep, 'completed');
         currentStep = stepNumber;
         updateStepProgress(currentStep, 'active');
-        
-        // Show new step
         showStep(stepNumber);
-        
-        // Scroll to top
-        document.querySelector('.form-panel').scrollTop = 0;
+        scrollToTop();
     };
     
     /**
      * Navigate to previous step
      */
-    window.previousStep = function(stepNumber) {
-        // Remove completed status from current step if going back
+    window.venPreviousStep = function(stepNumber) {
         updateStepProgress(currentStep, '');
-        
         currentStep = stepNumber;
         updateStepProgress(currentStep, 'active');
         showStep(stepNumber);
-        document.querySelector('.form-panel').scrollTop = 0;
+        scrollToTop();
     };
     
     /**
-     * Validate all fields in a step
+     * Validate all fields in current step
      */
     function validateStep(stepNumber) {
-        const stepElement = document.querySelector(`.form-step[data-step="${stepNumber}"]`);
+        const stepElement = document.querySelector(`.ven-form-step[data-step="${stepNumber}"]`);
         const inputs = stepElement.querySelectorAll('input[required], textarea[required], select[required]');
         let isValid = true;
         
@@ -418,29 +431,39 @@
     }
     
     /**
-     * Show specific step
+     * Show specific form step
      */
     function showStep(stepNumber) {
-        document.querySelectorAll('.form-step').forEach(step => {
+        document.querySelectorAll('.ven-form-step').forEach(step => {
             step.classList.remove('active');
         });
         
-        const targetStep = document.querySelector(`.form-step[data-step="${stepNumber}"]`);
+        const targetStep = document.querySelector(`.ven-form-step[data-step="${stepNumber}"]`);
         if (targetStep) {
             targetStep.classList.add('active');
         }
     }
     
     /**
-     * Update step progress indicator
+     * Update progress indicator
      */
     function updateStepProgress(stepNumber, status) {
-        const stepElement = document.querySelector(`.progress-step[data-step="${stepNumber}"]`);
+        const stepElement = document.querySelector(`.ven-progress-step[data-step="${stepNumber}"]`);
         if (!stepElement) return;
         
         stepElement.classList.remove('active', 'completed');
         if (status) {
             stepElement.classList.add(status);
+        }
+    }
+    
+    /**
+     * Scroll to top of form panel
+     */
+    function scrollToTop() {
+        const formPanel = document.querySelector('.ven-form-panel');
+        if (formPanel) {
+            formPanel.scrollTop = 0;
         }
     }
     
@@ -451,19 +474,13 @@
         e.preventDefault();
         
         // Validate all steps
-        for (let i = 1; i <= 4; i++) {
-            if (!validateStep(i)) {
-                showAlert('error', `Please complete all required fields in step ${i}`);
-                // Navigate to the step with errors
-                currentStep = i;
-                showStep(i);
-                updateStepProgress(i, 'active');
-                return;
-            }
+        if (!validateStep(1) || !validateStep(2) || !validateStep(3) || !validateStep(4)) {
+            showAlert('error', 'Please complete all required fields correctly');
+            return;
         }
         
         // Check terms agreement
-        const termsCheckbox = document.getElementById('terms');
+        const termsCheckbox = document.getElementById('venTerms');
         if (!termsCheckbox.checked) {
             showAlert('error', 'Please agree to the Terms of Service and Privacy Policy');
             return;
@@ -471,28 +488,37 @@
         
         // Collect form data
         const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
+        const data = {};
         
-        // Parse specializations into array
-        if (data.specializations) {
-            data.specializations = data.specializations
-                .split(',')
-                .map(s => s.trim())
-                .filter(s => s.length > 0);
+        // Convert FormData to JSON object
+        for (let [key, value] of formData.entries()) {
+            if (key === 'terms') continue; // Don't send terms checkbox
+            
+            // Handle specializations as array
+            if (key === 'specializations' && value) {
+                data[key] = value.split(',').map(s => s.trim()).filter(s => s);
+            }
+            // Handle numeric fields
+            else if (['capacity', 'base_price', 'price_per_person'].includes(key)) {
+                if (value) {
+                    data[key] = key === 'capacity' ? parseInt(value) : parseFloat(value);
+                }
+            }
+            // Handle empty optional fields
+            else if (value.trim()) {
+                data[key] = value.trim();
+            }
         }
         
-        // Show loading state
-        const submitButton = form.querySelector('.btn-submit');
-        submitButton.classList.add('loading');
+        const submitButton = form.querySelector('.ven-btn-submit');
+        submitButton.classList.add('ven-loading');
         submitButton.disabled = true;
         
         try {
-            // const token = document.querySelector('meta[name="csrf-token"]').content;
             const response = await fetch('/api/auth/register/vendor', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    // 'X-CSRFToken': token
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(data)
             });
@@ -500,50 +526,57 @@
             const result = await response.json();
             
             if (response.ok && result.success) {
-                showAlert('success', result.message);
+                showAlert('success', result.message || 'Vendor account created successfully!');
                 
-                // Redirect after delay
+                // Redirect after brief delay
                 setTimeout(() => {
-                    window.location.href = result.redirect_url;
+                    window.location.href = result.redirect_url || '/vendor/dashboard';
                 }, 1500);
             } else {
                 showAlert('error', result.message || 'Registration failed. Please try again.');
-                submitButton.classList.remove('loading');
+                submitButton.classList.remove('ven-loading');
                 submitButton.disabled = false;
             }
         } catch (error) {
             console.error('Registration error:', error);
-            showAlert('error', 'An error occurred. Please try again.');
-            submitButton.classList.remove('loading');
+            showAlert('error', 'An error occurred. Please check your connection and try again.');
+            submitButton.classList.remove('ven-loading');
             submitButton.disabled = false;
         }
     }
     
     /**
-     * Show alert message
+     * Display alert message
      */
     function showAlert(type, message) {
         const alert = document.createElement('div');
-        alert.className = `alert alert-${type}`;
+        alert.className = `ven-alert ven-alert-${type}`;
         
-        const icon = type === 'success' ? '✓' : '⚠';
+        const icon = type === 'success' 
+            ? '<i class="fas fa-check-circle"></i>' 
+            : '<i class="fas fa-exclamation-circle"></i>';
         
         alert.innerHTML = `
-            <span class="alert-icon">${icon}</span>
-            <div class="alert-content">
-                <div class="alert-title">${type === 'success' ? 'Success' : 'Error'}</div>
+            <span class="ven-alert-icon">${icon}</span>
+            <div class="ven-alert-content">
+                <div class="ven-alert-title">${type === 'success' ? 'Success' : 'Error'}</div>
                 <div>${message}</div>
             </div>
+            <button class="ven-alert-close" onclick="this.parentElement.remove()">
+                <i class="fas fa-times"></i>
+            </button>
         `;
         
         alertContainer.innerHTML = '';
         alertContainer.appendChild(alert);
         
-        // Auto remove after 5 seconds
+        // Auto-remove after 5 seconds
         setTimeout(() => {
             alert.style.opacity = '0';
             setTimeout(() => alert.remove(), 300);
         }, 5000);
+        
+        // Scroll alert into view
+        alertContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
-    
 })();

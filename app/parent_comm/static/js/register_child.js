@@ -645,3 +645,27 @@ document.addEventListener('keydown', function(e) {
         }
     }
 });
+
+window.RegisterChildModal = {
+    open: async function(tripId) {
+        await openTripRegistrationModal(tripId);
+    }
+};
+window.refreshTripsDisplay = function() {
+    if (window.TripsManager && typeof TripsManager.refreshTrips === 'function') {
+        TripsManager.refreshTrips();
+    }
+};
+
+window.refreshRegistrations = function() {
+    if (window.TripsManager && typeof TripsManager.refreshRegistrations === 'function') {
+        TripsManager.refreshRegistrations();
+    }
+};
+
+if (typeof refreshTripsDisplay === 'function') {
+    refreshTripsDisplay();
+}
+if (typeof refreshRegistrations === 'function') {
+    refreshRegistrations();
+}

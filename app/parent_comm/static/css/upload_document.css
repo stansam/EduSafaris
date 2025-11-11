@@ -1,0 +1,211 @@
+.form-child-input,
+.form-child-textarea,
+.form-child-select {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    width: 100%;
+    background-color: #fff;
+    color: #333;
+}
+
+.form-child-input:focus,
+.form-child-textarea:focus,
+.form-child-select:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.15);
+}
+
+.form-child-textarea {
+    resize: vertical;
+}
+
+/* --- Validation Errors --- */
+.form-child-error {
+    color: #e74c3c;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+/* --- File Upload Area --- */
+.file-child-upload-area {
+    border: 2px dashed #bfc9ca;
+    border-radius: 10px;
+    padding: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.3s ease, border-color 0.3s ease;
+    background: #f8f9fa;
+}
+
+.file-child-upload-area:hover {
+    background: #f0f8ff;
+    border-color: #3498db;
+}
+
+.file-child-upload-area.dragover {
+    background: #eaf6ff;
+    border-color: #2980b9;
+}
+
+.file-child-upload-icon {
+    font-size: 2rem;
+    color: #3498db;
+    margin-bottom: 0.5rem;
+}
+
+.file-child-upload-text {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.file-child-upload-hint {
+    font-size: 0.85rem;
+    color: #7f8c8d;
+    margin-top: 0.3rem;
+}
+
+/* --- File Selected Display --- */
+.file-child-selected {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ecf9ec;
+    border: 1px solid #b5e0b5;
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+}
+
+.file-child-selected i {
+    color: #27ae60;
+    font-size: 1.3rem;
+}
+
+.file-child-selected-info {
+    flex-grow: 1;
+    margin-left: 0.75rem;
+}
+
+.file-child-selected-name {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 0.95rem;
+}
+
+.file-child-selected-size {
+    font-size: 0.85rem;
+    color: #7f8c8d;
+}
+
+.document-child-btn {
+    border: none;
+    background: #e74c3c;
+    color: #fff;
+    padding: 0.5rem 0.6rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.document-child-btn:hover {
+    background: #c0392b;
+}
+
+/* --- Progress Bar --- */
+#uploadDocProgress {
+    margin-top: 10px;
+}
+
+#uploadDocProgressBar {
+    height: 8px;
+    background: #3498db;
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+#uploadDocProgressText {
+    text-align: center;
+    margin-top: 8px;
+    color: #7f8c8d;
+    font-size: 0.85rem;
+}
+
+/* --- Buttons --- */
+.modal-child-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.btn-child-cancel,
+.btn-child-submit {
+    border: none;
+    padding: 0.7rem 1.2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.95rem;
+    transition: background 0.3s ease, transform 0.1s ease;
+}
+
+.btn-child-cancel {
+    background: #bdc3c7;
+    color: #2c3e50;
+}
+
+.btn-child-cancel:hover {
+    background: #95a5a6;
+}
+
+.btn-child-submit {
+    background: #3498db;
+    color: #fff;
+}
+
+.btn-child-submit:hover {
+    background: #2980b9;
+}
+
+.btn-child-submit.loading {
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+/* --- Responsiveness --- */
+@media (max-width: 600px) {
+    .modal-child-container {
+        width: 100%;
+        max-width: 95%;
+    }
+
+    .modal-child-header h2 {
+        font-size: 1rem;
+    }
+
+    .form-child-section {
+        padding: 1rem;
+    }
+
+    .btn-child-cancel,
+    .btn-child-submit {
+        flex: 1;
+        justify-content: center;
+    }
+
+    .modal-child-actions {
+        flex-direction: column-reverse;
+    }
+
+    .file-child-upload-icon {
+        font-size: 1.8rem;
+    }
+}

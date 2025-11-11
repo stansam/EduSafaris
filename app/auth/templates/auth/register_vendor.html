@@ -4,24 +4,25 @@
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('auth.static', filename='css/register_vendor.css') }}">
+<link rel="stylesheet" href="{{ url_for('auth.static', filename='css/reg1.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 {% endblock %}
 
 {% block content %}
-<div class="registration-wrapper">
-    <div class="registration-container">
+<div class="ven-registration-wrapper">
+    <div class="ven-registration-container">
         <!-- Left Panel -->
-        <div class="info-panel">
-            <div class="info-content">
-                <div class="logo-section">
-                    <a href="{{ url_for('main.index') }}" class="back-link">← Back to Home</a>
+        <div class="ven-info-panel">
+            <div class="ven-info-content">
+                <div class="ven-logo-section">
+                    <a href="{{ url_for('main.index') }}" class="ven-back-link">
+                        <i class="fas fa-arrow-left"></i> Back to Home
+                    </a>
                 </div>
                 
-                <div class="illustration">
+                <div class="ven-illustration">
                     <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Background -->
                         <circle cx="200" cy="200" r="180" fill="#8b5cf6" opacity="0.1"/>
-                        
-                        <!-- Business building -->
                         <rect x="120" y="150" width="160" height="180" fill="#8b5cf6" rx="10"/>
                         <rect x="135" y="170" width="30" height="35" fill="#a78bfa"/>
                         <rect x="185" y="170" width="30" height="35" fill="#a78bfa"/>
@@ -29,62 +30,38 @@
                         <rect x="135" y="220" width="30" height="35" fill="#a78bfa"/>
                         <rect x="185" y="220" width="30" height="35" fill="#a78bfa"/>
                         <rect x="235" y="220" width="30" height="35" fill="#a78bfa"/>
-                        
-                        <!-- Door -->
                         <rect x="175" y="280" width="50" height="50" fill="#c084fc" rx="5"/>
                         <circle cx="215" cy="305" r="3" fill="#fbbf24"/>
-                        
-                        <!-- Awning -->
                         <path d="M 110 150 L 120 140 L 280 140 L 290 150 Z" fill="#c084fc"/>
-                        
-                        <!-- Sign -->
                         <rect x="160" y="100" width="80" height="30" fill="#fbbf24" rx="5"/>
-                        <text x="200" y="120" text-anchor="middle" fill="#8b5cf6" font-size="16" font-weight="bold">VENDOR</text>
-                        
-                        <!-- People/customers -->
                         <circle cx="80" cy="280" r="18" fill="#6366f1"/>
                         <rect x="68" y="298" width="24" height="35" rx="12" fill="#818cf8"/>
-                        
                         <circle cx="320" cy="290" r="18" fill="#ec4899"/>
                         <rect x="308" y="308" width="24" height="35" rx="12" fill="#f472b6"/>
-                        
-                        <!-- Decorative stars -->
                         <path d="M60,100 L65,115 L80,120 L65,125 L60,140 L55,125 L40,120 L55,115 Z" fill="#fbbf24" opacity="0.7"/>
                         <path d="M340,130 L343,140 L353,143 L343,146 L340,156 L337,146 L327,143 L337,140 Z" fill="#10b981" opacity="0.7"/>
                     </svg>
                 </div>
                 
-                <div class="info-text">
+                <div class="ven-info-text">
                     <h1>Grow Your Business</h1>
                     <p>Partner with schools and expand your reach in the educational travel sector.</p>
                     
-                    <div class="benefits">
-                        <div class="benefit-item">
-                            <span class="benefit-icon">
-                                <!-- 🎯 -->
-                                 <img src="{{url_for('main.static', filename='main/assets/bullseye-arrow.png')}}" alt="Bullseye icon" width="31" height="31">
-                            </span>
+                    <div class="ven-benefits">
+                        <div class="ven-benefit-item">
+                            <span class="ven-benefit-icon"><i class="fas fa-bullseye"></i></span>
                             <span>Direct School Access</span>
                         </div>
-                        <div class="benefit-item">
-                            <span class="benefit-icon">
-                                <!-- 📊 -->
-                                 <i class="fas fa-square-poll-vertical"></i>
-                            </span>
+                        <div class="ven-benefit-item">
+                            <span class="ven-benefit-icon"><i class="fas fa-chart-line"></i></span>
                             <span>Booking Management</span>
                         </div>
-                        <div class="benefit-item">
-                            <span class="benefit-icon">
-                                <!-- 💰 -->
-                                 <i class="fas fa-sack-dollar"></i>
-                            </span>
+                        <div class="ven-benefit-item">
+                            <span class="ven-benefit-icon"><i class="fas fa-sack-dollar"></i></span>
                             <span>Revenue Tracking</span>
                         </div>
-                        <div class="benefit-item">
-                            <span class="benefit-icon">
-                                <!-- ⭐ -->
-                                 <i class="fas fa-star"></i>
-                            </span>
+                        <div class="ven-benefit-item">
+                            <span class="ven-benefit-icon"><i class="fas fa-star"></i></span>
                             <span>Build Reputation</span>
                         </div>
                     </div>
@@ -93,89 +70,89 @@
         </div>
 
         <!-- Right Panel - Form -->
-        <div class="form-panel">
-            <div class="form-container">
-                <div class="form-header">
+        <div class="ven-form-panel">
+            <div class="ven-form-container">
+                <div class="ven-form-header">
                     <h2>Create Vendor Account</h2>
                     <p>Register your business with us</p>
                 </div>
 
-                <div id="alert-container"></div>
+                <div id="venAlertContainer"></div>
 
-                <form id="vendorRegistrationForm" class="registration-form" novalidate>
+                <form id="venVendorRegistrationForm" class="ven-registration-form" novalidate>
                     <!-- Progress Indicator -->
-                    <div class="progress-indicator">
-                        <div class="progress-step active" data-step="1">
-                            <div class="step-number">1</div>
-                            <div class="step-label">Personal</div>
+                    <div class="ven-progress-indicator">
+                        <div class="ven-progress-step active" data-step="1">
+                            <div class="ven-step-number">1</div>
+                            <div class="ven-step-label">Personal</div>
                         </div>
-                        <div class="progress-line"></div>
-                        <div class="progress-step" data-step="2">
-                            <div class="step-number">2</div>
-                            <div class="step-label">Business</div>
+                        <div class="ven-progress-line"></div>
+                        <div class="ven-progress-step" data-step="2">
+                            <div class="ven-step-number">2</div>
+                            <div class="ven-step-label">Business</div>
                         </div>
-                        <div class="progress-line"></div>
-                        <div class="progress-step" data-step="3">
-                            <div class="step-number">3</div>
-                            <div class="step-label">Details</div>
+                        <div class="ven-progress-line"></div>
+                        <div class="ven-progress-step" data-step="3">
+                            <div class="ven-step-number">3</div>
+                            <div class="ven-step-label">Details</div>
                         </div>
-                        <div class="progress-line"></div>
-                        <div class="progress-step" data-step="4">
-                            <div class="step-number">4</div>
-                            <div class="step-label">Security</div>
+                        <div class="ven-progress-line"></div>
+                        <div class="ven-progress-step" data-step="4">
+                            <div class="ven-step-number">4</div>
+                            <div class="ven-step-label">Security</div>
                         </div>
                     </div>
 
                     <!-- Step 1: Personal Information -->
-                    <div class="form-step active" data-step="1">
-                        <h3 class="step-title">Personal Information</h3>
+                    <div class="ven-form-step active" data-step="1">
+                        <h3 class="ven-step-title">Personal Information</h3>
                         
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="first_name">First Name <span class="required">*</span></label>
-                                <input type="text" id="first_name" name="first_name" required>
-                                <span class="error-message"></span>
+                        <div class="ven-form-row">
+                            <div class="ven-form-group">
+                                <label for="venFirstName">First Name <span class="ven-required">*</span></label>
+                                <input type="text" id="venFirstName" name="first_name" required>
+                                <span class="ven-error-message"></span>
                             </div>
 
-                            <div class="form-group">
-                                <label for="last_name">Last Name <span class="required">*</span></label>
-                                <input type="text" id="last_name" name="last_name" required>
-                                <span class="error-message"></span>
+                            <div class="ven-form-group">
+                                <label for="venLastName">Last Name <span class="ven-required">*</span></label>
+                                <input type="text" id="venLastName" name="last_name" required>
+                                <span class="ven-error-message"></span>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="email">Email Address <span class="required">*</span></label>
-                            <input type="email" id="email" name="email" required>
-                            <span class="error-message"></span>
-                            <span class="input-hint">Your personal email for account access</span>
+                        <div class="ven-form-group">
+                            <label for="venEmail">Email Address <span class="ven-required">*</span></label>
+                            <input type="email" id="venEmail" name="email" required>
+                            <span class="ven-error-message"></span>
+                            <span class="ven-input-hint">Your personal email for account access</span>
                         </div>
 
-                        <div class="form-group">
-                            <label for="phone">Phone Number <span class="required">*</span></label>
-                            <input type="tel" id="phone" name="phone" placeholder="+1234567890" required>
-                            <span class="error-message"></span>
+                        <div class="ven-form-group">
+                            <label for="venPhone">Phone Number <span class="ven-required">*</span></label>
+                            <input type="tel" id="venPhone" name="phone" placeholder="+1234567890" required>
+                            <span class="ven-error-message"></span>
                         </div>
 
-                        <div class="form-actions">
-                            <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url_for('auth.register') }}'">Back</button>
-                            <button type="button" class="btn btn-primary" onclick="nextStep(2)">Next Step</button>
+                        <div class="ven-form-actions">
+                            <button type="button" class="ven-btn ven-btn-secondary" onclick="window.location.href='{{ url_for('auth.register') }}'">Back</button>
+                            <button type="button" class="ven-btn ven-btn-primary" onclick="venNextStep(2)">Next Step</button>
                         </div>
                     </div>
 
                     <!-- Step 2: Business Information -->
-                    <div class="form-step" data-step="2">
-                        <h3 class="step-title">Business Information</h3>
+                    <div class="ven-form-step" data-step="2">
+                        <h3 class="ven-step-title">Business Information</h3>
                         
-                        <div class="form-group">
-                            <label for="business_name">Business Name <span class="required">*</span></label>
-                            <input type="text" id="business_name" name="business_name" required>
-                            <span class="error-message"></span>
+                        <div class="ven-form-group">
+                            <label for="venBusinessName">Business Name <span class="ven-required">*</span></label>
+                            <input type="text" id="venBusinessName" name="business_name" required>
+                            <span class="ven-error-message"></span>
                         </div>
 
-                        <div class="form-group">
-                            <label for="business_type">Business Type <span class="required">*</span></label>
-                            <select id="business_type" name="business_type" required>
+                        <div class="ven-form-group">
+                            <label for="venBusinessType">Business Type <span class="ven-required">*</span></label>
+                            <select id="venBusinessType" name="business_type" required>
                                 <option value="">Select business type</option>
                                 <option value="transportation">Transportation</option>
                                 <option value="accommodation">Accommodation</option>
@@ -184,214 +161,208 @@
                                 <option value="equipment">Equipment Rental</option>
                                 <option value="other">Other Services</option>
                             </select>
-                            <span class="error-message"></span>
+                            <span class="ven-error-message"></span>
                         </div>
 
-                        <div class="form-group">
-                            <label for="description">Business Description <span class="required">*</span></label>
-                            <textarea id="description" name="description" rows="4" placeholder="Describe your business and services..." required></textarea>
-                            <span class="error-message"></span>
+                        <div class="ven-form-group">
+                            <label for="venDescription">Business Description <span class="ven-required">*</span></label>
+                            <textarea id="venDescription" name="description" rows="4" placeholder="Describe your business and services..." required></textarea>
+                            <span class="ven-error-message"></span>
+                            <span class="ven-input-hint">Minimum 20 characters</span>
                         </div>
 
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="contact_email">Business Email <span class="required">*</span></label>
-                                <input type="email" id="contact_email" name="contact_email" required>
-                                <span class="error-message"></span>
+                        <div class="ven-form-row">
+                            <div class="ven-form-group">
+                                <label for="venContactEmail">Business Email <span class="ven-required">*</span></label>
+                                <input type="email" id="venContactEmail" name="contact_email" required>
+                                <span class="ven-error-message"></span>
                             </div>
 
-                            <div class="form-group">
-                                <label for="contact_phone">Business Phone <span class="required">*</span></label>
-                                <input type="tel" id="contact_phone" name="contact_phone" placeholder="+1234567890" required>
-                                <span class="error-message"></span>
+                            <div class="ven-form-group">
+                                <label for="venContactPhone">Business Phone <span class="ven-required">*</span></label>
+                                <input type="tel" id="venContactPhone" name="contact_phone" placeholder="+1234567890" required>
+                                <span class="ven-error-message"></span>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="website">Website</label>
-                            <input type="url" id="website" name="website" placeholder="https://www.example.com">
-                            <span class="error-message"></span>
+                        <div class="ven-form-group">
+                            <label for="venWebsite">Website</label>
+                            <input type="url" id="venWebsite" name="website" placeholder="https://www.example.com">
+                            <span class="ven-error-message"></span>
                         </div>
 
-                        <div class="form-actions">
-                            <button type="button" class="btn btn-secondary" onclick="previousStep(1)">Previous</button>
-                            <button type="button" class="btn btn-primary" onclick="nextStep(3)">Next Step</button>
+                        <div class="ven-form-actions">
+                            <button type="button" class="ven-btn ven-btn-secondary" onclick="venPreviousStep(1)">Previous</button>
+                            <button type="button" class="ven-btn ven-btn-primary" onclick="venNextStep(3)">Next Step</button>
                         </div>
                     </div>
 
                     <!-- Step 3: Business Details -->
-                    <div class="form-step" data-step="3">
-                        <h3 class="step-title">Business Details & Location</h3>
+                    <div class="ven-form-step" data-step="3">
+                        <h3 class="ven-step-title">Business Details & Location</h3>
                         
-                        <div class="form-group">
-                            <label for="address_line1">Address Line 1</label>
-                            <input type="text" id="address_line1" name="address_line1">
-                            <span class="error-message"></span>
+                        <div class="ven-form-group">
+                            <label for="venAddress1">Address Line 1</label>
+                            <input type="text" id="venAddress1" name="address_line1">
+                            <span class="ven-error-message"></span>
                         </div>
 
-                        <div class="form-group">
-                            <label for="address_line2">Address Line 2</label>
-                            <input type="text" id="address_line2" name="address_line2">
-                            <span class="error-message"></span>
+                        <div class="ven-form-group">
+                            <label for="venAddress2">Address Line 2</label>
+                            <input type="text" id="venAddress2" name="address_line2">
+                            <span class="ven-error-message"></span>
                         </div>
 
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="city">City <span class="required">*</span></label>
-                                <input type="text" id="city" name="city" required>
-                                <span class="error-message"></span>
+                        <div class="ven-form-row">
+                            <div class="ven-form-group">
+                                <label for="venCity">City <span class="ven-required">*</span></label>
+                                <input type="text" id="venCity" name="city" required>
+                                <span class="ven-error-message"></span>
                             </div>
 
-                            <div class="form-group">
-                                <label for="state">State/Province</label>
-                                <input type="text" id="state" name="state">
-                                <span class="error-message"></span>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="postal_code">Postal Code</label>
-                                <input type="text" id="postal_code" name="postal_code">
-                                <span class="error-message"></span>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="country">Country <span class="required">*</span></label>
-                                <input type="text" id="country" name="country" required>
-                                <span class="error-message"></span>
+                            <div class="ven-form-group">
+                                <label for="venState">State/Province</label>
+                                <input type="text" id="venState" name="state">
+                                <span class="ven-error-message"></span>
                             </div>
                         </div>
 
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="capacity">Capacity</label>
-                                <input type="number" id="capacity" name="capacity" min="1" placeholder="Maximum capacity">
-                                <span class="error-message"></span>
-                                <span class="input-hint">Maximum number of people you can accommodate</span>
+                        <div class="ven-form-row">
+                            <div class="ven-form-group">
+                                <label for="venPostalCode">Postal Code</label>
+                                <input type="text" id="venPostalCode" name="postal_code">
+                                <span class="ven-error-message"></span>
                             </div>
 
-                            <div class="form-group">
-                                <label for="license_number">License Number</label>
-                                <input type="text" id="license_number" name="license_number">
-                                <span class="error-message"></span>
+                            <div class="ven-form-group">
+                                <label for="venCountry">Country <span class="ven-required">*</span></label>
+                                <input type="text" id="venCountry" name="country" required>
+                                <span class="ven-error-message"></span>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="specializations">Specializations</label>
-                            <input type="text" id="specializations" name="specializations" placeholder="e.g., School trips, Sports events, Cultural tours">
-                            <span class="error-message"></span>
-                            <span class="input-hint">Separate multiple items with commas</span>
+                        <div class="ven-form-row">
+                            <div class="ven-form-group">
+                                <label for="venCapacity">Capacity</label>
+                                <input type="number" id="venCapacity" name="capacity" min="1" placeholder="Maximum capacity">
+                                <span class="ven-error-message"></span>
+                            </div>
+
+                            <div class="ven-form-group">
+                                <label for="venLicense">License Number</label>
+                                <input type="text" id="venLicense" name="license_number">
+                                <span class="ven-error-message"></span>
+                            </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="insurance_details">Insurance Details</label>
-                            <textarea id="insurance_details" name="insurance_details" rows="3" placeholder="Provide your insurance information..."></textarea>
-                            <span class="error-message"></span>
+                        <div class="ven-form-group">
+                            <label for="venSpecializations">Specializations</label>
+                            <input type="text" id="venSpecializations" name="specializations" placeholder="e.g., School trips, Sports events, Cultural tours">
+                            <span class="ven-error-message"></span>
+                            <span class="ven-input-hint">Separate multiple items with commas</span>
                         </div>
 
-                        <div class="pricing-section">
-                            <h4 class="subsection-title">Pricing Information (Optional)</h4>
+                        <div class="ven-form-group">
+                            <label for="venInsurance">Insurance Details</label>
+                            <textarea id="venInsurance" name="insurance_details" rows="3" placeholder="Provide your insurance information..."></textarea>
+                            <span class="ven-error-message"></span>
+                        </div>
+
+                        <div class="ven-pricing-section">
+                            <h4 class="ven-subsection-title">Pricing Information (Optional)</h4>
                             
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="base_price">Base Price ($)</label>
-                                    <input type="number" id="base_price" name="base_price" min="0" step="0.01" placeholder="0.00">
-                                    <span class="error-message"></span>
+                            <div class="ven-form-row">
+                                <div class="ven-form-group">
+                                    <label for="venBasePrice">Base Price ($)</label>
+                                    <input type="number" id="venBasePrice" name="base_price" min="0" step="0.01" placeholder="0.00">
+                                    <span class="ven-error-message"></span>
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="price_per_person">Price Per Person ($)</label>
-                                    <input type="number" id="price_per_person" name="price_per_person" min="0" step="0.01" placeholder="0.00">
-                                    <span class="error-message"></span>
+                                <div class="ven-form-group">
+                                    <label for="venPricePerson">Price Per Person ($)</label>
+                                    <input type="number" id="venPricePerson" name="price_per_person" min="0" step="0.01" placeholder="0.00">
+                                    <span class="ven-error-message"></span>
                                 </div>
                             </div>
 
-                            <div class="form-group">
-                                <label for="pricing_notes">Pricing Notes</label>
-                                <textarea id="pricing_notes" name="pricing_notes" rows="2" placeholder="Additional pricing information or conditions..."></textarea>
-                                <span class="error-message"></span>
+                            <div class="ven-form-group">
+                                <label for="venPricingNotes">Pricing Notes</label>
+                                <textarea id="venPricingNotes" name="pricing_notes" rows="2" placeholder="Additional pricing information..."></textarea>
+                                <span class="ven-error-message"></span>
                             </div>
                         </div>
 
-                        <div class="form-actions">
-                            <button type="button" class="btn btn-secondary" onclick="previousStep(2)">Previous</button>
-                            <button type="button" class="btn btn-primary" onclick="nextStep(4)">Next Step</button>
+                        <div class="ven-form-actions">
+                            <button type="button" class="ven-btn ven-btn-secondary" onclick="venPreviousStep(2)">Previous</button>
+                            <button type="button" class="ven-btn ven-btn-primary" onclick="venNextStep(4)">Next Step</button>
                         </div>
                     </div>
 
                     <!-- Step 4: Security -->
-                    <div class="form-step" data-step="4">
-                        <h3 class="step-title">Account Security</h3>
+                    <div class="ven-form-step" data-step="4">
+                        <h3 class="ven-step-title">Account Security</h3>
                         
-                        <div class="form-group">
-                            <label for="password">Password <span class="required">*</span></label>
-                            <div class="password-input-wrapper">
-                                <input type="password" id="password" name="password" required>
-                                <button type="button" class="toggle-password" data-target="password">
-                                    <span class="eye-icon">
-                                        <!-- 👁️ -->
-                                         <i class="fas fa-eye"></i>
-                                    </span>
+                        <div class="ven-form-group">
+                            <label for="venPassword">Password <span class="ven-required">*</span></label>
+                            <div class="ven-password-input-wrapper">
+                                <input type="password" id="venPassword" name="password" required>
+                                <button type="button" class="ven-toggle-password" data-target="venPassword">
+                                    <i class="fas fa-eye"></i>
                                 </button>
                             </div>
-                            <span class="error-message"></span>
-                            <div class="password-strength">
-                                <div class="strength-bar">
-                                    <div class="strength-fill"></div>
+                            <span class="ven-error-message"></span>
+                            <div class="ven-password-strength">
+                                <div class="ven-strength-bar">
+                                    <div class="ven-strength-fill"></div>
                                 </div>
-                                <span class="strength-text"></span>
+                                <span class="ven-strength-text"></span>
                             </div>
-                            <div class="password-requirements">
-                                <div class="requirement" data-requirement="length">
-                                    <span class="requirement-icon">○</span>
+                            <div class="ven-password-requirements">
+                                <div class="ven-requirement" data-requirement="length">
+                                    <span class="ven-requirement-icon">○</span>
                                     <span>At least 8 characters</span>
                                 </div>
-                                <div class="requirement" data-requirement="uppercase">
-                                    <span class="requirement-icon">○</span>
+                                <div class="ven-requirement" data-requirement="uppercase">
+                                    <span class="ven-requirement-icon">○</span>
                                     <span>One uppercase letter</span>
                                 </div>
-                                <div class="requirement" data-requirement="lowercase">
-                                    <span class="requirement-icon">○</span>
+                                <div class="ven-requirement" data-requirement="lowercase">
+                                    <span class="ven-requirement-icon">○</span>
                                     <span>One lowercase letter</span>
                                 </div>
-                                <div class="requirement" data-requirement="number">
-                                    <span class="requirement-icon">○</span>
+                                <div class="ven-requirement" data-requirement="number">
+                                    <span class="ven-requirement-icon">○</span>
                                     <span>One number</span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="confirm_password">Confirm Password <span class="required">*</span></label>
-                            <div class="password-input-wrapper">
-                                <input type="password" id="confirm_password" name="confirm_password" required>
-                                <button type="button" class="toggle-password" data-target="confirm_password">
-                                    <span class="eye-icon">
-                                        <!-- 👁️ -->
-                                         <i class="fas fa-eye"></i>
-                                    </span>
+                        <div class="ven-form-group">
+                            <label for="venConfirmPassword">Confirm Password <span class="ven-required">*</span></label>
+                            <div class="ven-password-input-wrapper">
+                                <input type="password" id="venConfirmPassword" name="confirm_password" required>
+                                <button type="button" class="ven-toggle-password" data-target="venConfirmPassword">
+                                    <i class="fas fa-eye"></i>
                                 </button>
                             </div>
-                            <span class="error-message"></span>
+                            <span class="ven-error-message"></span>
                         </div>
 
-                        <div class="form-group checkbox-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" id="terms" name="terms" required>
-                                <span class="checkbox-custom"></span>
-                                <span class="checkbox-text">I agree to the <a href="#" target="_blank">Terms of Service</a> and <a href="#" target="_blank">Privacy Policy</a> <span class="required">*</span></span>
+                        <div class="ven-form-group ven-checkbox-group">
+                            <label class="ven-checkbox-label">
+                                <input type="checkbox" id="venTerms" name="terms" required>
+                                <span class="ven-checkbox-custom"></span>
+                                <span class="ven-checkbox-text">I agree to the <a href="#" target="_blank">Terms of Service</a> and <a href="#" target="_blank">Privacy Policy</a> <span class="ven-required">*</span></span>
                             </label>
-                            <span class="error-message"></span>
+                            <span class="ven-error-message"></span>
                         </div>
 
-                        <div class="form-actions">
-                            <button type="button" class="btn btn-secondary" onclick="previousStep(3)">Previous</button>
-                            <button type="submit" class="btn btn-primary btn-submit">
-                                <span class="btn-text">Create Account</span>
-                                <span class="btn-loader" style="display: none;">
-                                    <span class="spinner"></span>
+                        <div class="ven-form-actions">
+                            <button type="button" class="ven-btn ven-btn-secondary" onclick="venPreviousStep(3)">Previous</button>
+                            <button type="submit" class="ven-btn ven-btn-primary ven-btn-submit">
+                                <span class="ven-btn-text">Create Account</span>
+                                <span class="ven-btn-loader" style="display: none;">
+                                    <span class="ven-spinner"></span>
                                     Creating...
                                 </span>
                             </button>
@@ -399,7 +370,7 @@
                     </div>
                 </form>
 
-                <div class="form-footer">
+                <div class="ven-form-footer">
                     <p>Already have an account? <a href="{{ url_for('auth.login') }}">Sign In</a></p>
                 </div>
             </div>

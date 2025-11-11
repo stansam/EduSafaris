@@ -228,6 +228,11 @@ const TripsManager = (function() {
     function populateFilterDropdowns() {
         // Categories
         if (elements.categoryFilter && state.categories.length > 0) {
+            // Clear existing options except first
+            while (elements.categoryFilter.options.length > 1) {
+                elements.categoryFilter.remove(1);
+            }
+            
             state.categories.forEach(category => {
                 const option = document.createElement('option');
                 option.value = category;
@@ -238,6 +243,11 @@ const TripsManager = (function() {
         
         // Grade Levels
         if (elements.gradeLevelFilter && state.gradeLevels.length > 0) {
+            // Clear existing options except first
+            while (elements.gradeLevelFilter.options.length > 1) {
+                elements.gradeLevelFilter.remove(1);
+            }
+            
             state.gradeLevels.forEach(level => {
                 const option = document.createElement('option');
                 option.value = level;
@@ -258,30 +268,21 @@ const TripsManager = (function() {
             const queryParams = new URLSearchParams({
                 page: state.currentPage,
                 per_page: state.perPage,
-                ...(state.filters.search && { q: state.filters.search }),
-                ...(state.filters.destination && { destination: state.filters.destination }),
-                ...(state.filters.category && { category: state.filters.category }),
-                ...(state.filters.gradeLevel && { grade_level: state.filters.gradeLevel }),
-                ...(state.filters.minPrice !== null && { min_price: state.filters.minPrice }),
-                ...(state.filters.maxPrice !== null && { max_price: state.filters.maxPrice }),
-                ...(state.filters.startDateFrom && { start_date_from: state.filters.startDateFrom }),
-                ...(state.filters.startDateTo && { start_date_to: state.filters.startDateTo }),
                 sort_by: state.filters.sortBy,
                 sort_order: state.filters.sortOrder
             });
 
-            const endpoint = state.filters.search || 
-                            state.filters.destination || 
-                            state.filters.category || 
-                            state.filters.gradeLevel ||
-                            state.filters.minPrice !== null ||
-                            state.filters.maxPrice !== null ||
-                            state.filters.startDateFrom ||
-                            state.filters.startDateTo
-                ? '/api/parent/trips/search'
-                : '/api/parents/trips';
+            // Add optional filters
+            if (state.filters.search) queryParams.append('q', state.filters.search);
+            if (state.filters.destination) queryParams.append('destination', state.filters.destination);
+            if (state.filters.category) queryParams.append('category', state.filters.category);
+            if (state.filters.gradeLevel) queryParams.append('grade_level', state.filters.gradeLevel);
+            if (state.filters.minPrice !== null) queryParams.append('min_price', state.filters.minPrice);
+            if (state.filters.maxPrice !== null) queryParams.append('max_price', state.filters.maxPrice);
+            if (state.filters.startDateFrom) queryParams.append('start_date_from', state.filters.startDateFrom);
+            if (state.filters.startDateTo) queryParams.append('start_date_to', state.filters.startDateTo);
 
-            const response = await fetch(`${endpoint}?${queryParams}`, {
+            const response = await fetch(`/api/parents/trips?${queryParams}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -370,7 +371,7 @@ const TripsManager = (function() {
         }
         
         card.innerHTML = `
-            <div class="trips-card-image"></div>
+            <div class="trips-card-image" style="${trip.cover_image_url ? `background-image: url(${trip.cover_image_url}); background-size: cover; background-position: center;` : ''}"></div>
             <div class="trips-card-body">
                 <div class="trips-card-header">
                     <div>
@@ -462,7 +463,7 @@ const TripsManager = (function() {
         }
         
         item.innerHTML = `
-            <div class="trips-list-image"></div>
+            <div class="trips-list-image" style="${trip.cover_image_url ? `background-image: url(${trip.cover_image_url}); background-size: cover; background-position: center;` : ''}"></div>
             <div class="trips-list-content">
                 <div class="trips-list-header">
                     <h3 class="trips-list-title">${escapeHtml(trip.title)}</h3>
@@ -486,8 +487,8 @@ const TripsManager = (function() {
                         <span>${trip.spots_remaining} spots left</span>
                     </div>
                     <div class="trips-list-detail">
-                        <i class="fas fa-dollar-sign"></i>
-                        <span>$${formatNumber(trip.price_per_student)}</span>
+                        <i class="fas fa-money-bill"></i>
+                        <span>Kshs. ${formatNumber(trip.price_per_student)}</span>
                     </div>
                 </div>
             </div>
@@ -530,7 +531,7 @@ const TripsManager = (function() {
             const result = await response.json();
 
             if (result.success && result.data) {
-                state.registrations = result.data.registrations || [];
+                state.registrations = result.data.active_registrations || [];
                 renderRegistrations();
             } else {
                 throw new Error(result.message || 'Failed to load registrations');
@@ -577,9 +578,9 @@ const TripsManager = (function() {
         card.className = 'trips-registration-card';
         
         let statusClass = 'trips-status-registered';
-        if (registration.participant_status === 'confirmed') {
+        if (registration.status === 'confirmed') {
             statusClass = 'trips-status-confirmed';
-        } else if (registration.participant_status === 'cancelled') {
+        } else if (registration.status === 'cancelled') {
             statusClass = 'trips-status-cancelled';
         }
         
@@ -592,7 +593,7 @@ const TripsManager = (function() {
                         <span>${escapeHtml(registration.participant_name)}</span>
                     </div>
                 </div>
-                <span class="trips-registration-status ${statusClass}">${registration.participant_status}</span>
+                <span class="trips-registration-status ${statusClass}">${registration.status}</span>
             </div>
             
             <div class="trips-registration-details">
@@ -609,20 +610,20 @@ const TripsManager = (function() {
                     <span>${registration.duration_days} days</span>
                 </div>
                 <div class="trips-registration-detail">
-                    <i class="fas fa-dollar-sign"></i>
-                    <span>$${formatNumber(registration.price_per_student)}</span>
+                    <i class="fas fa-money-bill"></i>
+                    <span>Kshs. ${formatNumber(registration.price_per_student)}</span>
                 </div>
             </div>
             
-            ${registration.participant_status !== 'cancelled' ? `
+            ${registration.status !== 'cancelled' ? `
                 <div class="trips-registration-actions">
                     <button class="trips-registration-btn trips-update-requirements-btn" 
-                            onclick="TripsManager.openUpdateRequirementsModal(${registration.trip_id}, ${registration.participant_id})">
+                            onclick="TripsManager.openUpdateRequirementsModal(${registration.trip.id}, ${registration.participant.id})">
                         <i class="fas fa-edit"></i>
                         Update Requirements
                     </button>
                     <button class="trips-registration-btn trips-cancel-registration-btn" 
-                            onclick="TripsManager.openCancelModal(${registration.trip_id}, ${registration.participant_id})">
+                            onclick="TripsManager.openCancelModal(${registration.id})">
                         <i class="fas fa-times-circle"></i>
                         Cancel
                     </button>
@@ -863,8 +864,9 @@ const TripsManager = (function() {
         if (typeof TripDetailsModal !== 'undefined' && TripDetailsModal.open) {
             TripDetailsModal.open(tripId);
         } else {
-            console.error('TripDetailsModal not found');
-            showToast('Failed to open trip details', 'error');
+            // Fallback: Navigate to trip details page or show inline
+            console.warn('TripDetailsModal not found, implement fallback');
+            showToast('Trip details viewer not available', 'warning');
         }
     }
 
@@ -872,26 +874,57 @@ const TripsManager = (function() {
         if (typeof RegisterChildModal !== 'undefined' && RegisterChildModal.open) {
             RegisterChildModal.open(tripId);
         } else {
-            console.error('RegisterChildModal not found');
-            showToast('Failed to open registration form', 'error');
+            console.warn('RegisterChildModal not found, implement fallback');
+            showToast('Registration form not available', 'warning');
         }
     }
 
-    function openUpdateRequirementsModal(tripId, participantId) {
+    function openUpdateRequirementsModal(tripId, registrationId) {
         if (typeof UpdateRequirementsModal !== 'undefined' && UpdateRequirementsModal.open) {
-            UpdateRequirementsModal.open(tripId, participantId);
+            UpdateRequirementsModal.open(tripId, registrationId);
         } else {
-            console.error('UpdateRequirementsModal not found');
-            showToast('Failed to open update form', 'error');
+            console.warn('UpdateRequirementsModal not found, implement fallback');
+            showToast('Update form not available', 'warning');
         }
     }
 
-    function openCancelModal(tripId, participantId) {
+    function openCancelModal(registrationId) {
         if (typeof CancelRegistrationModal !== 'undefined' && CancelRegistrationModal.open) {
-            CancelRegistrationModal.open(tripId, participantId);
+            CancelRegistrationModal.open(registrationId);
         } else {
-            console.error('CancelRegistrationModal not found');
-            showToast('Failed to open cancel form', 'error');
+            // Fallback: Confirm and cancel directly
+            if (confirm('Are you sure you want to cancel this registration?')) {
+                cancelRegistrationDirect(registrationId);
+            }
+        }
+    }
+
+    // Direct cancel registration (fallback)
+    async function cancelRegistrationDirect(registrationId) {
+        try {
+            const response = await fetch(`/api/parent/registrations/${registrationId}/cancel`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    cancellation_reason: 'Cancelled by parent'
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                showToast('Registration cancelled successfully', 'success');
+                loadRegistrations();
+                loadTrips(); // Refresh trips to update availability
+            } else {
+                showToast(result.message || 'Failed to cancel registration', 'error');
+            }
+        } catch (error) {
+            console.error('Error cancelling registration:', error);
+            showToast('An error occurred while cancelling registration', 'error');
         }
     }
 

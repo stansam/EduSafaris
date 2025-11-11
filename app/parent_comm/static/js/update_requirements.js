@@ -153,7 +153,7 @@ const UpdateRequirementsModal = (function() {
     }
 
     // Load Participant Data
-    async function loadParticipantData(tripId, participantId) {
+    async function loadParticipantData(tripId, upRegistrationId) {
         showLoading();
         
         try {
@@ -169,7 +169,7 @@ const UpdateRequirementsModal = (function() {
             if (!tripResponse.ok) {
                 throw new Error('Failed to load participant details');
             }
-
+            console.log('Trip response status:', upRegistrationId);
             const tripResult = await tripResponse.json();
             
             if (!tripResult.success || !tripResult.data) {
@@ -177,18 +177,35 @@ const UpdateRequirementsModal = (function() {
             }
 
             // Find participant in trip data
-            const participant = tripResult.data.user_participants?.find(
-                p => p.id === participantId
+            // const participant = tripResult.data.user_participants?.find(
+            //     p => p.id === participantId
+            // );
+            console.log(tripResult.data.user_registrations.map(r => r.participant.id));
+
+            const registration = tripResult.data.user_registrations?.find(
+                r => r.participant && r.participant.id === Number(upRegistrationId)
             );
 
-            if (!participant) {
+            if (!registration) {
                 throw new Error('Participant not found');
             }
 
+            // Re-map data to match expected structure downstream
+            const participant = registration.participant;
             state.participantData = {
                 trip: tripResult.data,
-                participant: participant
+                participant,
+                registration
             };
+
+            // if (!participant) {
+            //     throw new Error('Participant not found');
+            // }
+
+            // state.participantData = {
+            //     trip: tripResult.data,
+            //     participant: participant
+            // };
 
             displayParticipantData();
             populateForm();
@@ -200,7 +217,8 @@ const UpdateRequirementsModal = (function() {
 
     // Display Participant Data
     function displayParticipantData() {
-        const { trip, participant } = state.participantData;
+        // const { trip, participant } = state.participantData;
+        const { trip, participant, registration } = state.participantData;
         
         if (elements.childName) {
             const fullName = `${participant.first_name || ''} ${participant.last_name || ''}`.trim();
@@ -210,13 +228,19 @@ const UpdateRequirementsModal = (function() {
         if (elements.tripTitle) {
             elements.tripTitle.textContent = trip.title || 'Trip';
         }
+
+        if (registration && elements.registrationNumber) {
+            elements.registrationNumber.textContent = registration.registration_number || '';
+        }
         
         showContent();
     }
 
     // Populate Form
     function populateForm() {
-        const { participant } = state.participantData;
+        const { participant } = state.participantData || {};
+
+        if (!participant) return;
         
         if (elements.medicalConditions) {
             elements.medicalConditions.value = participant.medical_conditions || '';

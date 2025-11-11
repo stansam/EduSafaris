@@ -1,21 +1,17 @@
 /**
- * Teacher Registration Form Handler
- * Handles multi-step form, validation, and API communication
+ * Teacher Registration Form Handler - Updated for EduSafaris
  */
 
 (function() {
     'use strict';
     
-    // State
     let currentStep = 1;
-    let formData = {};
     let emailCheckTimeout = null;
+    let schoolSearchTimeout = null;
     
-    // DOM Elements
-    const form = document.getElementById('teacherRegistrationForm');
-    const alertContainer = document.getElementById('alert-container');
+    const form = document.getElementById('eduTeacherRegistrationForm');
+    const alertContainer = document.getElementById('eduAlertContainer');
     
-    // Initialize
     document.addEventListener('DOMContentLoaded', init);
     
     function init() {
@@ -24,44 +20,36 @@
         setupPasswordToggle();
         setupEmailValidation();
         setupPhoneFormatting();
+        setupSchoolSearch();
     }
     
-    /**
-     * Setup form submission and validation
-     */
     function setupFormHandlers() {
         if (!form) return;
         
         form.addEventListener('submit', handleSubmit);
         
-        // Real-time validation for all inputs
         const inputs = form.querySelectorAll('input, textarea');
         inputs.forEach(input => {
             input.addEventListener('blur', () => validateField(input));
             input.addEventListener('input', () => {
-                if (input.classList.contains('error')) {
+                if (input.classList.contains('edu-error')) {
                     validateField(input);
                 }
             });
         });
     }
     
-    /**
-     * Validate individual field
-     */
     function validateField(field) {
         const value = field.value.trim();
         const name = field.name;
         let isValid = true;
         let errorMessage = '';
         
-        // Required field check
         if (field.hasAttribute('required') && !value) {
             isValid = false;
             errorMessage = 'This field is required';
         }
         
-        // Specific validations
         if (value) {
             switch(name) {
                 case 'email':
@@ -88,7 +76,7 @@
                     break;
                     
                 case 'confirm_password':
-                    const password = document.getElementById('password').value;
+                    const password = document.getElementById('eduPassword').value;
                     if (value !== password) {
                         isValid = false;
                         errorMessage = 'Passwords do not match';
@@ -102,57 +90,52 @@
                         errorMessage = 'Name must be at least 2 characters';
                     }
                     break;
+                    
+                case 'years_of_experience':
+                    const exp = parseInt(value);
+                    if (isNaN(exp) || exp < 0 || exp > 60) {
+                        isValid = false;
+                        errorMessage = 'Years of experience must be between 0 and 60';
+                    }
+                    break;
             }
         }
         
-        // Update UI
         updateFieldStatus(field, isValid, errorMessage);
         return isValid;
     }
     
-    /**
-     * Update field status visually
-     */
     function updateFieldStatus(field, isValid, errorMessage) {
-        const errorElement = field.parentElement.querySelector('.error-message');
+        const errorElement = field.closest('.edu-form-group')?.querySelector('.edu-error-message');
         
         if (isValid) {
-            field.classList.remove('error');
-            field.classList.add('success');
+            field.classList.remove('edu-error');
+            field.classList.add('edu-success');
             if (errorElement) {
-                errorElement.classList.remove('active');
+                errorElement.classList.remove('edu-active');
             }
         } else {
-            field.classList.remove('success');
-            field.classList.add('error');
+            field.classList.remove('edu-success');
+            field.classList.add('edu-error');
             if (errorElement) {
                 errorElement.textContent = errorMessage;
-                errorElement.classList.add('active');
+                errorElement.classList.add('edu-active');
             }
         }
     }
     
-    /**
-     * Email validation
-     */
     function isValidEmail(email) {
         const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         return re.test(email);
     }
     
-    /**
-     * Phone validation
-     */
     function isValidPhone(phone) {
         const cleaned = phone.replace(/[\s\-\(\)]/g, '');
         return /^\+?\d{10,15}$/.test(cleaned);
     }
     
-    /**
-     * Setup email availability check
-     */
     function setupEmailValidation() {
-        const emailInput = document.getElementById('email');
+        const emailInput = document.getElementById('eduEmail');
         if (!emailInput) return;
         
         emailInput.addEventListener('input', function() {
@@ -167,23 +150,18 @@
         });
     }
     
-    /**
-     * Check email availability via API
-     */
     async function checkEmailAvailability(email) {
         try {
-            // const token = document.querySelector('meta[name="csrf-token"]').content;
-            const response = await fetch('/api/auth/check-email', {
+            const response = await fetch('/api/auth/checks-email', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    // 'X-CSRFToken': token
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ email })
             });
             
             const data = await response.json();
-            const emailInput = document.getElementById('email');
+            const emailInput = document.getElementById('eduEmail');
             
             if (!data.available) {
                 updateFieldStatus(emailInput, false, 'This email is already registered');
@@ -193,11 +171,78 @@
         }
     }
     
-    /**
-     * Setup password strength indicator
-     */
+    function setupSchoolSearch() {
+        const searchInput = document.getElementById('eduSchoolSearch');
+        const resultsDiv = document.getElementById('eduSchoolResults');
+        const hiddenInput = document.getElementById('eduSchoolId');
+        
+        if (!searchInput || !resultsDiv) return;
+        
+        searchInput.addEventListener('input', function() {
+            clearTimeout(schoolSearchTimeout);
+            const query = this.value.trim();
+            
+            if (query.length < 2) {
+                resultsDiv.style.display = 'none';
+                resultsDiv.innerHTML = '';
+                hiddenInput.value = '';
+                return;
+            }
+            
+            schoolSearchTimeout = setTimeout(() => {
+                searchSchools(query);
+            }, 300);
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.edu-school-search-wrapper')) {
+                resultsDiv.style.display = 'none';
+            }
+        });
+    }
+    
+    async function searchSchools(query) {
+        const resultsDiv = document.getElementById('eduSchoolResults');
+        
+        try {
+            const response = await fetch(`/api/auth/schools/search?q=${encodeURIComponent(query)}&limit=10`);
+            const data = await response.json();
+            
+            if (data.success && data.schools.length > 0) {
+                resultsDiv.innerHTML = data.schools.map(school => `
+                    <div class="edu-school-result-item" data-school-id="${school.id}">
+                        <div class="edu-school-name">
+                            ${school.name}
+                            ${school.is_verified ? '<i class="fas fa-check-circle edu-verified-icon"></i>' : ''}
+                        </div>
+                        <div class="edu-school-location">${school.city || ''}, ${school.country || ''}</div>
+                    </div>
+                `).join('');
+                
+                resultsDiv.style.display = 'block';
+                
+                resultsDiv.querySelectorAll('.edu-school-result-item').forEach(item => {
+                    item.addEventListener('click', function() {
+                        const schoolId = this.getAttribute('data-school-id');
+                        const schoolName = this.querySelector('.edu-school-name').textContent.trim();
+                        
+                        document.getElementById('eduSchoolId').value = schoolId;
+                        document.getElementById('eduSchoolSearch').value = schoolName;
+                        resultsDiv.style.display = 'none';
+                    });
+                });
+            } else {
+                resultsDiv.innerHTML = '<div class="edu-no-results">No schools found</div>';
+                resultsDiv.style.display = 'block';
+            }
+        } catch (error) {
+            console.error('School search failed:', error);
+            resultsDiv.style.display = 'none';
+        }
+    }
+    
     function setupPasswordStrength() {
-        const passwordInput = document.getElementById('password');
+        const passwordInput = document.getElementById('eduPassword');
         if (!passwordInput) return;
         
         passwordInput.addEventListener('input', function() {
@@ -208,9 +253,6 @@
         });
     }
     
-    /**
-     * Validate password and return strength
-     */
     function validatePassword(password) {
         const requirements = {
             length: password.length >= 8,
@@ -232,17 +274,14 @@
         };
     }
     
-    /**
-     * Update password strength bar
-     */
     function updatePasswordStrength(result) {
-        const strengthFill = document.querySelector('.strength-fill');
-        const strengthText = document.querySelector('.strength-text');
+        const strengthFill = document.querySelector('.edu-strength-fill');
+        const strengthText = document.querySelector('.edu-strength-text');
         
         if (!strengthFill || !strengthText) return;
         
-        strengthFill.className = 'strength-fill ' + result.strength;
-        strengthText.className = 'strength-text ' + result.strength;
+        strengthFill.className = 'edu-strength-fill edu-' + result.strength;
+        strengthText.className = 'edu-strength-text edu-' + result.strength;
         
         const strengthLabels = {
             weak: 'Weak',
@@ -253,54 +292,48 @@
         strengthText.textContent = strengthLabels[result.strength];
     }
     
-    /**
-     * Update password requirements checklist
-     */
     function updatePasswordRequirements(result) {
         Object.entries(result.requirements).forEach(([key, met]) => {
-            const requirement = document.querySelector(`[data-requirement="${key}"]`);
+            const requirement = document.querySelector(`.edu-requirement[data-requirement="${key}"]`);
             if (requirement) {
                 if (met) {
-                    requirement.classList.add('met');
+                    requirement.classList.add('edu-met');
                 } else {
-                    requirement.classList.remove('met');
+                    requirement.classList.remove('edu-met');
                 }
             }
         });
     }
     
-    /**
-     * Setup password visibility toggle
-     */
     function setupPasswordToggle() {
-        const toggleButtons = document.querySelectorAll('.toggle-password');
+        const toggleButtons = document.querySelectorAll('.edu-toggle-password');
         
         toggleButtons.forEach(button => {
             button.addEventListener('click', function() {
                 const targetId = this.getAttribute('data-target');
                 const input = document.getElementById(targetId);
+                const icon = this.querySelector('i');
                 
                 if (input.type === 'password') {
                     input.type = 'text';
-                    this.querySelector('.eye-icon').textContent = '👁️‍🗨️';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
                 } else {
                     input.type = 'password';
-                    this.querySelector('.eye-icon').textContent = '👁️';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
                 }
             });
         });
     }
     
-    /**
-     * Setup phone number formatting
-     */
     function setupPhoneFormatting() {
         const phoneInputs = document.querySelectorAll('input[type="tel"]');
         
         phoneInputs.forEach(input => {
             input.addEventListener('input', function(e) {
                 let value = e.target.value.replace(/\D/g, '');
-                if (value.length > 0 && !value.startsWith('+')) {
+                if (value.length > 0 && !e.target.value.startsWith('+')) {
                     value = '+' + value;
                 }
                 e.target.value = value;
@@ -308,43 +341,29 @@
         });
     }
     
-    /**
-     * Navigate to next step
-     */
-    window.nextStep = function(stepNumber) {
-        // Validate current step
+    window.eduNextStep = function(stepNumber) {
         if (!validateStep(currentStep)) {
             showAlert('error', 'Please fill in all required fields correctly');
             return;
         }
         
-        // Update progress
         updateStepProgress(currentStep, 'completed');
         currentStep = stepNumber;
         updateStepProgress(currentStep, 'active');
-        
-        // Show new step
         showStep(stepNumber);
-        
-        // Scroll to top
-        document.querySelector('.form-panel').scrollTop = 0;
+        document.querySelector('.edu-form-panel').scrollTop = 0;
     };
     
-    /**
-     * Navigate to previous step
-     */
-    window.previousStep = function(stepNumber) {
+    window.eduPreviousStep = function(stepNumber) {
+        updateStepProgress(currentStep, '');
         currentStep = stepNumber;
         updateStepProgress(currentStep, 'active');
         showStep(stepNumber);
-        document.querySelector('.form-panel').scrollTop = 0;
+        document.querySelector('.edu-form-panel').scrollTop = 0;
     };
     
-    /**
-     * Validate all fields in a step
-     */
     function validateStep(stepNumber) {
-        const stepElement = document.querySelector(`.form-step[data-step="${stepNumber}"]`);
+        const stepElement = document.querySelector(`.edu-form-step[data-step="${stepNumber}"]`);
         const inputs = stepElement.querySelectorAll('input[required], textarea[required]');
         let isValid = true;
         
@@ -357,25 +376,19 @@
         return isValid;
     }
     
-    /**
-     * Show specific step
-     */
     function showStep(stepNumber) {
-        document.querySelectorAll('.form-step').forEach(step => {
+        document.querySelectorAll('.edu-form-step').forEach(step => {
             step.classList.remove('active');
         });
         
-        const targetStep = document.querySelector(`.form-step[data-step="${stepNumber}"]`);
+        const targetStep = document.querySelector(`.edu-form-step[data-step="${stepNumber}"]`);
         if (targetStep) {
             targetStep.classList.add('active');
         }
     }
     
-    /**
-     * Update step progress indicator
-     */
     function updateStepProgress(stepNumber, status) {
-        const stepElement = document.querySelector(`.progress-step[data-step="${stepNumber}"]`);
+        const stepElement = document.querySelector(`.edu-progress-step[data-step="${stepNumber}"]`);
         if (!stepElement) return;
         
         stepElement.classList.remove('active', 'completed');
@@ -384,41 +397,32 @@
         }
     }
     
-    /**
-     * Handle form submission
-     */
     async function handleSubmit(e) {
         e.preventDefault();
         
-        // Validate all steps
         if (!validateStep(1) || !validateStep(2) || !validateStep(3)) {
             showAlert('error', 'Please complete all required fields');
             return;
         }
         
-        // Check terms agreement
-        const termsCheckbox = document.getElementById('terms');
+        const termsCheckbox = document.getElementById('eduTerms');
         if (!termsCheckbox.checked) {
             showAlert('error', 'Please agree to the Terms of Service and Privacy Policy');
             return;
         }
         
-        // Collect form data
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
         
-        // Show loading state
-        const submitButton = form.querySelector('.btn-submit');
-        submitButton.classList.add('loading');
+        const submitButton = form.querySelector('.edu-btn-submit');
+        submitButton.classList.add('edu-loading');
         submitButton.disabled = true;
         
         try {
-            // const token = document.querySelector('meta[name="csrf-token"]').content;
             const response = await fetch('/api/auth/register/teacher', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    // 'X-CSRFToken': token
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(data)
             });
@@ -428,48 +432,45 @@
             if (response.ok && result.success) {
                 showAlert('success', result.message);
                 
-                // Redirect after delay
                 setTimeout(() => {
                     window.location.href = result.redirect_url;
                 }, 1500);
             } else {
                 showAlert('error', result.message || 'Registration failed. Please try again.');
-                submitButton.classList.remove('loading');
+                submitButton.classList.remove('edu-loading');
                 submitButton.disabled = false;
             }
         } catch (error) {
             console.error('Registration error:', error);
             showAlert('error', 'An error occurred. Please try again.');
-            submitButton.classList.remove('loading');
+            submitButton.classList.remove('edu-loading');
             submitButton.disabled = false;
         }
     }
     
-    /**
-     * Show alert message
-     */
     function showAlert(type, message) {
         const alert = document.createElement('div');
-        alert.className = `alert alert-${type}`;
+        alert.className = `edu-alert edu-alert-${type}`;
         
-        const icon = type === 'success' ? '✓' : '⚠';
+        const icon = type === 'success' ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-exclamation-circle"></i>';
         
         alert.innerHTML = `
-            <span class="alert-icon">${icon}</span>
-            <div class="alert-content">
-                <div class="alert-title">${type === 'success' ? 'Success' : 'Error'}</div>
+            <span class="edu-alert-icon">${icon}</span>
+            <div class="edu-alert-content">
+                <div class="edu-alert-title">${type === 'success' ? 'Success' : 'Error'}</div>
                 <div>${message}</div>
             </div>
+            <button class="edu-alert-close" onclick="this.parentElement.remove()">
+                <i class="fas fa-times"></i>
+            </button>
         `;
         
         alertContainer.innerHTML = '';
         alertContainer.appendChild(alert);
         
-        // Auto remove after 5 seconds
         setTimeout(() => {
             alert.style.opacity = '0';
             setTimeout(() => alert.remove(), 300);
         }, 5000);
     }
-    
 })();

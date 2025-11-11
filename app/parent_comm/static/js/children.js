@@ -8,6 +8,17 @@ document.addEventListener('DOMContentLoaded', function() {
     loadTripsForFilter();
 });
 
+window.addEventListener('childAdded', (event) => {
+    console.log('New child:', event.detail);
+    loadChildren()
+    loadTripsForFilter();
+});
+
+window.addEventListener('childUpdated', (event) => {
+    console.log('Updated child:', event.detail);
+    loadChildren()
+    loadTripsForFilter();
+});
 // Load all children
 async function loadChildren() {
     const loadingState = document.getElementById('childrenLoadingState');
@@ -69,6 +80,8 @@ function renderChildren(children) {
     childrenGrid.innerHTML = children.map(child => createChildCard(child)).join('');
     childrenGrid.style.display = 'grid';
     document.getElementById('childrenEmptyState').style.display = 'none';
+
+    if (window.refreshUpdateChildTriggers) window.refreshUpdateChildTriggers();
 }
 
 // Create individual child card HTML
@@ -117,7 +130,7 @@ function createChildCard(child) {
                 <button class="action-btn primary" onclick="openViewChildModal(${child.id})">
                     <i class="fas fa-eye"></i> View Profile
                 </button>
-                <button class="action-btn secondary" onclick="openUpdateChildModal(${child.id})">
+                <button type="button" class="action-btn secondary" data-update-child-id="${child.id}">
                     <i class="fas fa-edit"></i> Edit
                 </button>
                 <button class="action-btn warning" onclick="openUploadDocumentModal(${child.id})">

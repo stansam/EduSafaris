@@ -1,149 +1,418 @@
 <!-- Add Child Modal -->
-<div id="addChildModal" class="modal-child-overlay" style="display: none;">
-    <div class="modal-child-container">
-        <div class="modal-child-header">
-            <h2><i class="fas fa-user-plus"></i> Register Child for Trip</h2>
-            <button class="modal-child-close" onclick="closeAddChildModal()">
+<div id="addChildModalOverlay" class="acm-modal-overlay">
+    <div class="acm-modal-container">
+        <div class="acm-modal-header">
+            <h2 class="acm-modal-title">
+                <i class="fas fa-user-plus"></i>
+                Add New Child
+            </h2>
+            <button type="button" class="acm-modal-close" id="addChildModalClose" aria-label="Close modal">
                 <i class="fas fa-times"></i>
             </button>
         </div>
-        
-        <form id="addChildForm" class="modal-child-form">
-            <!-- Trip Selection -->
-            <!-- <div class="form-child-section">
-                <h3 class="section-child-title">
-                    <i class="fas fa-plane"></i> Trip Information
-                </h3>
-                <div class="form-child-group">
-                    <label for="addTripSelect" class="form-child-label required">Select Trip</label>
-                    <select id="addTripSelect" name="trip_id" class="form-child-input" required>
-                        <option value="">Choose a trip...</option>
-                    </select>
-                    <span class="form-child-error" id="addTripSelectError"></span>
-                </div>
-            </div> -->
 
-            <!-- Personal Information -->
-            <div class="form-child-section">
-                <h3 class="section-child-title">
-                    <i class="fas fa-user"></i> Personal Information
-                </h3>
-                <div class="form-child-row">
-                    <div class="form-child-group">
-                        <label for="addFirstName" class="form-child-label required">First Name</label>
-                        <input type="text" id="addFirstName" name="first_name" class="form-child-input" required>
-                        <span class="form-child-error" id="addFirstNameError"></span>
-                    </div>
-                    <div class="form-child-group">
-                        <label for="addLastName" class="form-child-label required">Last Name</label>
-                        <input type="text" id="addLastName" name="last_name" class="form-child-input" required>
-                        <span class="form-child-error" id="addLastNameError"></span>
-                    </div>
+        <div class="acm-modal-body">
+            <!-- Progress Steps -->
+            <div class="acm-progress-steps">
+                <div class="acm-step acm-step-active" data-step="1">
+                    <div class="acm-step-number">1</div>
+                    <div class="acm-step-label">Basic Info</div>
                 </div>
-
-                <div class="form-child-row">
-                    <div class="form-child-group">
-                        <label for="addGender" class="form-child-label required">Gender</label>
-                        <select id="addGender" name="gender" class="form-child-input" required>
-                            <option value="">Select gender...</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="other">Other</option>
-                            <option value="prefer_not_to_say">Prefer not to say</option>
-                        </select>
-                        <span class="form-child-error" id="addGenderError"></span>
-                    </div>
-                    <div class="form-child-group">
-                        <label for="addDateOfBirth" class="form-child-label required">Date of Birth</label>
-                        <input type="date" id="addDateOfBirth" name="date_of_birth" class="form-child-input" required>
-                        <span class="form-child-error" id="addDateOfBirthError"></span>
-                    </div>
+                <div class="acm-step" data-step="2">
+                    <div class="acm-step-number">2</div>
+                    <div class="acm-step-label">Medical Info</div>
                 </div>
-                
-                <div class="form-child-row">
-                    <div class="form-child-group">
-                        <label for="addDateOfBirth" class="form-child-label">Date of Birth</label>
-                        <input type="date" id="addDateOfBirth" name="date_of_birth" class="form-child-input">
-                        <span class="form-child-error" id="addDateOfBirthError"></span>
-                    </div>
-                    <div class="form-child-group">
-                        <label for="addGradeLevel" class="form-child-label">Grade/Class</label>
-                        <input type="text" id="addGradeLevel" name="grade_level" class="form-child-input" placeholder="e.g., Grade 8">
-                        <span class="form-child-error" id="addGradeLevelError"></span>
-                    </div>
-                </div>
-                
-                <div class="form-child-group">
-                    <label for="addStudentId" class="form-child-label">Student ID</label>
-                    <input type="text" id="addStudentId" name="student_id" class="form-child-input" placeholder="Optional">
-                    <span class="form-child-error" id="addStudentIdError"></span>
+                <div class="acm-step" data-step="3">
+                    <div class="acm-step-number">3</div>
+                    <div class="acm-step-label">Emergency Contacts</div>
                 </div>
             </div>
 
-            <!-- Contact Information -->
-            <div class="form-child-section">
-                <h3 class="section-child-title">
-                    <i class="fas fa-phone"></i> Contact Information
-                </h3>
-                <div class="form-child-row">
-                    <div class="form-child-group">
-                        <label for="addEmail" class="form-child-label">Email</label>
-                        <input type="email" id="addEmail" name="email" class="form-child-input" placeholder="child@example.com">
-                        <span class="form-child-error" id="addEmailError"></span>
-                    </div>
-                    <div class="form-child-group">
-                        <label for="addPhone" class="form-child-label">Phone</label>
-                        <input type="tel" id="addPhone" name="phone" class="form-child-input" placeholder="+254 700 000000">
-                        <span class="form-child-error" id="addPhoneError"></span>
-                    </div>
-                </div>
-            </div>
+            <!-- Alert Messages -->
+            <div id="addChildAlertContainer" class="acm-alert-container"></div>
 
-            <!-- Emergency Contact Information -->
-            <div class="form-child-section">
-                <h3 class="section-child-title">
-                    <i class="fas fa-phone-alt"></i> Emergency Contact (Required)
-                </h3>
-                <div class="form-child-row">
-                    <div class="form-child-group">
-                        <label for="addEmergencyContact1Name" class="form-child-label required">Contact Name</label>
-                        <input type="text" id="addEmergencyContact1Name" name="emergency_contact_1_name" class="form-child-input" required>
-                        <span class="form-child-error" id="addEmergencyContact1NameError"></span>
-                    </div>
-                    <div class="form-child-group">
-                        <label for="addEmergencyContact1Phone" class="form-child-label required">Contact Phone</label>
-                        <input type="tel" id="addEmergencyContact1Phone" name="emergency_contact_1_phone" class="form-child-input" placeholder="+254 700 000000" required>
-                        <span class="form-child-error" id="addEmergencyContact1PhoneError"></span>
-                    </div>
-                </div>
-                <div class="form-child-group">
-                    <label for="addEmergencyContact1Relationship" class="form-child-label required">Relationship</label>
-                    <input type="text" id="addEmergencyContact1Relationship" name="emergency_contact_1_relationship" class="form-child-input" placeholder="e.g., Parent, Guardian" required>
-                    <span class="form-child-error" id="addEmergencyContact1RelationshipError"></span>
-                </div>
-            </div>
+            <!-- Form -->
+            <form id="addChildForm" novalidate>
+                <!-- Step 1: Basic Information -->
+                <div class="acm-form-step acm-form-step-active" data-step="1">
+                    <div class="acm-form-row">
+                        <div class="acm-form-group acm-col-6">
+                            <label for="acmFirstName" class="acm-label">
+                                First Name <span class="acm-required">*</span>
+                            </label>
+                            <input 
+                                type="text" 
+                                id="acmFirstName" 
+                                name="first_name" 
+                                class="acm-input" 
+                                required
+                                minlength="2"
+                                maxlength="50"
+                                placeholder="Enter first name"
+                            >
+                            <span class="acm-error-message" id="acmFirstNameError"></span>
+                        </div>
 
-            <!-- Special Requirements -->
-            <div class="form-child-section">
-                <h3 class="section-child-title">
-                    <i class="fas fa-info-circle"></i> Special Requirements
-                </h3>
-                <div class="form-child-group">
-                    <label for="addSpecialRequirements" class="form-child-label">Any special needs or requirements?</label>
-                    <textarea id="addSpecialRequirements" name="special_requirements" class="form-child-textarea" rows="3" placeholder="Please describe any special requirements..."></textarea>
-                    <span class="form-child-error" id="addSpecialRequirementsError"></span>
-                </div>
-            </div>
+                        <div class="acm-form-group acm-col-6">
+                            <label for="acmLastName" class="acm-label">
+                                Last Name <span class="acm-required">*</span>
+                            </label>
+                            <input 
+                                type="text" 
+                                id="acmLastName" 
+                                name="last_name" 
+                                class="acm-input" 
+                                required
+                                minlength="2"
+                                maxlength="50"
+                                placeholder="Enter last name"
+                            >
+                            <span class="acm-error-message" id="acmLastNameError"></span>
+                        </div>
+                    </div>
 
-            <!-- Form Actions -->
-            <div class="modal-child-actions">
-                <button type="button" class="btn-child-cancel" onclick="closeAddChildModal()">
-                    <i class="fas fa-times"></i> Cancel
+                    <div class="acm-form-row">
+                        <div class="acm-form-group acm-col-6">
+                            <label for="acmDateOfBirth" class="acm-label">
+                                Date of Birth <span class="acm-required">*</span>
+                            </label>
+                            <input 
+                                type="date" 
+                                id="acmDateOfBirth" 
+                                name="date_of_birth" 
+                                class="acm-input" 
+                                required
+                            >
+                            <span class="acm-error-message" id="acmDateOfBirthError"></span>
+                        </div>
+
+                        <div class="acm-form-group acm-col-6">
+                            <label for="acmGender" class="acm-label">
+                                Gender <span class="acm-required">*</span>
+                            </label>
+                            <select id="acmGender" name="gender" class="acm-input" required>
+                                <option value="">Select gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                                <option value="prefer_not_to_say">Prefer not to say</option>
+                            </select>
+                            <span class="acm-error-message" id="acmGenderError"></span>
+                        </div>
+                    </div>
+
+                    <div class="acm-form-row">
+                        <div class="acm-form-group acm-col-6">
+                            <label for="acmGradeLevel" class="acm-label">Grade Level</label>
+                            <input 
+                                type="text" 
+                                id="acmGradeLevel" 
+                                name="grade_level" 
+                                class="acm-input"
+                                placeholder="e.g., 4th Grade"
+                            >
+                            <span class="acm-error-message" id="acmGradeLevelError"></span>
+                        </div>
+
+                        <div class="acm-form-group acm-col-6">
+                            <label for="acmSchoolName" class="acm-label">School Name</label>
+                            <input 
+                                type="text" 
+                                id="acmSchoolName" 
+                                name="school_name" 
+                                class="acm-input"
+                                placeholder="Enter school name"
+                            >
+                            <span class="acm-error-message" id="acmSchoolNameError"></span>
+                        </div>
+                    </div>
+
+                    <div class="acm-form-row">
+                        <div class="acm-form-group acm-col-6">
+                            <label for="acmEmail" class="acm-label">Email</label>
+                            <input 
+                                type="email" 
+                                id="acmEmail" 
+                                name="email" 
+                                class="acm-input"
+                                placeholder="child@example.com"
+                            >
+                            <span class="acm-error-message" id="acmEmailError"></span>
+                        </div>
+
+                        <div class="acm-form-group acm-col-6">
+                            <label for="acmPhone" class="acm-label">Phone</label>
+                            <input 
+                                type="tel" 
+                                id="acmPhone" 
+                                name="phone" 
+                                class="acm-input"
+                                placeholder="+254712345678"
+                            >
+                            <span class="acm-error-message" id="acmPhoneError"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Medical Information -->
+                <div class="acm-form-step" data-step="2">
+                    <div class="acm-form-row">
+                        <div class="acm-form-group acm-col-6">
+                            <label for="acmBloodType" class="acm-label">Blood Type</label>
+                            <select id="acmBloodType" name="blood_type" class="acm-input">
+                                <option value="">Select blood type</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </select>
+                            <span class="acm-error-message" id="acmBloodTypeError"></span>
+                        </div>
+
+                        <div class="acm-form-group acm-col-6">
+                            <label for="acmAllergies" class="acm-label">Allergies</label>
+                            <input 
+                                type="text" 
+                                id="acmAllergies" 
+                                name="allergies" 
+                                class="acm-input"
+                                placeholder="e.g., Peanuts, shellfish"
+                            >
+                            <span class="acm-error-message" id="acmAllergiesError"></span>
+                        </div>
+                    </div>
+
+                    <div class="acm-form-row">
+                        <div class="acm-form-group acm-col-12">
+                            <label for="acmMedicalConditions" class="acm-label">Medical Conditions</label>
+                            <textarea 
+                                id="acmMedicalConditions" 
+                                name="medical_conditions" 
+                                class="acm-textarea"
+                                rows="3"
+                                placeholder="List any medical conditions"
+                            ></textarea>
+                            <span class="acm-error-message" id="acmMedicalConditionsError"></span>
+                        </div>
+                    </div>
+
+                    <div class="acm-form-row">
+                        <div class="acm-form-group acm-col-12">
+                            <label for="acmMedications" class="acm-label">Current Medications</label>
+                            <textarea 
+                                id="acmMedications" 
+                                name="medications" 
+                                class="acm-textarea"
+                                rows="3"
+                                placeholder="List any current medications"
+                            ></textarea>
+                            <span class="acm-error-message" id="acmMedicationsError"></span>
+                        </div>
+                    </div>
+
+                    <div class="acm-form-row">
+                        <div class="acm-form-group acm-col-12">
+                            <label for="acmDietaryRestrictions" class="acm-label">Dietary Restrictions</label>
+                            <input 
+                                type="text" 
+                                id="acmDietaryRestrictions" 
+                                name="dietary_restrictions" 
+                                class="acm-input"
+                                placeholder="e.g., Vegetarian, Gluten-free"
+                            >
+                            <span class="acm-error-message" id="acmDietaryRestrictionsError"></span>
+                        </div>
+                    </div>
+
+                    <div class="acm-form-row">
+                        <div class="acm-form-group acm-col-6">
+                            <label for="acmDoctorName" class="acm-label">Doctor's Name</label>
+                            <input 
+                                type="text" 
+                                id="acmDoctorName" 
+                                name="doctor_name" 
+                                class="acm-input"
+                                placeholder="Enter doctor's name"
+                            >
+                            <span class="acm-error-message" id="acmDoctorNameError"></span>
+                        </div>
+
+                        <div class="acm-form-group acm-col-6">
+                            <label for="acmDoctorPhone" class="acm-label">Doctor's Phone</label>
+                            <input 
+                                type="tel" 
+                                id="acmDoctorPhone" 
+                                name="doctor_phone" 
+                                class="acm-input"
+                                placeholder="+254712345678"
+                            >
+                            <span class="acm-error-message" id="acmDoctorPhoneError"></span>
+                        </div>
+                    </div>
+
+                    <div class="acm-form-row">
+                        <div class="acm-form-group acm-col-12">
+                            <label for="acmSpecialRequirements" class="acm-label">Special Requirements</label>
+                            <textarea 
+                                id="acmSpecialRequirements" 
+                                name="special_requirements" 
+                                class="acm-textarea"
+                                rows="3"
+                                placeholder="Any special requirements or accommodations needed"
+                            ></textarea>
+                            <span class="acm-error-message" id="acmSpecialRequirementsError"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Emergency Contacts -->
+                <div class="acm-form-step" data-step="3">
+                    <h3 class="acm-section-title">Primary Emergency Contact</h3>
+                    <div class="acm-form-row">
+                        <div class="acm-form-group acm-col-6">
+                            <label for="acmEmergencyContact1Name" class="acm-label">
+                                Name <span class="acm-required">*</span>
+                            </label>
+                            <input 
+                                type="text" 
+                                id="acmEmergencyContact1Name" 
+                                name="emergency_contact_1_name" 
+                                class="acm-input"
+                                required
+                                placeholder="Enter contact name"
+                            >
+                            <span class="acm-error-message" id="acmEmergencyContact1NameError"></span>
+                        </div>
+
+                        <div class="acm-form-group acm-col-6">
+                            <label for="acmEmergencyContact1Relationship" class="acm-label">
+                                Relationship <span class="acm-required">*</span>
+                            </label>
+                            <input 
+                                type="text" 
+                                id="acmEmergencyContact1Relationship" 
+                                name="emergency_contact_1_relationship" 
+                                class="acm-input"
+                                required
+                                placeholder="e.g., Mother, Father"
+                            >
+                            <span class="acm-error-message" id="acmEmergencyContact1RelationshipError"></span>
+                        </div>
+                    </div>
+
+                    <div class="acm-form-row">
+                        <div class="acm-form-group acm-col-6">
+                            <label for="acmEmergencyContact1Phone" class="acm-label">
+                                Phone <span class="acm-required">*</span>
+                            </label>
+                            <input 
+                                type="tel" 
+                                id="acmEmergencyContact1Phone" 
+                                name="emergency_contact_1_phone" 
+                                class="acm-input"
+                                required
+                                placeholder="+254712345678"
+                            >
+                            <span class="acm-error-message" id="acmEmergencyContact1PhoneError"></span>
+                        </div>
+
+                        <div class="acm-form-group acm-col-6">
+                            <label for="acmEmergencyContact1Email" class="acm-label">Email</label>
+                            <input 
+                                type="email" 
+                                id="acmEmergencyContact1Email" 
+                                name="emergency_contact_1_email" 
+                                class="acm-input"
+                                placeholder="contact@example.com"
+                            >
+                            <span class="acm-error-message" id="acmEmergencyContact1EmailError"></span>
+                        </div>
+                    </div>
+
+                    <h3 class="acm-section-title acm-section-title-secondary">Secondary Emergency Contact (Optional)</h3>
+                    <div class="acm-form-row">
+                        <div class="acm-form-group acm-col-6">
+                            <label for="acmEmergencyContact2Name" class="acm-label">Name</label>
+                            <input 
+                                type="text" 
+                                id="acmEmergencyContact2Name" 
+                                name="emergency_contact_2_name" 
+                                class="acm-input"
+                                placeholder="Enter contact name"
+                            >
+                            <span class="acm-error-message" id="acmEmergencyContact2NameError"></span>
+                        </div>
+
+                        <div class="acm-form-group acm-col-6">
+                            <label for="acmEmergencyContact2Relationship" class="acm-label">Relationship</label>
+                            <input 
+                                type="text" 
+                                id="acmEmergencyContact2Relationship" 
+                                name="emergency_contact_2_relationship" 
+                                class="acm-input"
+                                placeholder="e.g., Aunt, Uncle"
+                            >
+                            <span class="acm-error-message" id="acmEmergencyContact2RelationshipError"></span>
+                        </div>
+                    </div>
+
+                    <div class="acm-form-row">
+                        <div class="acm-form-group acm-col-6">
+                            <label for="acmEmergencyContact2Phone" class="acm-label">Phone</label>
+                            <input 
+                                type="tel" 
+                                id="acmEmergencyContact2Phone" 
+                                name="emergency_contact_2_phone" 
+                                class="acm-input"
+                                placeholder="+254712345678"
+                            >
+                            <span class="acm-error-message" id="acmEmergencyContact2PhoneError"></span>
+                        </div>
+
+                        <div class="acm-form-group acm-col-6">
+                            <label for="acmEmergencyContact2Email" class="acm-label">Email</label>
+                            <input 
+                                type="email" 
+                                id="acmEmergencyContact2Email" 
+                                name="emergency_contact_2_email" 
+                                class="acm-input"
+                                placeholder="contact@example.com"
+                            >
+                            <span class="acm-error-message" id="acmEmergencyContact2EmailError"></span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="acm-modal-footer">
+            <div class="acm-footer-left">
+                <button type="button" class="acm-btn acm-btn-secondary" id="addChildPrevBtn">
+                    <i class="fas fa-arrow-left"></i> Previous
                 </button>
-                <button type="submit" class="btn-child-submit" id="addChildSubmitBtn">
-                    <i class="fas fa-check"></i> Register Child
+            </div>
+            <div class="acm-footer-right">
+                <button type="button" class="acm-btn acm-btn-outline" id="addChildCancelBtn">
+                    Cancel
+                </button>
+                <button type="button" class="acm-btn acm-btn-primary" id="addChildNextBtn">
+                    Next <i class="fas fa-arrow-right"></i>
+                </button>
+                <button type="submit" form="addChildForm" class="acm-btn acm-btn-success" id="addChildSubmitBtn" style="display: none;">
+                    <i class="fas fa-check"></i> Create Child
                 </button>
             </div>
-        </form>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div id="addChildLoadingOverlay" class="acm-loading-overlay">
+            <div class="acm-spinner"></div>
+            <p class="acm-loading-text">Creating child profile...</p>
+        </div>
     </div>
 </div>
+
