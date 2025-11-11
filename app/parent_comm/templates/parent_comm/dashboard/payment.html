@@ -1,4 +1,216 @@
-<div class="empty-state">
-    <i class="fas fa-bell"></i>
-    <p>Payment History - coming soon</p>
+<!-- Parent Dashboard Payment Management - Main View -->
+<div class="eps-payment-container">
+  <!-- Header Section -->
+  <div class="eps-payment-header">
+    <div class="eps-header-content">
+      <h2 class="eps-page-title">
+        <i class="fas fa-credit-card"></i>
+        Payment Management
+      </h2>
+      <p class="eps-page-subtitle">Manage trip payments and view transaction history</p>
+    </div>
+    <button class="eps-btn eps-btn-primary" id="epsInitiatePaymentBtn">
+      <i class="fas fa-plus-circle"></i>
+      Make Payment
+    </button>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="eps-stats-grid">
+    <div class="eps-stat-card eps-stat-owed">
+      <div class="eps-stat-icon">
+        <i class="fas fa-wallet"></i>
+      </div>
+      <div class="eps-stat-content">
+        <span class="eps-stat-label">Total Owed</span>
+        <span class="eps-stat-value" id="epsTotalOwed">KES 0.00</span>
+        <span class="eps-stat-sublabel" id="epsActiveRegs">0 active registrations</span>
+      </div>
+    </div>
+
+    <div class="eps-stat-card eps-stat-paid">
+      <div class="eps-stat-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <div class="eps-stat-content">
+        <span class="eps-stat-label">Total Paid</span>
+        <span class="eps-stat-value" id="epsTotalPaid">KES 0.00</span>
+        <span class="eps-stat-sublabel" id="epsTotalTransactions">0 transactions</span>
+      </div>
+    </div>
+
+    <div class="eps-stat-card eps-stat-outstanding">
+      <div class="eps-stat-icon">
+        <i class="fas fa-exclamation-circle"></i>
+      </div>
+      <div class="eps-stat-content">
+        <span class="eps-stat-label">Outstanding</span>
+        <span class="eps-stat-value" id="epsOutstanding">KES 0.00</span>
+        <span class="eps-stat-sublabel" id="epsOverdueCount">0 overdue</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alerts Section -->
+  <div id="epsAlertsContainer"></div>
+
+  <!-- Tabs Navigation -->
+  <div class="eps-tabs-wrapper">
+    <div class="eps-tabs-header">
+      <button class="eps-tab-btn eps-tab-active" data-eps-tab="overview">
+        <i class="fas fa-th-large"></i>
+        Overview
+      </button>
+      <button class="eps-tab-btn" data-eps-tab="history">
+        <i class="fas fa-history"></i>
+        Payment History
+      </button>
+      <button class="eps-tab-btn" data-eps-tab="plans">
+        <i class="fas fa-calendar-alt"></i>
+        Payment Plans
+      </button>
+      <button class="eps-tab-btn" data-eps-tab="registrations">
+        <i class="fas fa-list"></i>
+        Registrations
+      </button>
+    </div>
+
+    <div class="eps-tabs-content">
+      <!-- Overview Tab -->
+      <div class="eps-tab-pane eps-tab-active" id="epsOverviewTab">
+        <!-- Recent Payments -->
+        <div class="eps-section">
+          <div class="eps-section-header">
+            <h3 class="eps-section-title">
+              <i class="fas fa-clock"></i>
+              Recent Payments
+            </h3>
+            <button class="eps-btn eps-btn-text" id="epsViewAllPayments">
+              View All <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+          <div class="eps-loading" id="epsRecentPaymentsLoading">
+            <i class="fas fa-spinner fa-spin"></i>
+            <span>Loading recent payments...</span>
+          </div>
+          <div id="epsRecentPaymentsContainer"></div>
+        </div>
+
+        <!-- Upcoming Deadlines -->
+        <div class="eps-section">
+          <div class="eps-section-header">
+            <h3 class="eps-section-title">
+              <i class="fas fa-calendar-exclamation"></i>
+              Upcoming Deadlines
+            </h3>
+          </div>
+          <div class="eps-loading" id="epsDeadlinesLoading">
+            <i class="fas fa-spinner fa-spin"></i>
+            <span>Loading deadlines...</span>
+          </div>
+          <div id="epsDeadlinesContainer"></div>
+        </div>
+      </div>
+
+      <!-- Payment History Tab -->
+      <div class="eps-tab-pane" id="epsHistoryTab">
+        <div class="eps-filters-bar">
+          <div class="eps-search-wrapper">
+            <i class="fas fa-search"></i>
+            <input type="text" id="epsHistorySearch" class="eps-search-input" 
+                   placeholder="Search by registration, trip, or reference...">
+          </div>
+          <select id="epsHistoryStatusFilter" class="eps-filter-select">
+            <option value="">All Status</option>
+            <option value="completed">Completed</option>
+            <option value="pending">Pending</option>
+            <option value="failed">Failed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+          <div class="eps-date-range">
+            <input type="date" id="epsHistoryStartDate" class="eps-date-input">
+            <span>to</span>
+            <input type="date" id="epsHistoryEndDate" class="eps-date-input">
+          </div>
+          <button class="eps-btn eps-btn-secondary" id="epsApplyFilters">
+            <i class="fas fa-filter"></i>
+            Apply
+          </button>
+        </div>
+
+        <div class="eps-loading" id="epsHistoryLoading">
+          <i class="fas fa-spinner fa-spin"></i>
+          <span>Loading payment history...</span>
+        </div>
+
+        <div id="epsHistoryTableWrapper" style="display: none;">
+          <div class="eps-table-container">
+            <table class="eps-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Reference</th>
+                  <th>Trip / Participant</th>
+                  <th>Amount</th>
+                  <th>Method</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="epsHistoryTableBody"></tbody>
+            </table>
+          </div>
+          <div class="eps-pagination" id="epsPaginationContainer"></div>
+        </div>
+
+        <div class="eps-empty-state" id="epsHistoryEmpty" style="display: none;">
+          <i class="fas fa-receipt"></i>
+          <h3>No Payment History</h3>
+          <p>You haven't made any payments yet.</p>
+        </div>
+      </div>
+
+      <!-- Payment Plans Tab -->
+      <div class="eps-tab-pane" id="epsPlansTab">
+        <div class="eps-loading" id="epsPlansLoading">
+          <i class="fas fa-spinner fa-spin"></i>
+          <span>Loading payment plans...</span>
+        </div>
+        <div id="epsPlansContainer"></div>
+        <div class="eps-empty-state" id="epsPlansEmpty" style="display: none;">
+          <i class="fas fa-calendar-times"></i>
+          <h3>No Payment Plans</h3>
+          <p>Create a payment plan to manage installments.</p>
+        </div>
+      </div>
+
+      <!-- Registrations Tab -->
+      <div class="eps-tab-pane" id="epsRegistrationsTab">
+        <div class="eps-loading" id="epsRegistrationsLoading">
+          <i class="fas fa-spinner fa-spin"></i>
+          <span>Loading registrations...</span>
+        </div>
+        <div id="epsRegistrationsContainer"></div>
+        <div class="eps-empty-state" id="epsRegistrationsEmpty" style="display: none;">
+          <i class="fas fa-clipboard-list"></i>
+          <h3>No Active Registrations</h3>
+          <p>You don't have any active trip registrations.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Notification -->
+<div class="eps-toast" id="epsToast">
+  <div class="eps-toast-content">
+    <i class="eps-toast-icon"></i>
+    <div class="eps-toast-text">
+      <strong class="eps-toast-title"></strong>
+      <span class="eps-toast-message"></span>
+    </div>
+  </div>
+  <button class="eps-toast-close">
+    <i class="fas fa-times"></i>
+  </button>
 </div>

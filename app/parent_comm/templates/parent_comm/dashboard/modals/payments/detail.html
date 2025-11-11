@@ -1,0 +1,115 @@
+<!-- Payment Details Modal -->
+<div class="eps-modal" id="epsPaymentDetailsModal">
+  <div class="eps-modal-content eps-modal-medium">
+    <div class="eps-modal-header">
+      <h3>
+        <i class="fas fa-file-invoice"></i>
+        Payment Details
+      </h3>
+      <button class="eps-modal-close" onclick="closeEpsPaymentDetailsModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="eps-modal-body">
+      <div class="eps-loading" id="epsPaymentDetailsLoading">
+        <i class="fas fa-spinner fa-spin"></i>
+        <span>Loading payment details...</span>
+      </div>
+
+      <div id="epsPaymentDetailsContent" style="display: none;">
+        <!-- Payment Status -->
+        <div class="eps-detail-status-section">
+          <div class="eps-status-icon" id="epsDetailStatusIcon">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <div class="eps-status-text">
+            <h4 id="epsDetailStatusTitle">Payment Completed</h4>
+            <p id="epsDetailStatusMessage">Your payment has been processed successfully</p>
+          </div>
+        </div>
+
+        <!-- Payment Information -->
+        <div class="eps-detail-section">
+          <h4 class="eps-detail-section-title">
+            <i class="fas fa-info-circle"></i>
+            Payment Information
+          </h4>
+          <div class="eps-detail-grid">
+            <div class="eps-detail-item">
+              <span class="eps-detail-label">Reference Number</span>
+              <span class="eps-detail-value" id="epsDetailRefNumber">-</span>
+            </div>
+            <div class="eps-detail-item">
+              <span class="eps-detail-label">Transaction ID</span>
+              <span class="eps-detail-value" id="epsDetailTxnId">-</span>
+            </div>
+            <div class="eps-detail-item">
+              <span class="eps-detail-label">Amount</span>
+              <span class="eps-detail-value eps-detail-amount" id="epsDetailAmount">-</span>
+            </div>
+            <div class="eps-detail-item">
+              <span class="eps-detail-label">Payment Method</span>
+              <span class="eps-detail-value" id="epsDetailMethod">-</span>
+            </div>
+            <div class="eps-detail-item">
+              <span class="eps-detail-label">M-Pesa Receipt</span>
+              <span class="eps-detail-value" id="epsDetailMpesaReceipt">-</span>
+            </div>
+            <div class="eps-detail-item">
+              <span class="eps-detail-label">Payment Date</span>
+              <span class="eps-detail-value" id="epsDetailPaymentDate">-</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Registration Information -->
+        <div class="eps-detail-section">
+          <h4 class="eps-detail-section-title">
+            <i class="fas fa-clipboard-list"></i>
+            Registration Information
+          </h4>
+          <div class="eps-detail-grid">
+            <div class="eps-detail-item">
+              <span class="eps-detail-label">Registration Number</span>
+              <span class="eps-detail-value" id="epsDetailRegNumber">-</span>
+            </div>
+            <div class="eps-detail-item">
+              <span class="eps-detail-label">Trip</span>
+              <span class="eps-detail-value" id="epsDetailTrip">-</span>
+            </div>
+            <div class="eps-detail-item">
+              <span class="eps-detail-label">Participant</span>
+              <span class="eps-detail-value" id="epsDetailParticipant">-</span>
+            </div>
+            <div class="eps-detail-item">
+              <span class="eps-detail-label">Outstanding Balance</span>
+              <span class="eps-detail-value" id="epsDetailOutstanding">-</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Failure Reason (if failed) -->
+        <div id="epsDetailFailureSection" class="eps-alert eps-alert-error" style="display: none;">
+          <i class="fas fa-exclamation-circle"></i>
+          <div>
+            <strong>Payment Failed</strong><br>
+            <span id="epsDetailFailureReason">-</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="eps-modal-footer">
+      <button type="button" class="eps-btn eps-btn-secondary" onclick="closeEpsPaymentDetailsModal()">
+        Close
+      </button>
+      <button type="button" class="eps-btn eps-btn-primary" id="epsDownloadReceiptBtn" style="display: none;" onclick="downloadEpsPaymentReceipt()">
+        <i class="fas fa-download"></i>
+        Download Receipt
+      </button>
+      <button type="button" class="eps-btn eps-btn-primary" id="epsCheckStatusBtn" style="display: none;" onclick="checkEpsPaymentStatusFromModal()">
+        <i class="fas fa-sync"></i>
+        Check Status
+      </button>
+    </div>
+  </div>
+</div>

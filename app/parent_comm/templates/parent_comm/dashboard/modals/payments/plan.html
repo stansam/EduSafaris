@@ -1,0 +1,144 @@
+<!-- Payment Plan Modal -->
+<div class="eps-modal" id="epsPaymentPlanModal">
+  <div class="eps-modal-content eps-modal-large">
+    <div class="eps-modal-header">
+      <h3>
+        <i class="fas fa-calendar-alt"></i>
+        Payment Plan Details
+      </h3>
+      <button class="eps-modal-close" onclick="closeEpsPaymentPlanModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="eps-modal-body">
+      <div class="eps-loading" id="epsPaymentPlanLoading">
+        <i class="fas fa-spinner fa-spin"></i>
+        <span>Loading payment plan...</span>
+      </div>
+
+      <div id="epsPaymentPlanContent" style="display: none;">
+        <!-- Registration Info -->
+        <div class="eps-plan-info-card">
+          <h4 class="eps-plan-card-title">
+            <i class="fas fa-clipboard-list"></i>
+            Registration Details
+          </h4>
+          <div class="eps-plan-info-grid">
+            <div class="eps-plan-info-item">
+              <span class="eps-plan-info-label">Trip</span>
+              <span class="eps-plan-info-value" id="epsPlanTripTitle">-</span>
+            </div>
+            <div class="eps-plan-info-item">
+              <span class="eps-plan-info-label">Participant</span>
+              <span class="eps-plan-info-value" id="epsPlanParticipant">-</span>
+            </div>
+            <div class="eps-plan-info-item">
+              <span class="eps-plan-info-label">Registration Number</span>
+              <span class="eps-plan-info-value" id="epsPlanRegNumber">-</span>
+            </div>
+            <div class="eps-plan-info-item">
+              <span class="eps-plan-info-label">Current Plan</span>
+              <span class="eps-plan-info-value" id="epsPlanCurrentPlan">-</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Summary -->
+        <div class="eps-plan-summary-card">
+          <h4 class="eps-plan-card-title">
+            <i class="fas fa-chart-pie"></i>
+            Payment Summary
+          </h4>
+          <div class="eps-plan-summary-grid">
+            <div class="eps-plan-summary-item">
+              <div class="eps-plan-summary-icon eps-summary-total">
+                <i class="fas fa-wallet"></i>
+              </div>
+              <div class="eps-plan-summary-content">
+                <span class="eps-plan-summary-label">Total Amount</span>
+                <span class="eps-plan-summary-value" id="epsPlanTotalAmount">KES 0.00</span>
+              </div>
+            </div>
+            <div class="eps-plan-summary-item">
+              <div class="eps-plan-summary-icon eps-summary-paid">
+                <i class="fas fa-check-circle"></i>
+              </div>
+              <div class="eps-plan-summary-content">
+                <span class="eps-plan-summary-label">Amount Paid</span>
+                <span class="eps-plan-summary-value" id="epsPlanAmountPaid">KES 0.00</span>
+              </div>
+            </div>
+            <div class="eps-plan-summary-item">
+              <div class="eps-plan-summary-icon eps-summary-outstanding">
+                <i class="fas fa-exclamation-circle"></i>
+              </div>
+              <div class="eps-plan-summary-content">
+                <span class="eps-plan-summary-label">Outstanding</span>
+                <span class="eps-plan-summary-value" id="epsPlanOutstanding">KES 0.00</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment History -->
+        <div class="eps-plan-history-card">
+          <h4 class="eps-plan-card-title">
+            <i class="fas fa-history"></i>
+            Payment History
+          </h4>
+          <div id="epsPlanPaymentHistory">
+            <div class="eps-empty-state" style="padding: 40px 20px;">
+              <i class="fas fa-receipt"></i>
+              <p>No payment history available</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Available Plans -->
+        <div class="eps-plan-options-card">
+          <h4 class="eps-plan-card-title">
+            <i class="fas fa-list-ul"></i>
+            Available Payment Plans
+          </h4>
+          <div id="epsAvailablePlans" class="eps-plan-options-grid">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Change Plan Form -->
+        <div id="epsChangePlanSection" class="eps-change-plan-section" style="display: none;">
+          <h4 class="eps-plan-card-title">
+            <i class="fas fa-edit"></i>
+            Update Payment Plan
+          </h4>
+          <form id="epsChangePlanForm">
+            <div class="eps-form-group">
+              <label for="epsNewPlanType">Select New Plan <span class="eps-required">*</span></label>
+              <select id="epsNewPlanType" class="eps-form-control" required>
+                <option value="">Choose a payment plan</option>
+              </select>
+            </div>
+            <div class="eps-form-actions">
+              <button type="button" class="eps-btn eps-btn-secondary" onclick="hideEpsChangePlanSection()">
+                Cancel
+              </button>
+              <button type="submit" class="eps-btn eps-btn-primary" id="epsSubmitPlanChangeBtn">
+                <i class="fas fa-check"></i>
+                Update Plan
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="eps-modal-footer">
+      <button type="button" class="eps-btn eps-btn-secondary" onclick="closeEpsPaymentPlanModal()">
+        Close
+      </button>
+      <button type="button" class="eps-btn eps-btn-primary" id="epsShowChangePlanBtn" onclick="showEpsChangePlanSection()">
+        <i class="fas fa-edit"></i>
+        Change Plan
+      </button>
+    </div>
+  </div>
+</div>

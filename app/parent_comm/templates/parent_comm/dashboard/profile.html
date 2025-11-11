@@ -1,0 +1,283 @@
+<!-- Parent Profile Tab Content -->
+<div class="parent-profile-container">
+    <!-- Profile Header -->
+    <div class="profile-header-section">
+        <div class="profile-header-content">
+            <div class="profile-avatar-wrapper">
+                <div class="profile-avatar-circle">
+                    <i class="fas fa-user profile-avatar-icon"></i>
+                </div>
+                <button class="profile-avatar-upload-btn" title="Upload profile picture">
+                    <i class="fas fa-camera"></i>
+                </button>
+            </div>
+            <div class="profile-header-info">
+                <h2 class="profile-user-name" id="profileUserName">Loading...</h2>
+                <p class="profile-user-role"><i class="fas fa-users"></i> Parent Account</p>
+                <div class="profile-verification-badge" id="profileVerificationBadge">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Verified</span>
+                </div>
+            </div>
+        </div>
+        <div class="profile-header-actions">
+            <button class="profile-btn profile-btn-primary" id="profileEditBtn">
+                <i class="fas fa-edit"></i> Edit Profile
+            </button>
+        </div>
+    </div>
+
+    <!-- Alert Messages -->
+    <div class="profile-alert profile-alert-success" id="profileSuccessAlert" style="display: none;">
+        <i class="fas fa-check-circle"></i>
+        <span id="profileSuccessMessage"></span>
+        <button class="profile-alert-close" onclick="closeProfileAlert('profileSuccessAlert')">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <div class="profile-alert profile-alert-error" id="profileErrorAlert" style="display: none;">
+        <i class="fas fa-exclamation-circle"></i>
+        <span id="profileErrorMessage"></span>
+        <button class="profile-alert-close" onclick="closeProfileAlert('profileErrorAlert')">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="profile-loading-overlay" id="profileLoadingOverlay" style="display: none;">
+        <div class="profile-spinner"></div>
+        <p>Loading profile...</p>
+    </div>
+
+    <!-- Profile Content -->
+    <div class="profile-content-wrapper">
+        <!-- Statistics Cards -->
+        <div class="profile-stats-grid" id="profileStatsGrid">
+            <div class="profile-stat-card">
+                <div class="profile-stat-icon profile-stat-icon-primary">
+                    <i class="fas fa-child"></i>
+                </div>
+                <div class="profile-stat-info">
+                    <h3 id="profileChildrenCount">0</h3>
+                    <p>Children</p>
+                </div>
+            </div>
+            <div class="profile-stat-card">
+                <div class="profile-stat-icon profile-stat-icon-success">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="profile-stat-info">
+                    <h3 id="profileUpcomingTrips">0</h3>
+                    <p>Upcoming Trips</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Information Sections -->
+        <div class="profile-sections-grid">
+            <!-- Personal Information -->
+            <div class="profile-info-card">
+                <div class="profile-card-header">
+                    <h3><i class="fas fa-user-circle"></i> Personal Information</h3>
+                </div>
+                <div class="profile-card-body" id="profilePersonalInfo">
+                    <div class="profile-info-row">
+                        <span class="profile-info-label">First Name:</span>
+                        <span class="profile-info-value" id="profileFirstName">-</span>
+                    </div>
+                    <div class="profile-info-row">
+                        <span class="profile-info-label">Last Name:</span>
+                        <span class="profile-info-value" id="profileLastName">-</span>
+                    </div>
+                    <div class="profile-info-row">
+                        <span class="profile-info-label">Email:</span>
+                        <span class="profile-info-value" id="profileEmail">-</span>
+                    </div>
+                    <div class="profile-info-row">
+                        <span class="profile-info-label">Phone:</span>
+                        <span class="profile-info-value" id="profilePhone">-</span>
+                    </div>
+                    <div class="profile-info-row">
+                        <span class="profile-info-label">Date of Birth:</span>
+                        <span class="profile-info-value" id="profileDOB">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Information -->
+            <div class="profile-info-card">
+                <div class="profile-card-header">
+                    <h3><i class="fas fa-info-circle"></i> Additional Information</h3>
+                </div>
+                <div class="profile-card-body">
+                    <div class="profile-info-row">
+                        <span class="profile-info-label">School:</span>
+                        <span class="profile-info-value" id="profileSchool">-</span>
+                    </div>
+                    <div class="profile-info-row profile-info-row-full">
+                        <span class="profile-info-label">Bio:</span>
+                        <span class="profile-info-value" id="profileBio">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emergency Contact -->
+            <div class="profile-info-card">
+                <div class="profile-card-header">
+                    <h3><i class="fas fa-phone-alt"></i> Emergency Contact</h3>
+                </div>
+                <div class="profile-card-body">
+                    <div class="profile-info-row">
+                        <span class="profile-info-label">Contact Name:</span>
+                        <span class="profile-info-value" id="profileEmergencyContact">-</span>
+                    </div>
+                    <div class="profile-info-row">
+                        <span class="profile-info-label">Contact Phone:</span>
+                        <span class="profile-info-value" id="profileEmergencyPhone">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account Information -->
+            <div class="profile-info-card">
+                <div class="profile-card-header">
+                    <h3><i class="fas fa-cog"></i> Account Information</h3>
+                </div>
+                <div class="profile-card-body">
+                    <div class="profile-info-row">
+                        <span class="profile-info-label">Account Status:</span>
+                        <span class="profile-info-value" id="profileStatus">-</span>
+                    </div>
+                    <div class="profile-info-row">
+                        <span class="profile-info-label">Member Since:</span>
+                        <span class="profile-info-value" id="profileCreatedAt">-</span>
+                    </div>
+                    <div class="profile-info-row">
+                        <span class="profile-info-label">Last Login:</span>
+                        <span class="profile-info-value" id="profileLastLogin">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Profile Modal -->
+<div class="profile-modal" id="profileEditModal">
+    <div class="profile-modal-content">
+        <div class="profile-modal-header">
+            <h3><i class="fas fa-user-edit"></i> Edit Profile</h3>
+            <button class="profile-modal-close" id="profileModalCloseBtn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="profile-modal-body">
+            <form id="profileEditForm">
+                <!-- Personal Information Section -->
+                <div class="profile-form-section">
+                    <h4 class="profile-form-section-title">
+                        <i class="fas fa-user"></i> Personal Information
+                    </h4>
+                    <div class="profile-form-grid">
+                        <div class="profile-form-group">
+                            <label for="editFirstName" class="profile-form-label">
+                                First Name <span class="profile-required">*</span>
+                            </label>
+                            <input type="text" id="editFirstName" name="first_name" 
+                                   class="profile-form-input" required minlength="2" maxlength="50">
+                            <span class="profile-form-error" id="errorFirstName"></span>
+                        </div>
+                        <div class="profile-form-group">
+                            <label for="editLastName" class="profile-form-label">
+                                Last Name <span class="profile-required">*</span>
+                            </label>
+                            <input type="text" id="editLastName" name="last_name" 
+                                   class="profile-form-input" required minlength="2" maxlength="50">
+                            <span class="profile-form-error" id="errorLastName"></span>
+                        </div>
+                    </div>
+                    <div class="profile-form-grid">
+                        <div class="profile-form-group">
+                            <label for="editEmail" class="profile-form-label">
+                                Email <span class="profile-required">*</span>
+                            </label>
+                            <input type="email" id="editEmail" name="email" 
+                                   class="profile-form-input" required>
+                            <span class="profile-form-error" id="errorEmail"></span>
+                            <small class="profile-form-help">
+                                <i class="fas fa-info-circle"></i> 
+                                Changing email will require re-verification
+                            </small>
+                        </div>
+                        <div class="profile-form-group">
+                            <label for="editPhone" class="profile-form-label">Phone</label>
+                            <input type="tel" id="editPhone" name="phone" 
+                                   class="profile-form-input" maxlength="20">
+                            <span class="profile-form-error" id="errorPhone"></span>
+                        </div>
+                    </div>
+                    <div class="profile-form-group">
+                        <label for="editDOB" class="profile-form-label">Date of Birth</label>
+                        <input type="date" id="editDOB" name="date_of_birth" 
+                               class="profile-form-input">
+                        <span class="profile-form-error" id="errorDOB"></span>
+                    </div>
+                </div>
+
+                <!-- Additional Information Section -->
+                <div class="profile-form-section">
+                    <h4 class="profile-form-section-title">
+                        <i class="fas fa-info"></i> Additional Information
+                    </h4>
+                    <div class="profile-form-group">
+                        <label for="editSchool" class="profile-form-label">School</label>
+                        <input type="text" id="editSchool" name="school" 
+                               class="profile-form-input" maxlength="100">
+                        <span class="profile-form-error" id="errorSchool"></span>
+                    </div>
+                    <div class="profile-form-group">
+                        <label for="editBio" class="profile-form-label">Bio</label>
+                        <textarea id="editBio" name="bio" class="profile-form-textarea" 
+                                  rows="4" maxlength="1000"></textarea>
+                        <span class="profile-form-error" id="errorBio"></span>
+                        <small class="profile-form-help profile-char-count">
+                            <span id="bioCharCount">0</span>/1000 characters
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Emergency Contact Section -->
+                <div class="profile-form-section">
+                    <h4 class="profile-form-section-title">
+                        <i class="fas fa-phone-alt"></i> Emergency Contact
+                    </h4>
+                    <div class="profile-form-group">
+                        <label for="editEmergencyContact" class="profile-form-label">
+                            Emergency Contact Name
+                        </label>
+                        <input type="text" id="editEmergencyContact" name="emergency_contact" 
+                               class="profile-form-input" maxlength="100">
+                        <span class="profile-form-error" id="errorEmergencyContact"></span>
+                    </div>
+                    <div class="profile-form-group">
+                        <label for="editEmergencyPhone" class="profile-form-label">
+                            Emergency Contact Phone
+                        </label>
+                        <input type="tel" id="editEmergencyPhone" name="emergency_phone" 
+                               class="profile-form-input" maxlength="20">
+                        <span class="profile-form-error" id="errorEmergencyPhone"></span>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="profile-modal-footer">
+            <button type="button" class="profile-btn profile-btn-secondary" id="profileCancelBtn">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+            <button type="submit" form="profileEditForm" class="profile-btn profile-btn-primary" 
+                    id="profileSaveBtn">
+                <i class="fas fa-save"></i> Save Changes
+            </button>
+        </div>
+    </div>
+</div>

@@ -765,7 +765,7 @@ def initiate_mpesa_stk_push(phone_number, amount, account_reference, transaction
 
 
 @teacher_vendor_bp.route('/teacher/vendors/payments/mpesa/callback', methods=['POST'])
-def mpesa_callback():
+def mpesa_teacher_callback():
     """
     M-Pesa payment callback endpoint
     This endpoint receives payment confirmation from Safaricom
@@ -897,7 +897,7 @@ def mpesa_callback():
 @teacher_vendor_bp.route('/teacher/vendors/bookings/<int:booking_id>/payment/status', methods=['GET'])
 @login_required
 @roles_required('teacher')
-def check_payment_status(booking_id):
+def check_teacher_payment_status(booking_id):
     """Check payment status for a booking"""
     try:
         booking = Booking.query.get(booking_id)

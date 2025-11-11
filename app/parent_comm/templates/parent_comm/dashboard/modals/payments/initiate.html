@@ -1,0 +1,132 @@
+<!-- Initiate Payment Modal -->
+<div class="eps-modal" id="epsInitiatePaymentModal">
+  <div class="eps-modal-content eps-modal-large">
+    <div class="eps-modal-header">
+      <h3>
+        <i class="fas fa-credit-card"></i>
+        Initiate Payment
+      </h3>
+      <button class="eps-modal-close" onclick="closeEpsInitiatePaymentModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <form id="epsInitiatePaymentForm">
+      <div class="eps-modal-body">
+        <!-- Registration Selection -->
+        <div class="eps-form-group">
+          <label for="epsPaymentRegistration">
+            Select Registration <span class="eps-required">*</span>
+          </label>
+          <select id="epsPaymentRegistration" class="eps-form-control" required>
+            <option value="">Loading registrations...</option>
+          </select>
+          <span class="eps-error-message" id="epsPaymentRegistrationError"></span>
+        </div>
+
+        <!-- Registration Details Display -->
+        <div id="epsRegistrationDetails" class="eps-info-box" style="display: none;">
+          <div class="eps-info-row">
+            <span class="eps-info-label">Trip:</span>
+            <span class="eps-info-value" id="epsRegTripTitle">-</span>
+          </div>
+          <div class="eps-info-row">
+            <span class="eps-info-label">Participant:</span>
+            <span class="eps-info-value" id="epsRegParticipant">-</span>
+          </div>
+          <div class="eps-info-row">
+            <span class="eps-info-label">Total Amount:</span>
+            <span class="eps-info-value" id="epsRegTotalAmount">-</span>
+          </div>
+          <div class="eps-info-row">
+            <span class="eps-info-label">Amount Paid:</span>
+            <span class="eps-info-value" id="epsRegAmountPaid">-</span>
+          </div>
+          <div class="eps-info-row">
+            <span class="eps-info-label">Outstanding Balance:</span>
+            <span class="eps-info-value eps-text-primary" id="epsRegOutstanding">-</span>
+          </div>
+        </div>
+
+        <!-- Payment Amount -->
+        <div class="eps-form-group">
+          <label for="epsPaymentAmount">
+            Payment Amount (KES) <span class="eps-required">*</span>
+          </label>
+          <div class="eps-input-with-prefix">
+            <span class="eps-input-prefix">KES</span>
+            <input 
+              type="number" 
+              id="epsPaymentAmount" 
+              class="eps-form-control eps-input-with-prefix-field" 
+              placeholder="0.00"
+              step="0.01"
+              min="100"
+              required
+            >
+          </div>
+          <small class="eps-help-text">Minimum amount: KES 100</small>
+          <span class="eps-error-message" id="epsPaymentAmountError"></span>
+        </div>
+
+        <!-- Phone Number -->
+        <div class="eps-form-group">
+          <label for="epsPaymentPhone">
+            M-Pesa Phone Number <span class="eps-required">*</span>
+          </label>
+          <div class="eps-input-with-prefix">
+            <span class="eps-input-prefix">+254</span>
+            <input 
+              type="tel" 
+              id="epsPaymentPhone" 
+              class="eps-form-control eps-input-with-prefix-field" 
+              placeholder="7XXXXXXXX"
+              pattern="[0-9]{9}"
+              maxlength="9"
+              required
+            >
+          </div>
+          <small class="eps-help-text">Enter your M-Pesa registered phone number (9 digits after 254)</small>
+          <span class="eps-error-message" id="epsPaymentPhoneError"></span>
+        </div>
+
+        <!-- Payment Method (Hidden for now, defaults to mpesa) -->
+        <input type="hidden" id="epsPaymentMethod" value="mpesa">
+
+        <!-- Quick Amount Buttons -->
+        <div class="eps-quick-amounts" id="epsQuickAmounts" style="display: none;">
+          <label class="eps-form-label">Quick Amounts:</label>
+          <div class="eps-quick-amount-buttons">
+            <button type="button" class="eps-quick-amount-btn" data-amount="25">25%</button>
+            <button type="button" class="eps-quick-amount-btn" data-amount="50">50%</button>
+            <button type="button" class="eps-quick-amount-btn" data-amount="75">75%</button>
+            <button type="button" class="eps-quick-amount-btn" data-amount="100">Full</button>
+          </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="eps-alert eps-alert-info">
+          <i class="fas fa-info-circle"></i>
+          <div>
+            <strong>Payment Instructions:</strong>
+            <ol style="margin: 8px 0 0 0; padding-left: 20px;">
+              <li>Enter the amount you wish to pay</li>
+              <li>Enter your M-Pesa registered phone number</li>
+              <li>Click "Initiate Payment"</li>
+              <li>You will receive an STK push prompt on your phone</li>
+              <li>Enter your M-Pesa PIN to complete the payment</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+      <div class="eps-modal-footer">
+        <button type="button" class="eps-btn eps-btn-secondary" onclick="closeEpsInitiatePaymentModal()">
+          Cancel
+        </button>
+        <button type="submit" class="eps-btn eps-btn-primary" id="epsSubmitPaymentBtn">
+          <i class="fas fa-credit-card"></i>
+          Initiate Payment
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

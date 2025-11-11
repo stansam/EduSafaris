@@ -1,0 +1,54 @@
+<!-- Cancel Payment Modal -->
+<div class="eps-modal" id="epsCancelPaymentModal">
+  <div class="eps-modal-content eps-modal-small">
+    <div class="eps-modal-header">
+      <h3>
+        <i class="fas fa-exclamation-triangle"></i>
+        Cancel Payment
+      </h3>
+      <button class="eps-modal-close" onclick="closeEpsCancelPaymentModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <form id="epsCancelPaymentForm">
+      <div class="eps-modal-body">
+        <div class="eps-alert eps-alert-warning">
+          <i class="fas fa-exclamation-circle"></i>
+          <div>
+            <strong>Warning!</strong><br>
+            Are you sure you want to cancel this payment? This action cannot be undone.
+          </div>
+        </div>
+
+        <div class="eps-form-group">
+          <label>Payment Reference</label>
+          <div class="eps-info-display" id="epsCancelPaymentRef">-</div>
+        </div>
+
+        <div class="eps-form-group">
+          <label>Amount</label>
+          <div class="eps-info-display" id="epsCancelPaymentAmount">-</div>
+        </div>
+
+        <input type="hidden" id="epsCancelPaymentId">
+      </div>
+      <div class="eps-modal-footer">
+        <button type="button" class="eps-btn eps-btn-secondary" onclick="closeEpsCancelPaymentModal()">
+          Keep Payment
+        </button>
+        <button type="submit" class="eps-btn eps-btn-danger" id="epsConfirmCancelBtn">
+          <i class="fas fa-times-circle"></i>
+          Cancel Payment
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+
+</style>
+
+<script>
+
+</script>

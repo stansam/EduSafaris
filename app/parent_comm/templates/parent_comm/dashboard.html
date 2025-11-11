@@ -14,6 +14,12 @@
 <link rel="stylesheet" href="{{url_for('parent_comm.static', filename='css/register_child.css')}}">
 <link rel="stylesheet" href="{{url_for('parent_comm.static', filename='css/cancel_registration.css')}}">
 <link rel="stylesheet" href="{{url_for('parent_comm.static', filename='css/update_requirements.css')}}">
+<link rel="stylesheet" href="{{url_for('parent_comm.static', filename='css/payment.css')}}">
+<link rel="stylesheet" href="{{url_for('parent_comm.static', filename='css/payments/initiate.css')}}">
+<link rel="stylesheet" href="{{url_for('parent_comm.static', filename='css/payments/detail.css')}}">
+<link rel="stylesheet" href="{{url_for('parent_comm.static', filename='css/payments/cancel.css')}}">
+<link rel="stylesheet" href="{{url_for('parent_comm.static', filename='css/payments/plan.css')}}">
+<link rel="stylesheet" href="{{url_for('parent_comm.static', filename='css/profile.css')}}">
 {% endblock %}
 
 {% block scripts %} 
@@ -30,6 +36,12 @@
 <script src="{{url_for('parent_comm.static', filename='js/register_child.js')}}"></script>
 <script src="{{url_for('parent_comm.static', filename='js/cancel_registration.js')}}"></script>
 <script src="{{url_for('parent_comm.static', filename='js/update_requirements.js')}}"></script>
+<script src="{{url_for('parent_comm.static', filename='js/payment.js')}}"></script>
+<script src="{{url_for('parent_comm.static', filename='js/payments/initiate.js')}}"></script>
+<script src="{{url_for('parent_comm.static', filename='js/payments/detail.js')}}"></script>
+<script src="{{url_for('parent_comm.static', filename='js/payments/cancel.js')}}"></script>
+<script src="{{url_for('parent_comm.static', filename='js/payments/plan.js')}}"></script>
+<script src="{{url_for('parent_comm.static', filename='js/profile.js')}}"></script>
 {% endblock %}
 
 {% block content %} 
@@ -43,6 +55,7 @@
                 <button class="tab-btn" data-tab="trips">Trips</button>
                 <button class="tab-btn" data-tab="payments">Payments</button>
                 <button class="tab-btn" data-tab="notifications">Notifications</button>
+                <button class="tab-btn" data-tab="profile">Profile</button>
             </div>
 
             <div class="tab-content">
@@ -64,6 +77,11 @@
                     {% include 'parent_comm/dashboard/notifications.html' %}
                     
                 </div>
+
+                <div class="tab-pane" id="profile">
+                    {% include 'parent_comm/dashboard/profile.html' %}
+                    
+                </div>
             </div>
         </div>
 
@@ -78,6 +96,10 @@
 {% include 'parent_comm/dashboard/modals/register_child.html' %}
 {% include 'parent_comm/dashboard/modals/cancel_registration.html' %}
 {% include 'parent_comm/dashboard/modals/update_requirements.html' %}
+{% include 'parent_comm/dashboard/modals/payments/initiate.html' %}
+{% include 'parent_comm/dashboard/modals/payments/detail.html' %}
+{% include 'parent_comm/dashboard/modals/payments/cancel.html' %}
+{% include 'parent_comm/dashboard/modals/payments/plan.html' %}
 {% endblock %}
 
 

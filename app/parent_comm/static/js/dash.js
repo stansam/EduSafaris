@@ -21,6 +21,10 @@ function switchTab(tabName) {
         selectedBtn.classList.add('active');
         selectedPane.classList.add('active');
     }
+
+    if (tabName === 'payments' && typeof epsPaymentManager !== 'undefined') {
+            epsPaymentManager.refresh();
+        }
 }
 
 // Interactive button actions

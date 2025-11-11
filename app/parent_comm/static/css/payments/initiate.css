@@ -1,0 +1,265 @@
+.eps-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+  overflow-y: auto;
+}
+
+.eps-modal.eps-modal-active {
+  display: flex;
+  animation: epsModalFadeIn 0.3s ease;
+}
+
+@keyframes epsModalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.eps-modal-content {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-height: 90vh;
+  overflow-y: auto;
+  width: 100%;
+  animation: epsModalSlideUp 0.3s ease;
+}
+
+@keyframes epsModalSlideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.eps-modal-small { max-width: 500px; }
+.eps-modal-medium { max-width: 700px; }
+.eps-modal-large { max-width: 900px; }
+
+.eps-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 28px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.eps-modal-header h3 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a202c;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.eps-modal-header h3 i {
+  color: #2563eb;
+}
+
+.eps-modal-close {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: #f3f4f6;
+  color: #4b5563;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.eps-modal-close:hover {
+  background: #e5e7eb;
+  color: #1a202c;
+  transform: rotate(90deg);
+}
+
+.eps-modal-body {
+  padding: 28px;
+}
+
+.eps-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 20px 28px;
+  border-top: 2px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+.eps-form-group {
+  margin-bottom: 20px;
+}
+
+.eps-form-group label,
+.eps-form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.eps-required {
+  color: #dc2626;
+}
+
+.eps-form-control {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.eps-form-control:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.eps-form-control.eps-form-error {
+  border-color: #dc2626;
+}
+
+.eps-input-with-prefix {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.eps-input-prefix {
+  position: absolute;
+  left: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  z-index: 1;
+}
+
+.eps-input-with-prefix-field {
+  padding-left: 52px;
+}
+
+.eps-help-text {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.eps-error-message {
+  display: none;
+  font-size: 13px;
+  color: #dc2626;
+  margin-top: 6px;
+}
+
+.eps-error-message.eps-error-visible {
+  display: block;
+}
+
+.eps-info-box {
+  background: #f9fafb;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.eps-info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.eps-info-row:last-child {
+  border-bottom: none;
+}
+
+.eps-info-label {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.eps-info-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.eps-text-primary {
+  color: #2563eb !important;
+  font-size: 16px !important;
+}
+
+.eps-quick-amounts {
+  margin-bottom: 20px;
+}
+
+.eps-quick-amount-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.eps-quick-amount-btn {
+  padding: 10px;
+  border: 2px solid #e5e7eb;
+  background: white;
+  color: #4b5563;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.eps-quick-amount-btn:hover {
+  border-color: #2563eb;
+  color: #2563eb;
+  background: #eff6ff;
+}
+
+.eps-quick-amount-btn.active {
+  border-color: #2563eb;
+  background: #2563eb;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .eps-modal-content {
+    max-height: 95vh;
+  }
+
+  .eps-modal-header,
+  .eps-modal-body,
+  .eps-modal-footer {
+    padding: 20px;
+  }
+
+  .eps-quick-amount-buttons {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

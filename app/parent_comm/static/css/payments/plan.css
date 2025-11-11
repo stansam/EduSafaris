@@ -1,0 +1,195 @@
+.eps-plan-info-card,
+.eps-plan-summary-card,
+.eps-plan-history-card,
+.eps-plan-options-card,
+.eps-change-plan-section {
+  background: #f9fafb;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.eps-plan-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.eps-plan-card-title i {
+  color: #2563eb;
+}
+
+.eps-plan-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.eps-plan-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.eps-plan-info-label {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.eps-plan-info-value {
+  font-size: 14px;
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.eps-plan-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.eps-plan-summary-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.eps-plan-summary-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.eps-summary-total {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  color: white;
+}
+
+.eps-summary-paid {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.eps-summary-outstanding {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+}
+
+.eps-plan-summary-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.eps-plan-summary-label {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.eps-plan-summary-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.eps-plan-payment-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: white;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.eps-plan-payment-info {
+  flex: 1;
+}
+
+.eps-plan-payment-date {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.eps-plan-payment-amount {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.eps-plan-options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.eps-plan-option-card {
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.eps-plan-option-card:hover {
+  border-color: #2563eb;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.eps-plan-option-card.active {
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+
+.eps-plan-option-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 8px;
+}
+
+.eps-plan-option-details {
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+.eps-form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+@media (max-width: 768px) {
+  .eps-plan-info-grid,
+  .eps-plan-summary-grid,
+  .eps-plan-options-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .eps-form-actions {
+    flex-direction: column;
+  }
+  
+  .eps-form-actions .eps-btn {
+    width: 100%;
+  }
+}

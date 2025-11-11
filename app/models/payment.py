@@ -95,6 +95,10 @@ class RegistrationPayment(BasePayment):
     registration_id = db.Column(db.Integer, db.ForeignKey('trip_registrations.id'), nullable=False)
     parent_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     
+    # phone_number = db.Column(db.String(20))
+    # mpesa_receipt_number = db.Column(db.String(100))
+    # transaction_date = db.Column(db.DateTime)
+
     # Relationships
     registration = db.relationship('TripRegistration', back_populates='payments')
     parent = db.relationship('User', foreign_keys=[parent_id])
