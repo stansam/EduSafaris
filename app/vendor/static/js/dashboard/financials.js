@@ -19,7 +19,7 @@ const vpFinancialsState = {
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
-    if (document.getElementById('financials')) {
+    if (document.getElementById('vendorFinancials')) {
         vpFinancialsInit();
     }
 });
@@ -861,3 +861,17 @@ function vpFinancialsGetPeriodLabel() {
 }
 
 // Keyframe for slide
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes vpSlideOut {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(style);

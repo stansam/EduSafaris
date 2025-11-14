@@ -15,7 +15,7 @@ class User(UserMixin, BaseModel):
     phone = db.Column(db.String(20))
     
     # Role and Status
-    role = db.Column(db.Enum('student', 'parent', 'teacher', 'vendor', 'admin', name='user_roles'), 
+    role = db.Column(db.Enum('parent', 'teacher', 'vendor', 'admin', name='user_roles'), 
                     nullable=False, default='parent')
     is_active = db.Column(db.Boolean, default=True, nullable=False)
     is_verified = db.Column(db.Boolean, default=False, nullable=False)

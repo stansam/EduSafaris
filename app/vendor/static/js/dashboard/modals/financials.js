@@ -1,559 +1,632 @@
-// ==================== MODAL MANAGEMENT ====================
+/**
+ * Vendor Financials Modal Functions
+ * Handles all modal dialogs for financials
+ */
 
-// Global modal state
-const ModalState = {
-    currentPayment: null,
-    completedPayments: [],
-    generatedInvoice: null
-};
-
-// ==================== INITIALIZATION ====================
-document.addEventListener('DOMContentLoaded', function() {
-    initializeModals();
-    setupModalEventListeners();
-});
-
-function initializeModals() {
-    console.log('Initializing modals...');
+/**
+ * Show payment details modal
+ */
+function vpFinancialsShowPaymentDetailsModal(invoice) {
+    const modal = vpFinancialsCreateModal('payment-details', 'Payment Details');
     
-    // Set max date for report download
-    const today = new Date().toISOString().split('T')[0];
-    const reportStartDate = document.getElementById('report-start-date');
-    const reportEndDate = document.getElementById('report-end-date');
+    const content = `
+        <div class="vp-modal-invoice">
+            <!-- Invoice Header -->
+            <div class="vp-invoice-header">
+                <div class="vp-invoice-logo">
+                    <i class="fas fa-file-invoice"></i>
+                    <h2>INVOICE</h2>
+                </div>
+                <div class="vp-invoice-number">
+                    <strong>Invoice #:</strong> ${vpFinancialsEscapeHtml(invoice.invoice_number)}
+                    <br>
+                    <strong>Date:</strong> ${vpFinancialsFormatDate(invoice.invoice_date)}
+                    <br>
+                    <span class="vp-status-badge vp-status-${invoice.status}">
+                        <i class="fas fa-circle"></i>
+                        ${invoice.status}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Vendor & Client Info -->
+            <div class="vp-invoice-parties">
+                <div class="vp-invoice-party">
+                    <h4><i class="fas fa-building"></i> From</h4>
+                    <p><strong>${vpFinancialsEscapeHtml(invoice.vendor.business_name)}</strong></p>
+                    <p>${vpFinancialsEscapeHtml(invoice.vendor.contact_email)}</p>
+                    <p>${vpFinancialsEscapeHtml(invoice.vendor.contact_phone)}</p>
+                    ${invoice.vendor.address ? `<p>${vpFinancialsEscapeHtml(invoice.vendor.address)}</p>` : ''}
+                </div>
+                <div class="vp-invoice-party">
+                    <h4><i class="fas fa-user"></i> Bill To</h4>
+                    <p><strong>${vpFinancialsEscapeHtml(invoice.client.name || 'N/A')}</strong></p>
+                    <p>${vpFinancialsEscapeHtml(invoice.client.email || 'N/A')}</p>
+                    <p>${vpFinancialsEscapeHtml(invoice.client.phone || 'N/A')}</p>
+                </div>
+            </div>
+
+            <!-- Booking Details -->
+            ${invoice.booking_details && invoice.booking_details.trip_title ? `
+                <div class="vp-invoice-section">
+                    <h4><i class="fas fa-map-marked-alt"></i> Service Details</h4>
+                    <div class="vp-invoice-detail-grid">
+                        <div class="vp-invoice-detail">
+                            <span class="vp-detail-label">Trip:</span>
+                            <span class="vp-detail-value">${vpFinancialsEscapeHtml(invoice.booking_details.trip_title)}</span>
+                        </div>
+                        <div class="vp-invoice-detail">
+                            <span class="vp-detail-label">Service Type:</span>
+                            <span class="vp-detail-value" style="text-transform: capitalize;">${vpFinancialsEscapeHtml(invoice.booking_details.booking_type || 'N/A')}</span>
+                        </div>
+                        ${invoice.booking_details.service_dates?.start ? `
+                            <div class="vp-invoice-detail">
+                                <span class="vp-detail-label">Service Period:</span>
+                                <span class="vp-detail-value">${vpFinancialsFormatDate(invoice.booking_details.service_dates.start)} - ${vpFinancialsFormatDate(invoice.booking_details.service_dates.end)}</span>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            ` : ''}
+
+            <!-- Line Items -->
+            <div class="vp-invoice-section">
+                <table class="vp-invoice-table">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th style="text-align: center;">Qty</th>
+                            <th style="text-align: right;">Unit Price</th>
+                            <th style="text-align: right;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${invoice.line_items.map(item => `
+                            <tr>
+                                <td>${vpFinancialsEscapeHtml(item.description)}</td>
+                                <td style="text-align: center;">${item.quantity}</td>
+                                <td style="text-align: right;">${vpFinancialsFormatCurrency(item.unit_price)}</td>
+                                <td style="text-align: right;"><strong>${vpFinancialsFormatCurrency(item.total)}</strong></td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Totals -->
+            <div class="vp-invoice-totals">
+                <div class="vp-invoice-total-row">
+                    <span>Subtotal:</span>
+                    <span>${vpFinancialsFormatCurrency(invoice.totals.subtotal)}</span>
+                </div>
+                ${invoice.totals.tax > 0 ? `
+                    <div class="vp-invoice-total-row">
+                        <span>Tax:</span>
+                        <span>${vpFinancialsFormatCurrency(invoice.totals.tax)}</span>
+                    </div>
+                ` : ''}
+                <div class="vp-invoice-total-row vp-invoice-grand-total">
+                    <span>Total:</span>
+                    <span>${vpFinancialsFormatCurrency(invoice.totals.total)}</span>
+                </div>
+                <div class="vp-invoice-total-row" style="color: #28a745;">
+                    <span>Amount Paid:</span>
+                    <span>${vpFinancialsFormatCurrency(invoice.totals.amount_paid)}</span>
+                </div>
+                ${invoice.totals.balance_due > 0 ? `
+                    <div class="vp-invoice-total-row" style="color: #dc3545;">
+                        <span>Balance Due:</span>
+                        <span>${vpFinancialsFormatCurrency(invoice.totals.balance_due)}</span>
+                    </div>
+                ` : ''}
+            </div>
+
+            <!-- Payment Details -->
+            ${invoice.payment_details ? `
+                <div class="vp-invoice-section">
+                    <h4><i class="fas fa-credit-card"></i> Payment Information</h4>
+                    <div class="vp-invoice-detail-grid">
+                        <div class="vp-invoice-detail">
+                            <span class="vp-detail-label">Reference Number:</span>
+                            <span class="vp-detail-value">${vpFinancialsEscapeHtml(invoice.payment_details.reference_number || 'N/A')}</span>
+                        </div>
+                        <div class="vp-invoice-detail">
+                            <span class="vp-detail-label">Transaction ID:</span>
+                            <span class="vp-detail-value">${vpFinancialsEscapeHtml(invoice.payment_details.transaction_id || 'N/A')}</span>
+                        </div>
+                        <div class="vp-invoice-detail">
+                            <span class="vp-detail-label">Payment Method:</span>
+                            <span class="vp-detail-value" style="text-transform: capitalize;">${vpFinancialsEscapeHtml(invoice.payment_details.payment_method || 'N/A')}</span>
+                        </div>
+                        <div class="vp-invoice-detail">
+                            <span class="vp-detail-label">Payment Date:</span>
+                            <span class="vp-detail-value">${vpFinancialsFormatDate(invoice.payment_details.payment_date)}</span>
+                        </div>
+                    </div>
+                </div>
+            ` : ''}
+
+            <!-- Notes -->
+            ${invoice.notes ? `
+                <div class="vp-invoice-section">
+                    <h4><i class="fas fa-sticky-note"></i> Notes</h4>
+                    <p class="vp-invoice-notes">${vpFinancialsEscapeHtml(invoice.notes)}</p>
+                </div>
+            ` : ''}
+
+            <!-- Actions -->
+            <div class="vp-invoice-actions">
+                <button class="vp-btn vp-btn-secondary" onclick="vpFinancialsPrintInvoice()">
+                    <i class="fas fa-print"></i> Print
+                </button>
+                <button class="vp-btn vp-btn-primary" onclick="vpFinancialsDownloadInvoice('${invoice.invoice_number}')">
+                    <i class="fas fa-download"></i> Download PDF
+                </button>
+            </div>
+        </div>
+    `;
     
-    if (reportStartDate) reportStartDate.max = today;
-    if (reportEndDate) reportEndDate.max = today;
+    modal.setContent(content);
+    modal.show();
 }
 
-function setupModalEventListeners() {
-    // Invoice form submission
-    const invoiceForm = document.getElementById('invoiceForm');
-    if (invoiceForm) {
-        invoiceForm.addEventListener('submit', handleInvoiceGeneration);
-    }
+/**
+ * Show download history modal
+ */
+function vpFinancialsShowDownloadModal() {
+    const modal = vpFinancialsCreateModal('download-history', 'Download Payment History');
     
-    // Download report form submission
-    const downloadForm = document.getElementById('downloadReportForm');
-    if (downloadForm) {
-        downloadForm.addEventListener('submit', handleReportDownload);
-    }
-    
-    // Generate invoice from details modal
-    const generateFromDetails = document.getElementById('generateInvoiceFromDetails');
-    if (generateFromDetails) {
-        generateFromDetails.addEventListener('click', function() {
-            if (ModalState.currentPayment) {
-                closeModal('paymentDetailsModal');
-                window.selectedPaymentId = ModalState.currentPayment.id;
-                openGenerateInvoiceModal();
-            }
-        });
-    }
-}
+    const content = `
+        <form id="vpDownloadForm" class="vp-modal-form">
+            <div class="vp-form-group">
+                <label class="vp-form-label">
+                    <i class="fas fa-file-alt"></i> File Format
+                </label>
+                <select id="vpDownloadFormat" class="vp-form-control" required>
+                    <option value="csv">CSV (Excel Compatible)</option>
+                    <option value="json">JSON</option>
+                </select>
+                <small class="vp-form-help">Choose the format for your download</small>
+            </div>
 
-// ==================== MODAL CONTROL FUNCTIONS ====================
-function openModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    }
-}
+            <div class="vp-form-group">
+                <label class="vp-form-label">
+                    <i class="fas fa-calendar-alt"></i> Date Range
+                </label>
+                <div class="vp-form-row">
+                    <input type="date" id="vpDownloadStartDate" class="vp-form-control" placeholder="Start Date">
+                    <input type="date" id="vpDownloadEndDate" class="vp-form-control" placeholder="End Date">
+                </div>
+                <small class="vp-form-help">Leave empty to download all history</small>
+            </div>
 
-function closeModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.classList.remove('active');
-        document.body.style.overflow = '';
-        
-        // Reset forms
-        const form = modal.querySelector('form');
-        if (form) {
-            form.reset();
-        }
-    }
-}
+            <div class="vp-form-group">
+                <label class="vp-form-label">
+                    <i class="fas fa-filter"></i> Payment Status
+                </label>
+                <select id="vpDownloadStatus" class="vp-form-control">
+                    <option value="">All Statuses</option>
+                    <option value="completed">Completed</option>
+                    <option value="pending">Pending</option>
+                    <option value="processing">Processing</option>
+                    <option value="failed">Failed</option>
+                    <option value="refunded">Refunded</option>
+                </select>
+            </div>
 
-// ==================== PAYMENT DETAILS MODAL ====================
-function openPaymentDetailsModal(payment) {
-    ModalState.currentPayment = payment;
+            <div class="vp-modal-actions">
+                <button type="button" class="vp-btn vp-btn-secondary" onclick="vpFinancialsCloseModal()">
+                    Cancel
+                </button>
+                <button type="submit" class="vp-btn vp-btn-primary">
+                    <i class="fas fa-download"></i> Download
+                </button>
+            </div>
+        </form>
+    `;
     
-    // Populate payment information
-    document.getElementById('detail-reference').textContent = payment.reference_number || 'N/A';
-    document.getElementById('detail-transaction').textContent = payment.transaction_id || 'N/A';
-    document.getElementById('detail-amount').textContent = formatCurrency(payment.amount);
+    modal.setContent(content);
+    modal.show();
     
-    // Status badge
-    const statusElement = document.getElementById('detail-status');
-    statusElement.innerHTML = `<span class="status-badge status-${payment.status}">${payment.status}</span>`;
-    
-    document.getElementById('detail-method').textContent = capitalizeFirst(payment.payment_method || 'N/A');
-    document.getElementById('detail-date').textContent = formatDate(payment.payment_date);
-    document.getElementById('detail-processed').textContent = payment.processed_date ? 
-        formatDate(payment.processed_date) : 'Not processed';
-    
-    // Payer information
-    document.getElementById('detail-payer-name').textContent = payment.payer_name || 'N/A';
-    document.getElementById('detail-payer-email').textContent = payment.payer_email || 'N/A';
-    document.getElementById('detail-payer-phone').textContent = payment.payer_phone || 'N/A';
-    
-    // Booking information
-    const booking = payment.service_booking || {};
-    const trip = booking.trip || {};
-    
-    document.getElementById('detail-trip').textContent = trip.title || 'N/A';
-    document.getElementById('detail-booking-type').textContent = 
-        capitalizeFirst(booking.booking_type || 'N/A');
-    document.getElementById('detail-booking-id').textContent = booking.id || 'N/A';
-    document.getElementById('detail-description').textContent = 
-        payment.description || booking.service_description || 'No description';
-    
-    // Show/hide generate invoice button based on status
-    const generateBtn = document.getElementById('generateInvoiceFromDetails');
-    if (payment.status === 'completed') {
-        generateBtn.style.display = 'inline-flex';
-    } else {
-        generateBtn.style.display = 'none';
-    }
-    
-    openModal('paymentDetailsModal');
-}
-
-// ==================== GENERATE INVOICE MODAL ====================
-async function openGenerateInvoiceModal() {
-    try {
-        // Load completed payments for dropdown
-        await loadCompletedPayments();
-        
-        // Pre-select payment if one was selected
-        if (window.selectedPaymentId) {
-            document.getElementById('invoice-payment-id').value = window.selectedPaymentId;
-            window.selectedPaymentId = null;
-        }
-        
-        openModal('generateInvoiceModal');
-    } catch (error) {
-        console.error('Error opening invoice modal:', error);
-        showToast('Failed to load payment options', 'error');
-    }
-}
-
-async function loadCompletedPayments() {
-    try {
-        const response = await fetch('/api/vendor/financials/booking-payments?status=completed&per_page=100', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        
-        if (!response.ok) {
-            throw new Error('Failed to load completed payments');
-        }
-        
-        const data = await response.json();
-        
-        if (data.success) {
-            ModalState.completedPayments = data.data.payments;
-            populatePaymentDropdown(data.data.payments);
-        }
-    } catch (error) {
-        console.error('Error loading completed payments:', error);
-        throw error;
-    }
-}
-
-function populatePaymentDropdown(payments) {
-    const select = document.getElementById('invoice-payment-id');
-    select.innerHTML = '<option value="">Select a completed payment...</option>';
-    
-    payments.forEach(payment => {
-        const booking = payment.service_booking || {};
-        const trip = booking.trip || {};
-        const option = document.createElement('option');
-        option.value = payment.id;
-        option.textContent = `${payment.reference_number} - ${trip.title || 'N/A'} - ${formatCurrency(payment.amount)}`;
-        select.appendChild(option);
+    // Handle form submission
+    document.getElementById('vpDownloadForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        vpFinancialsExecuteDownload();
     });
 }
 
-async function handleInvoiceGeneration(e) {
-    e.preventDefault();
+/**
+ * Execute download
+ */
+async function vpFinancialsExecuteDownload() {
+    const format = document.getElementById('vpDownloadFormat').value;
+    const startDate = document.getElementById('vpDownloadStartDate').value;
+    const endDate = document.getElementById('vpDownloadEndDate').value;
+    const status = document.getElementById('vpDownloadStatus').value;
     
-    const paymentId = document.getElementById('invoice-payment-id').value;
-    const invoiceNumber = document.getElementById('invoice-number').value;
-    const notes = document.getElementById('invoice-notes').value;
-    
-    if (!paymentId) {
-        showToast('Please select a payment', 'warning');
-        return;
-    }
-    
-    const submitBtn = e.target.querySelector('button[type="submit"]');
-    const originalText = submitBtn.innerHTML;
+    const params = new URLSearchParams({ format });
+    if (startDate) params.append('start_date', startDate);
+    if (endDate) params.append('end_date', endDate);
+    if (status) params.append('status', status);
     
     try {
-        // Show loading state
-        submitBtn.classList.add('loading');
-        submitBtn.disabled = true;
+        vpFinancialsShowToast('info', 'Downloading', 'Preparing your file...');
         
-        const response = await fetch('/api/vendor/financials/invoices/generate', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                payment_id: parseInt(paymentId),
-                invoice_number: invoiceNumber || undefined,
-                notes: notes || undefined
-            })
+        const response = await fetch(`/api/vendor/financials/payment-history/download?${params}`, {
+            method: 'GET',
+            credentials: 'same-origin'
         });
         
-        const data = await response.json();
-        
         if (!response.ok) {
-            throw new Error(data.message || 'Failed to generate invoice');
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Download failed');
         }
         
-        if (data.success) {
-            ModalState.generatedInvoice = data.data.invoice;
-            
-            showToast('Invoice generated successfully!', 'success');
-            closeModal('generateInvoiceModal');
-            
-            // Show invoice preview
-            setTimeout(() => {
-                showInvoicePreview(data.data.invoice);
-            }, 300);
-        } else {
-            throw new Error(data.message || 'Failed to generate invoice');
+        // Get filename from headers or use default
+        const contentDisposition = response.headers.get('Content-Disposition');
+        let filename = `payment_history_${new Date().toISOString().split('T')[0]}.${format}`;
+        
+        if (contentDisposition) {
+            const filenameMatch = contentDisposition.match(/filename="?(.+)"?/);
+            if (filenameMatch) filename = filenameMatch[1];
         }
+        
+        // Download file
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        
+        vpFinancialsShowToast('success', 'Success', 'Payment history downloaded successfully');
+        vpFinancialsCloseModal();
+        
     } catch (error) {
-        console.error('Error generating invoice:', error);
-        showToast(error.message || 'Failed to generate invoice', 'error');
-    } finally {
-        submitBtn.classList.remove('loading');
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalText;
+        console.error('Download error:', error);
+        vpFinancialsShowToast('error', 'Error', error.message || 'Failed to download payment history');
     }
 }
 
-// ==================== INVOICE PREVIEW MODAL ====================
-function showInvoicePreview(invoiceData) {
-    const content = document.getElementById('invoicePreviewContent');
+/**
+ * Show generate report modal
+ */
+function vpFinancialsShowReportModal() {
+    const modal = vpFinancialsCreateModal('generate-report', 'Generate Financial Report');
     
-    // Build invoice HTML
-    const booking = invoiceData.booking_details || {};
-    const vendor = invoiceData.vendor || {};
-    const client = invoiceData.client || {};
-    const totals = invoiceData.totals || {};
-    
-    content.innerHTML = `
-        <div class="invoice-header">
-            <div>
-                <div class="invoice-logo">${vendor.business_name || 'Vendor'}</div>
-                <p style="margin: 8px 0; color: var(--text-secondary);">
-                    ${vendor.address || ''}<br>
-                    ${vendor.contact_email || ''}<br>
-                    ${vendor.contact_phone || ''}
-                </p>
+    const content = `
+        <form id="vpReportForm" class="vp-modal-form">
+            <div class="vp-form-group">
+                <label class="vp-form-label">
+                    <i class="fas fa-calendar"></i> Report Period
+                </label>
+                <select id="vpReportPeriod" class="vp-form-control" required onchange="vpFinancialsToggleCustomDates(this.value)">
+                    <option value="weekly">Last 7 Days</option>
+                    <option value="monthly" selected>Last 30 Days</option>
+                    <option value="quarterly">Last 3 Months</option>
+                    <option value="yearly">Last Year</option>
+                    <option value="custom">Custom Range</option>
+                </select>
             </div>
-            <div class="invoice-number">
-                <h2>INVOICE</h2>
-                <p><strong>Invoice #:</strong> ${invoiceData.invoice_number}</p>
-                <p><strong>Date:</strong> ${formatDate(invoiceData.invoice_date)}</p>
-                <p><strong>Status:</strong> <span class="status-badge status-${invoiceData.status}">${invoiceData.status}</span></p>
-            </div>
-        </div>
-        
-        <div class="invoice-parties">
-            <div class="invoice-party">
-                <h3>Bill To</h3>
-                <p><strong>${client.name || 'N/A'}</strong></p>
-                <p>${client.email || ''}</p>
-                <p>${client.phone || ''}</p>
-            </div>
-            <div class="invoice-party">
-                <h3>Service Details</h3>
-                <p><strong>Trip:</strong> ${booking.trip_title || 'N/A'}</p>
-                <p><strong>Type:</strong> ${capitalizeFirst(booking.booking_type || 'N/A')}</p>
-                <p><strong>Booking ID:</strong> #${booking.booking_id || 'N/A'}</p>
-            </div>
-        </div>
-        
-        <table class="invoice-table">
-            <thead>
-                <tr>
-                    <th>Description</th>
-                    <th style="text-align: center;">Quantity</th>
-                    <th style="text-align: right;">Unit Price</th>
-                    <th style="text-align: right;">Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${invoiceData.line_items.map(item => `
-                    <tr>
-                        <td>${item.description}</td>
-                        <td style="text-align: center;">${item.quantity}</td>
-                        <td style="text-align: right;">${formatCurrency(item.unit_price)}</td>
-                        <td style="text-align: right;">${formatCurrency(item.total)}</td>
-                    </tr>
-                `).join('')}
-            </tbody>
-        </table>
-        
-        <div class="invoice-total">
-            <div class="invoice-total-row">
-                <span>Subtotal:</span>
-                <span>${formatCurrency(totals.subtotal)}</span>
-            </div>
-            ${totals.tax > 0 ? `
-                <div class="invoice-total-row">
-                    <span>Tax:</span>
-                    <span>${formatCurrency(totals.tax)}</span>
+
+            <div id="vpReportCustomDates" class="vp-form-group" style="display: none;">
+                <label class="vp-form-label">
+                    <i class="fas fa-calendar-alt"></i> Custom Date Range
+                </label>
+                <div class="vp-form-row">
+                    <input type="date" id="vpReportStartDate" class="vp-form-control" placeholder="Start Date">
+                    <input type="date" id="vpReportEndDate" class="vp-form-control" placeholder="End Date">
                 </div>
-            ` : ''}
-            <div class="invoice-total-row grand-total">
-                <span>Total:</span>
-                <span>${formatCurrency(totals.total)}</span>
             </div>
-            <div class="invoice-total-row" style="color: var(--success-color);">
-                <span>Amount Paid:</span>
-                <span>${formatCurrency(totals.amount_paid)}</span>
+
+            <div class="vp-form-group">
+                <label class="vp-form-label">
+                    <i class="fas fa-chart-line"></i> Group By
+                </label>
+                <select id="vpReportGroupBy" class="vp-form-control" required>
+                    <option value="day">Daily</option>
+                    <option value="month" selected>Monthly</option>
+                </select>
+                <small class="vp-form-help">How to group revenue data in the report</small>
             </div>
-            ${totals.balance_due > 0 ? `
-                <div class="invoice-total-row" style="color: var(--danger-color);">
-                    <span>Balance Due:</span>
-                    <span>${formatCurrency(totals.balance_due)}</span>
+
+            <div class="vp-form-group">
+                <label class="vp-form-label">
+                    <i class="fas fa-list-check"></i> Include Sections
+                </label>
+                <div class="vp-checkbox-group">
+                    <label class="vp-checkbox-label">
+                        <input type="checkbox" checked> Overall Statistics
+                    </label>
+                    <label class="vp-checkbox-label">
+                        <input type="checkbox" checked> Revenue by Service Type
+                    </label>
+                    <label class="vp-checkbox-label">
+                        <input type="checkbox" checked> Time Series Data
+                    </label>
+                    <label class="vp-checkbox-label">
+                        <input type="checkbox" checked> Top Bookings
+                    </label>
+                    <label class="vp-checkbox-label">
+                        <input type="checkbox" checked> Payment Statistics
+                    </label>
                 </div>
-            ` : ''}
-        </div>
-        
-        ${invoiceData.notes ? `
-            <div class="invoice-notes">
-                <h4>Notes</h4>
-                <p>${invoiceData.notes}</p>
             </div>
-        ` : ''}
-        
-        ${invoiceData.payment_details ? `
-            <div class="invoice-notes">
-                <h4>Payment Information</h4>
-                <p>
-                    <strong>Payment Method:</strong> ${capitalizeFirst(invoiceData.payment_details.payment_method)}<br>
-                    <strong>Transaction ID:</strong> ${invoiceData.payment_details.transaction_id || 'N/A'}<br>
-                    <strong>Payment Date:</strong> ${formatDate(invoiceData.payment_details.payment_date)}
-                </p>
+
+            <div class="vp-modal-actions">
+                <button type="button" class="vp-btn vp-btn-secondary" onclick="vpFinancialsCloseModal()">
+                    Cancel
+                </button>
+                <button type="submit" class="vp-btn vp-btn-primary">
+                    <i class="fas fa-file-pdf"></i> Generate Report
+                </button>
             </div>
-        ` : ''}
+        </form>
     `;
     
-    openModal('invoicePreviewModal');
+    modal.setContent(content);
+    modal.show();
+    
+    // Handle form submission
+    document.getElementById('vpReportForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        vpFinancialsExecuteGenerateReport();
+    });
 }
 
-function printInvoice() {
+/**
+ * Toggle custom date fields
+ */
+function vpFinancialsToggleCustomDates(period) {
+    const customDates = document.getElementById('vpReportCustomDates');
+    if (customDates) {
+        customDates.style.display = period === 'custom' ? 'block' : 'none';
+        
+        if (period === 'custom') {
+            document.getElementById('vpReportStartDate').required = true;
+            document.getElementById('vpReportEndDate').required = true;
+        } else {
+            document.getElementById('vpReportStartDate').required = false;
+            document.getElementById('vpReportEndDate').required = false;
+        }
+    }
+}
+
+/**
+ * Execute generate report
+ */
+async function vpFinancialsExecuteGenerateReport() {
+    const period = document.getElementById('vpReportPeriod').value;
+    const groupBy = document.getElementById('vpReportGroupBy').value;
+    
+    const params = new URLSearchParams({ period, group_by: groupBy });
+    
+    if (period === 'custom') {
+        const startDate = document.getElementById('vpReportStartDate').value;
+        const endDate = document.getElementById('vpReportEndDate').value;
+        
+        if (!startDate || !endDate) {
+            vpFinancialsShowToast('warning', 'Missing Dates', 'Please select start and end dates');
+            return;
+        }
+        
+        params.append('start_date', startDate);
+        params.append('end_date', endDate);
+    }
+    
+    try {
+        vpFinancialsShowToast('info', 'Generating', 'Creating your report...');
+        
+        const response = await fetch(`/api/vendor/financials/revenue-report?${params}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'same-origin'
+        });
+        
+        const data = await vpFinancialsHandleResponse(response);
+        
+        if (data.success) {
+            vpFinancialsShowToast('success', 'Success', 'Report generated successfully');
+            vpFinancialsCloseModal();
+            
+            // You could show the report in a new modal or download it
+            vpFinancialsShowReportPreview(data.data);
+        } else {
+            throw new Error(data.message || 'Failed to generate report');
+        }
+        
+    } catch (error) {
+        console.error('Report generation error:', error);
+        vpFinancialsShowToast('error', 'Error', error.message || 'Failed to generate report');
+    }
+}
+
+/**
+ * Show report preview modal
+ */
+function vpFinancialsShowReportPreview(reportData) {
+    const modal = vpFinancialsCreateModal('report-preview', 'Financial Report Preview', 'large');
+    
+    const period = reportData.period || {};
+    const stats = reportData.overall_statistics || {};
+    
+    const content = `
+        <div class="vp-report-preview">
+            <div class="vp-report-header">
+                <h3>Financial Report</h3>
+                <p>Period: ${vpFinancialsFormatDate(period.start_date)} - ${vpFinancialsFormatDate(period.end_date)}</p>
+            </div>
+
+            <div class="vp-report-stats">
+                <div class="vp-report-stat">
+                    <div class="vp-report-stat-label">Total Revenue</div>
+                    <div class="vp-report-stat-value">${vpFinancialsFormatCurrency(stats.total_revenue)}</div>
+                </div>
+                <div class="vp-report-stat">
+                    <div class="vp-report-stat-label">Transactions</div>
+                    <div class="vp-report-stat-value">${stats.total_transactions || 0}</div>
+                </div>
+                <div class="vp-report-stat">
+                    <div class="vp-report-stat-label">Average Transaction</div>
+                    <div class="vp-report-stat-value">${vpFinancialsFormatCurrency(stats.average_transaction)}</div>
+                </div>
+                <div class="vp-report-stat">
+                    <div class="vp-report-stat-label">Pending Revenue</div>
+                    <div class="vp-report-stat-value">${vpFinancialsFormatCurrency(stats.pending_revenue)}</div>
+                </div>
+            </div>
+
+            <div class="vp-report-actions">
+                <button class="vp-btn vp-btn-secondary" onclick="vpFinancialsPrintReport()">
+                    <i class="fas fa-print"></i> Print
+                </button>
+                <button class="vp-btn vp-btn-primary" onclick="vpFinancialsDownloadReport()">
+                    <i class="fas fa-download"></i> Download PDF
+                </button>
+            </div>
+        </div>
+    `;
+    
+    modal.setContent(content);
+    modal.show();
+}
+
+/**
+ * Show custom date modal for revenue chart
+ */
+async function vpFinancialsShowCustomDateModal() {
+    const modal = vpFinancialsCreateModal('custom-dates', 'Select Date Range');
+    
+    const content = `
+        <form id="vpCustomDateForm" class="vp-modal-form">
+            <div class="vp-form-group">
+                <label class="vp-form-label">
+                    <i class="fas fa-calendar-alt"></i> Date Range
+                </label>
+                <div class="vp-form-row">
+                    <input type="date" id="vpRevenueStartDate" class="vp-form-control" required>
+                    <input type="date" id="vpRevenueEndDate" class="vp-form-control" required>
+                </div>
+                <small class="vp-form-help">Select start and end dates for the report</small>
+            </div>
+
+            <div class="vp-modal-actions">
+                <button type="button" class="vp-btn vp-btn-secondary" onclick="vpFinancialsCloseModal(); document.getElementById('vpRevenuePeriod').value='monthly'; vpFinancialsLoadRevenueReport();">
+                    Cancel
+                </button>
+                <button type="submit" class="vp-btn vp-btn-primary">
+                    <i class="fas fa-check"></i> Apply
+                </button>
+            </div>
+        </form>
+    `;
+    
+    modal.setContent(content);
+    modal.show();
+    
+    document.getElementById('vpCustomDateForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        vpFinancialsCloseModal();
+        vpFinancialsLoadRevenueReport();
+    });
+}
+
+/**
+ * Print invoice
+ */
+function vpFinancialsPrintInvoice() {
     window.print();
 }
 
-function downloadInvoice() {
-    // In a real implementation, this would generate a PDF
-    showToast('PDF generation feature coming soon!', 'info');
-    
-    // For now, we can trigger the browser's print dialog with save as PDF option
-    setTimeout(() => {
-        window.print();
-    }, 500);
+/**
+ * Download invoice as PDF
+ */
+function vpFinancialsDownloadInvoice(invoiceNumber) {
+    vpFinancialsShowToast('info', 'Coming Soon', 'PDF download feature will be available soon');
 }
 
-// ==================== DOWNLOAD REPORT MODAL ====================
-function openDownloadReportModal() {
-    // Pre-fill with current filter values if applicable
-    const currentStatus = FinancialsState.currentStatus;
-    if (currentStatus) {
-        document.getElementById('report-status').value = currentStatus;
+/**
+ * Print report
+ */
+function vpFinancialsPrintReport() {
+    window.print();
+}
+
+/**
+ * Download report
+ */
+function vpFinancialsDownloadReport() {
+    vpFinancialsShowToast('info', 'Coming Soon', 'PDF download feature will be available soon');
+}
+
+/**
+ * Create modal
+ */
+function vpFinancialsCreateModal(id, title, size = 'medium') {
+    const existingModal = document.getElementById(`vpModal-${id}`);
+    if (existingModal) {
+        existingModal.remove();
     }
     
-    if (FinancialsState.currentPeriod === 'custom') {
-        document.getElementById('report-start-date').value = FinancialsState.startDate || '';
-        document.getElementById('report-end-date').value = FinancialsState.endDate || '';
-    }
-    
-    openModal('downloadReportModal');
-}
-
-async function handleReportDownload(e) {
-    e.preventDefault();
-    
-    const format = document.getElementById('report-format').value;
-    const status = document.getElementById('report-status').value;
-    const startDate = document.getElementById('report-start-date').value;
-    const endDate = document.getElementById('report-end-date').value;
-    
-    // Validate date range if provided
-    if (startDate && endDate) {
-        if (new Date(startDate) > new Date(endDate)) {
-            showToast('Start date cannot be after end date', 'error');
-            return;
-        }
-        
-        // Check if range exceeds 2 years
-        const daysDiff = (new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24);
-        if (daysDiff > 730) {
-            showToast('Date range cannot exceed 2 years', 'error');
-            return;
-        }
-    }
-    
-    const submitBtn = e.target.querySelector('button[type="submit"]');
-    const originalText = submitBtn.innerHTML;
-    
-    try {
-        // Show loading state
-        submitBtn.classList.add('loading');
-        submitBtn.disabled = true;
-        
-        // Build URL
-        let url = `/api/vendor/financials/payment-history/download?format=${format}`;
-        
-        if (status) {
-            url += `&status=${status}`;
-        }
-        
-        if (startDate) {
-            url += `&start_date=${startDate}`;
-        }
-        
-        if (endDate) {
-            url += `&end_date=${endDate}`;
-        }
-        
-        // Trigger download
-        window.location.href = url;
-        
-        showToast('Download started successfully!', 'success');
-        
-        setTimeout(() => {
-            closeModal('downloadReportModal');
-        }, 1000);
-        
-    } catch (error) {
-        console.error('Error downloading report:', error);
-        showToast(error.message || 'Failed to download report', 'error');
-    } finally {
-        setTimeout(() => {
-            submitBtn.classList.remove('loading');
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = originalText;
-        }, 1000);
-    }
-}
-
-// ==================== UTILITY FUNCTIONS ====================
-function formatCurrency(amount) {
-    return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD'
-    }).format(amount || 0);
-}
-
-function formatDate(dateString) {
-    if (!dateString) return 'N/A';
-    
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    }).format(date);
-}
-
-function capitalizeFirst(str) {
-    if (!str) return '';
-    return str.charAt(0).toUpperCase() + str.slice(1).replace(/_/g, ' ');
-}
-
-function showToast(message, type = 'info') {
-    const container = document.getElementById('toastContainer');
-    if (!container) return;
-    
-    const id = 'toast-' + Date.now();
-    
-    const icons = {
-        success: 'fa-check-circle',
-        error: 'fa-exclamation-circle',
-        warning: 'fa-exclamation-triangle',
-        info: 'fa-info-circle'
-    };
-    
-    const titles = {
-        success: 'Success',
-        error: 'Error',
-        warning: 'Warning',
-        info: 'Information'
-    };
-    
-    const toast = document.createElement('div');
-    toast.id = id;
-    toast.className = `toast ${type}`;
-    toast.innerHTML = `
-        <div class="toast-icon">
-            <i class="fas ${icons[type]}"></i>
+    const modal = document.createElement('div');
+    modal.id = `vpModal-${id}`;
+    modal.className = `vp-modal-overlay`;
+    modal.innerHTML = `
+        <div class="vp-modal vp-modal-${size}">
+            <div class="vp-modal-header">
+                <h3 class="vp-modal-title">${title}</h3>
+                <button class="vp-modal-close" onclick="vpFinancialsCloseModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="vp-modal-body" id="vpModalBody-${id}">
+                <!-- Content will be inserted here -->
+            </div>
         </div>
-        <div class="toast-content">
-            <div class="toast-title">${titles[type]}</div>
-            <div class="toast-message">${message}</div>
-        </div>
-        <button class="toast-close" onclick="closeToast('${id}')">
-            <i class="fas fa-times"></i>
-        </button>
     `;
     
-    container.appendChild(toast);
+    const container = document.getElementById('vpFinancialsModalsContainer');
+    if (container) {
+        container.appendChild(modal);
+    } else {
+        document.body.appendChild(modal);
+    }
     
-    // Auto-remove after 5 seconds
-    setTimeout(() => {
-        closeToast(id);
-    }, 5000);
+    // Close on overlay click
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            vpFinancialsCloseModal();
+        }
+    });
+    
+    return {
+        element: modal,
+        show: function() {
+            setTimeout(() => modal.classList.add('vp-modal-show'), 10);
+        },
+        hide: function() {
+            modal.classList.remove('vp-modal-show');
+            setTimeout(() => modal.remove(), 300);
+        },
+        setContent: function(content) {
+            const body = document.getElementById(`vpModalBody-${id}`);
+            if (body) body.innerHTML = content;
+        }
+    };
 }
 
-function closeToast(id) {
-    const toast = document.getElementById(id);
-    if (toast) {
-        toast.style.animation = 'slideOut 0.3s ease';
-        setTimeout(() => {
-            toast.remove();
-        }, 300);
-    }
+/**
+ * Close modal
+ */
+function vpFinancialsCloseModal() {
+    const modals = document.querySelectorAll('.vp-modal-overlay');
+    modals.forEach(modal => {
+        modal.classList.remove('vp-modal-show');
+        setTimeout(() => modal.remove(), 300);
+    });
 }
-
-// Make functions globally accessible
-window.openModal = openModal;
-window.closeModal = closeModal;
-window.openPaymentDetailsModal = openPaymentDetailsModal;
-window.openGenerateInvoiceModal = openGenerateInvoiceModal;
-window.openDownloadReportModal = openDownloadReportModal;
-window.printInvoice = printInvoice;
-window.downloadInvoice = downloadInvoice;
-window.closeToast = closeToast;
-
-// Close modal when clicking outside
-document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('modal-overlay')) {
-        const modal = e.target.closest('.modal');
-        if (modal) {
-            closeModal(modal.id);
-        }
-    }
-});
-
-// Close modal with Escape key
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        const activeModal = document.querySelector('.modal.active');
-        if (activeModal) {
-            closeModal(activeModal.id);
-        }
-    }
-});
