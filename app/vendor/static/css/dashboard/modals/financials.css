@@ -1,0 +1,571 @@
+/* ==================== MODAL STYLES ==================== */
+
+/* Modal Base */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-container {
+    position: relative;
+    background: var(--bg-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    animation: slideUp 0.3s ease;
+    z-index: 1;
+}
+
+.modal-container.modal-lg {
+    max-width: 900px;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-header {
+    padding: 24px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-close {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: var(--bg-light);
+    color: var(--text-secondary);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    font-size: 16px;
+}
+
+.modal-close:hover {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.modal-body {
+    padding: 24px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.modal-footer {
+    padding: 20px 24px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+/* Form Elements */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.form-label.required::after {
+    content: '*';
+    color: var(--danger-color);
+    margin-left: 4px;
+}
+
+.form-label-sm {
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    transition: var(--transition);
+    background-color: var(--bg-white);
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.form-control:disabled {
+    background-color: var(--bg-light);
+    cursor: not-allowed;
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.form-help {
+    display: block;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 6px;
+}
+
+.form-group-inline {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.date-range-inputs {
+    display: flex;
+    gap: 16px;
+}
+
+/* Alerts */
+.alert {
+    padding: 14px 16px;
+    border-radius: var(--radius-md);
+    display: flex;
+    gap: 12px;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.alert i {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.alert-info {
+    background-color: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    color: var(--info-color);
+}
+
+.alert-warning {
+    background-color: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    color: var(--warning-color);
+}
+
+.alert-success {
+    background-color: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    color: var(--success-color);
+}
+
+.alert-error {
+    background-color: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: var(--danger-color);
+}
+
+/* Detail Grid for Payment Details Modal */
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.detail-section {
+    background-color: var(--bg-light);
+    padding: 20px;
+    border-radius: var(--radius-md);
+}
+
+.detail-section.full-width {
+    grid-column: 1 / -1;
+}
+
+.detail-section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 16px 0;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.detail-value {
+    font-size: 14px;
+    color: var(--text-primary);
+    font-weight: 600;
+    text-align: right;
+}
+
+.detail-value.detail-amount {
+    font-size: 20px;
+    color: var(--success-color);
+}
+
+/* Invoice Preview */
+.invoice-preview {
+    background: var(--bg-white);
+    padding: 40px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-family: 'Arial', sans-serif;
+}
+
+.invoice-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 3px solid var(--primary-color);
+}
+
+.invoice-logo {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.invoice-number {
+    text-align: right;
+}
+
+.invoice-number h2 {
+    font-size: 24px;
+    margin: 0 0 8px 0;
+    color: var(--text-primary);
+}
+
+.invoice-number p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.invoice-parties {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.invoice-party h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0 0 12px 0;
+}
+
+.invoice-party p {
+    margin: 4px 0;
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.invoice-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+
+.invoice-table thead {
+    background-color: var(--bg-light);
+}
+
+.invoice-table th {
+    padding: 12px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.invoice-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 14px;
+}
+
+.invoice-table tfoot td {
+    font-weight: 700;
+    border-top: 2px solid var(--border-color);
+}
+
+.invoice-total {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.invoice-total-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 14px;
+}
+
+.invoice-total-row.grand-total {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary-color);
+    border-top: 2px solid var(--primary-color);
+    padding-top: 16px;
+    margin-top: 12px;
+}
+
+.invoice-notes {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.invoice-notes h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    margin: 0 0 12px 0;
+}
+
+.invoice-notes p {
+    font-size: 13px;
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+/* Responsive Modal Design */
+@media (max-width: 768px) {
+    .modal {
+        padding: 10px;
+    }
+    
+    .modal-container {
+        max-height: 95vh;
+    }
+    
+    .modal-header {
+        padding: 20px;
+    }
+    
+    .modal-body {
+        padding: 20px;
+    }
+    
+    .modal-footer {
+        padding: 16px 20px;
+        flex-direction: column;
+    }
+    
+    .modal-footer .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .detail-section.full-width {
+        grid-column: 1;
+    }
+    
+    .date-range-inputs {
+        flex-direction: column;
+    }
+    
+    .invoice-preview {
+        padding: 20px;
+    }
+    
+    .invoice-header {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .invoice-number {
+        text-align: left;
+    }
+    
+    .invoice-parties {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+    
+    .invoice-table {
+        font-size: 12px;
+    }
+    
+    .invoice-table th,
+    .invoice-table td {
+        padding: 8px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .modal-overlay,
+    .modal-header,
+    .modal-footer {
+        display: none !important;
+    }
+    
+    .modal-container {
+        max-width: 100%;
+        box-shadow: none;
+        max-height: none;
+    }
+    
+    .invoice-preview {
+        border: none;
+        padding: 0;
+    }
+}
+
+/* Loading State for Forms */
+.btn.loading {
+    position: relative;
+    color: transparent;
+    pointer-events: none;
+}
+
+.btn.loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+/* Success Checkmark Animation */
+@keyframes checkmark {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.success-checkmark {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px;
+}
+
+.success-checkmark .check-icon {
+    width: 80px;
+    height: 80px;
+    position: relative;
+    border-radius: 50%;
+    box-sizing: content-box;
+    border: 4px solid var(--success-color);
+    animation: checkmark 0.6s ease;
+}
+
+.success-checkmark .check-icon::before {
+    content: '';
+    position: absolute;
+    top: 24px;
+    left: 14px;
+    width: 20px;
+    height: 40px;
+    border-right: 4px solid var(--success-color);
+    border-bottom: 4px solid var(--success-color);
+    transform: rotate(45deg);
+    animation: checkmark 0.6s ease 0.3s;
+}

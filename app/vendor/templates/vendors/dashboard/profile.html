@@ -1,37 +1,508 @@
-<div class="vp-profile-form">
-    <div class="vp-profile-section">
-        <h3>Company Profile</h3>
-        <div class="vp-profile-grid">
-            <div class="vp-profile-field">
-                <label>Company Name</label>
-                <input type="text" value="Safari Adventures Ltd" readonly>
+<!-- Vendor Profile Management Template -->
+<div class="vp-profile-container">
+    <!-- Profile Header -->
+    <div class="vp-profile-header">
+        <div class="vp-header-content">
+            <div class="vp-header-left">
+                <i class="fas fa-user-tie vp-header-icon"></i>
+                <div>
+                    <h2 class="vp-header-title">Vendor Profile</h2>
+                    <p class="vp-header-subtitle">Manage your business information and settings</p>
+                </div>
             </div>
-            <div class="vp-profile-field">
-                <label>Contact Email</label>
-                <input type="email" value="vendor@edusafaris.com" readonly>
-            </div>
-        </div>
-        <div class="vp-profile-grid">
-            <div class="vp-profile-field">
-                <label>Phone</label>
-                <input type="tel" value="+255 123 456 789" readonly>
-            </div>
-            <div class="vp-profile-field">
-                <label>Location</label>
-                <input type="text" value="Arusha, Tanzania" readonly>
+            <div class="vp-header-actions">
+                <button type="button" id="vpEditProfileBtn" class="vp-btn vp-btn-primary">
+                    <i class="fas fa-edit"></i> Edit Profile
+                </button>
             </div>
         </div>
     </div>
 
-    <div class="vp-profile-section">
-        <h3>Services Offered</h3>
-        <div class="vp-services-group" id="servicesGroup">
-            <span class="vp-service-tag">Transportation</span>
-            <span class="vp-service-tag">Guides</span>
-            <span class="vp-service-tag">Equipment Rental</span>
-            <span class="vp-service-tag">Catering</span>
+    <!-- Alert Messages -->
+    <div id="vpAlertContainer" class="vp-alert-container"></div>
+
+    <!-- Loading Overlay -->
+    <div id="vpLoadingOverlay" class="vp-loading-overlay" style="display: none;">
+        <div class="vp-spinner">
+            <i class="fas fa-circle-notch fa-spin"></i>
+            <p>Loading...</p>
         </div>
     </div>
 
-    <button class="vp-save-btn">Save Changes</button>
+    <!-- Profile Content -->
+    <div class="vp-profile-content">
+        <!-- View Mode -->
+        <div id="vpViewMode" class="vp-view-mode">
+            <!-- Business Information Card -->
+            <div class="vp-card">
+                <div class="vp-card-header">
+                    <h3 class="vp-card-title">
+                        <i class="fas fa-building"></i> Business Information
+                    </h3>
+                </div>
+                <div class="vp-card-body">
+                    <div class="vp-info-grid">
+                        <div class="vp-info-item">
+                            <label class="vp-info-label">Business Name</label>
+                            <p class="vp-info-value" id="vpViewBusinessName">-</p>
+                        </div>
+                        <div class="vp-info-item">
+                            <label class="vp-info-label">Business Type</label>
+                            <p class="vp-info-value" id="vpViewBusinessType">-</p>
+                        </div>
+                        <div class="vp-info-item vp-info-full">
+                            <label class="vp-info-label">Description</label>
+                            <p class="vp-info-value" id="vpViewDescription">-</p>
+                        </div>
+                        <div class="vp-info-item">
+                            <label class="vp-info-label">License Number</label>
+                            <p class="vp-info-value" id="vpViewLicenseNumber">-</p>
+                        </div>
+                        <div class="vp-info-item">
+                            <label class="vp-info-label">Capacity</label>
+                            <p class="vp-info-value" id="vpViewCapacity">-</p>
+                        </div>
+                        <div class="vp-info-item vp-info-full">
+                            <label class="vp-info-label">Specializations</label>
+                            <div id="vpViewSpecializations" class="vp-tags-container"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Information Card -->
+            <div class="vp-card">
+                <div class="vp-card-header">
+                    <h3 class="vp-card-title">
+                        <i class="fas fa-address-book"></i> Contact Information
+                    </h3>
+                </div>
+                <div class="vp-card-body">
+                    <div class="vp-info-grid">
+                        <div class="vp-info-item">
+                            <label class="vp-info-label">Contact Email</label>
+                            <p class="vp-info-value" id="vpViewContactEmail">-</p>
+                        </div>
+                        <div class="vp-info-item">
+                            <label class="vp-info-label">Contact Phone</label>
+                            <p class="vp-info-value" id="vpViewContactPhone">-</p>
+                        </div>
+                        <div class="vp-info-item vp-info-full">
+                            <label class="vp-info-label">Website</label>
+                            <p class="vp-info-value" id="vpViewWebsite">-</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Address Card -->
+            <div class="vp-card">
+                <div class="vp-card-header">
+                    <h3 class="vp-card-title">
+                        <i class="fas fa-map-marker-alt"></i> Business Address
+                    </h3>
+                </div>
+                <div class="vp-card-body">
+                    <div class="vp-info-grid">
+                        <div class="vp-info-item vp-info-full">
+                            <label class="vp-info-label">Address Line 1</label>
+                            <p class="vp-info-value" id="vpViewAddressLine1">-</p>
+                        </div>
+                        <div class="vp-info-item vp-info-full">
+                            <label class="vp-info-label">Address Line 2</label>
+                            <p class="vp-info-value" id="vpViewAddressLine2">-</p>
+                        </div>
+                        <div class="vp-info-item">
+                            <label class="vp-info-label">City</label>
+                            <p class="vp-info-value" id="vpViewCity">-</p>
+                        </div>
+                        <div class="vp-info-item">
+                            <label class="vp-info-label">State/Province</label>
+                            <p class="vp-info-value" id="vpViewState">-</p>
+                        </div>
+                        <div class="vp-info-item">
+                            <label class="vp-info-label">Postal Code</label>
+                            <p class="vp-info-value" id="vpViewPostalCode">-</p>
+                        </div>
+                        <div class="vp-info-item">
+                            <label class="vp-info-label">Country</label>
+                            <p class="vp-info-value" id="vpViewCountry">-</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pricing Information Card -->
+            <div class="vp-card">
+                <div class="vp-card-header">
+                    <h3 class="vp-card-title">
+                        <i class="fas fa-dollar-sign"></i> Pricing Information
+                    </h3>
+                </div>
+                <div class="vp-card-body">
+                    <div class="vp-info-grid">
+                        <div class="vp-info-item">
+                            <label class="vp-info-label">Base Price</label>
+                            <p class="vp-info-value" id="vpViewBasePrice">-</p>
+                        </div>
+                        <div class="vp-info-item">
+                            <label class="vp-info-label">Price Per Person</label>
+                            <p class="vp-info-value" id="vpViewPricePerPerson">-</p>
+                        </div>
+                        <div class="vp-info-item vp-info-full">
+                            <label class="vp-info-label">Pricing Notes</label>
+                            <p class="vp-info-value" id="vpViewPricingNotes">-</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Insurance & Verification Card -->
+            <div class="vp-card">
+                <div class="vp-card-header">
+                    <h3 class="vp-card-title">
+                        <i class="fas fa-shield-alt"></i> Insurance & Verification
+                    </h3>
+                </div>
+                <div class="vp-card-body">
+                    <div class="vp-info-grid">
+                        <div class="vp-info-item vp-info-full">
+                            <label class="vp-info-label">Insurance Details</label>
+                            <p class="vp-info-value" id="vpViewInsuranceDetails">-</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Account Information Card -->
+            <div class="vp-card">
+                <div class="vp-card-header">
+                    <h3 class="vp-card-title">
+                        <i class="fas fa-user"></i> User Account Information
+                    </h3>
+                </div>
+                <div class="vp-card-body">
+                    <div class="vp-info-grid">
+                        <div class="vp-info-item">
+                            <label class="vp-info-label">First Name</label>
+                            <p class="vp-info-value" id="vpViewFirstName">-</p>
+                        </div>
+                        <div class="vp-info-item">
+                            <label class="vp-info-label">Last Name</label>
+                            <p class="vp-info-value" id="vpViewLastName">-</p>
+                        </div>
+                        <div class="vp-info-item">
+                            <label class="vp-info-label">Email</label>
+                            <p class="vp-info-value" id="vpViewEmail">-</p>
+                        </div>
+                        <div class="vp-info-item">
+                            <label class="vp-info-label">Phone</label>
+                            <p class="vp-info-value" id="vpViewPhone">-</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Card -->
+            <div class="vp-card">
+                <div class="vp-card-header">
+                    <h3 class="vp-card-title">
+                        <i class="fas fa-chart-line"></i> Statistics
+                    </h3>
+                </div>
+                <div class="vp-card-body">
+                    <div class="vp-stats-grid">
+                        <div class="vp-stat-item">
+                            <i class="fas fa-calendar-check vp-stat-icon"></i>
+                            <div class="vp-stat-content">
+                                <p class="vp-stat-value" id="vpStatTotalBookings">0</p>
+                                <p class="vp-stat-label">Total Bookings</p>
+                            </div>
+                        </div>
+                        <div class="vp-stat-item">
+                            <i class="fas fa-hourglass-half vp-stat-icon"></i>
+                            <div class="vp-stat-content">
+                                <p class="vp-stat-value" id="vpStatActiveBookings">0</p>
+                                <p class="vp-stat-label">Active Bookings</p>
+                            </div>
+                        </div>
+                        <div class="vp-stat-item">
+                            <i class="fas fa-star vp-stat-icon"></i>
+                            <div class="vp-stat-content">
+                                <p class="vp-stat-value" id="vpStatAverageRating">0.0</p>
+                                <p class="vp-stat-label">Average Rating</p>
+                            </div>
+                        </div>
+                        <div class="vp-stat-item">
+                            <i class="fas fa-comment vp-stat-icon"></i>
+                            <div class="vp-stat-content">
+                                <p class="vp-stat-value" id="vpStatTotalReviews">0</p>
+                                <p class="vp-stat-label">Total Reviews</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Mode -->
+        <div id="vpEditMode" class="vp-edit-mode" style="display: none;">
+            <form id="vpProfileForm">
+                <!-- Business Information Card -->
+                <div class="vp-card">
+                    <div class="vp-card-header">
+                        <h3 class="vp-card-title">
+                            <i class="fas fa-building"></i> Business Information
+                        </h3>
+                    </div>
+                    <div class="vp-card-body">
+                        <div class="vp-form-grid">
+                            <div class="vp-form-group">
+                                <label for="vpBusinessName" class="vp-form-label">
+                                    Business Name <span class="vp-required">*</span>
+                                </label>
+                                <input type="text" id="vpBusinessName" name="business_name" 
+                                       class="vp-form-input" required>
+                                <span class="vp-error-message" id="vpErrorBusinessName"></span>
+                            </div>
+
+                            <div class="vp-form-group">
+                                <label for="vpBusinessType" class="vp-form-label">
+                                    Business Type
+                                </label>
+                                <select id="vpBusinessType" name="business_type" class="vp-form-input">
+                                    <option value="">Select Type</option>
+                                    <option value="transportation">Transportation</option>
+                                    <option value="accommodation">Accommodation</option>
+                                    <option value="activities">Activities</option>
+                                    <option value="food_service">Food Service</option>
+                                    <option value="tour_guide">Tour Guide</option>
+                                    <option value="equipment_rental">Equipment Rental</option>
+                                    <option value="other">Other</option>
+                                </select>
+                                <span class="vp-error-message" id="vpErrorBusinessType"></span>
+                            </div>
+
+                            <div class="vp-form-group vp-form-full">
+                                <label for="vpDescription" class="vp-form-label">
+                                    Description
+                                </label>
+                                <textarea id="vpDescription" name="description" 
+                                          class="vp-form-textarea" rows="4"></textarea>
+                                <span class="vp-error-message" id="vpErrorDescription"></span>
+                            </div>
+
+                            <div class="vp-form-group">
+                                <label for="vpLicenseNumber" class="vp-form-label">
+                                    License Number
+                                </label>
+                                <input type="text" id="vpLicenseNumber" name="license_number" 
+                                       class="vp-form-input">
+                                <span class="vp-error-message" id="vpErrorLicenseNumber"></span>
+                            </div>
+
+                            <div class="vp-form-group">
+                                <label for="vpCapacity" class="vp-form-label">
+                                    Capacity
+                                </label>
+                                <input type="number" id="vpCapacity" name="capacity" 
+                                       class="vp-form-input" min="1">
+                                <span class="vp-error-message" id="vpErrorCapacity"></span>
+                            </div>
+
+                            <div class="vp-form-group vp-form-full">
+                                <label for="vpSpecializations" class="vp-form-label">
+                                    Specializations
+                                </label>
+                                <div class="vp-tags-input-wrapper">
+                                    <div id="vpSpecializationsTags" class="vp-tags-display"></div>
+                                    <input type="text" id="vpSpecializationsInput" 
+                                           class="vp-tags-input" 
+                                           placeholder="Type and press Enter to add">
+                                </div>
+                                <small class="vp-form-help">Press Enter to add each specialization</small>
+                                <span class="vp-error-message" id="vpErrorSpecializations"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Information Card -->
+                <div class="vp-card">
+                    <div class="vp-card-header">
+                        <h3 class="vp-card-title">
+                            <i class="fas fa-address-book"></i> Contact Information
+                        </h3>
+                    </div>
+                    <div class="vp-card-body">
+                        <div class="vp-form-grid">
+                            <div class="vp-form-group">
+                                <label for="vpContactEmail" class="vp-form-label">
+                                    Contact Email <span class="vp-required">*</span>
+                                </label>
+                                <input type="email" id="vpContactEmail" name="contact_email" 
+                                       class="vp-form-input" required>
+                                <span class="vp-error-message" id="vpErrorContactEmail"></span>
+                            </div>
+
+                            <div class="vp-form-group">
+                                <label for="vpContactPhone" class="vp-form-label">
+                                    Contact Phone <span class="vp-required">*</span>
+                                </label>
+                                <input type="tel" id="vpContactPhone" name="contact_phone" 
+                                       class="vp-form-input" required>
+                                <span class="vp-error-message" id="vpErrorContactPhone"></span>
+                            </div>
+
+                            <div class="vp-form-group vp-form-full">
+                                <label for="vpWebsite" class="vp-form-label">
+                                    Website
+                                </label>
+                                <input type="url" id="vpWebsite" name="website" 
+                                       class="vp-form-input" 
+                                       placeholder="https://example.com">
+                                <span class="vp-error-message" id="vpErrorWebsite"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Address Card -->
+                <div class="vp-card">
+                    <div class="vp-card-header">
+                        <h3 class="vp-card-title">
+                            <i class="fas fa-map-marker-alt"></i> Business Address
+                        </h3>
+                    </div>
+                    <div class="vp-card-body">
+                        <div class="vp-form-grid">
+                            <div class="vp-form-group vp-form-full">
+                                <label for="vpAddressLine1" class="vp-form-label">
+                                    Address Line 1
+                                </label>
+                                <input type="text" id="vpAddressLine1" name="address_line1" 
+                                       class="vp-form-input">
+                                <span class="vp-error-message" id="vpErrorAddressLine1"></span>
+                            </div>
+
+                            <div class="vp-form-group vp-form-full">
+                                <label for="vpAddressLine2" class="vp-form-label">
+                                    Address Line 2
+                                </label>
+                                <input type="text" id="vpAddressLine2" name="address_line2" 
+                                       class="vp-form-input">
+                                <span class="vp-error-message" id="vpErrorAddressLine2"></span>
+                            </div>
+
+                            <div class="vp-form-group">
+                                <label for="vpCity" class="vp-form-label">
+                                    City
+                                </label>
+                                <input type="text" id="vpCity" name="city" 
+                                       class="vp-form-input">
+                                <span class="vp-error-message" id="vpErrorCity"></span>
+                            </div>
+
+                            <div class="vp-form-group">
+                                <label for="vpState" class="vp-form-label">
+                                    State/Province
+                                </label>
+                                <input type="text" id="vpState" name="state" 
+                                       class="vp-form-input">
+                                <span class="vp-error-message" id="vpErrorState"></span>
+                            </div>
+
+                            <div class="vp-form-group">
+                                <label for="vpPostalCode" class="vp-form-label">
+                                    Postal Code
+                                </label>
+                                <input type="text" id="vpPostalCode" name="postal_code" 
+                                       class="vp-form-input">
+                                <span class="vp-error-message" id="vpErrorPostalCode"></span>
+                            </div>
+
+                            <div class="vp-form-group">
+                                <label for="vpCountry" class="vp-form-label">
+                                    Country
+                                </label>
+                                <input type="text" id="vpCountry" name="country" 
+                                       class="vp-form-input">
+                                <span class="vp-error-message" id="vpErrorCountry"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pricing Information Card -->
+                <div class="vp-card">
+                    <div class="vp-card-header">
+                        <h3 class="vp-card-title">
+                            <i class="fas fa-dollar-sign"></i> Pricing Information
+                        </h3>
+                    </div>
+                    <div class="vp-card-body">
+                        <div class="vp-form-grid">
+                            <div class="vp-form-group">
+                                <label for="vpBasePrice" class="vp-form-label">
+                                    Base Price
+                                </label>
+                                <input type="number" id="vpBasePrice" name="base_price" 
+                                       class="vp-form-input" step="0.01" min="0">
+                                <span class="vp-error-message" id="vpErrorBasePrice"></span>
+                            </div>
+
+                            <div class="vp-form-group">
+                                <label for="vpPricePerPerson" class="vp-form-label">
+                                    Price Per Person
+                                </label>
+                                <input type="number" id="vpPricePerPerson" name="price_per_person" 
+                                       class="vp-form-input" step="0.01" min="0">
+                                <span class="vp-error-message" id="vpErrorPricePerPerson"></span>
+                            </div>
+
+                            <div class="vp-form-group vp-form-full">
+                                <label for="vpPricingNotes" class="vp-form-label">
+                                    Pricing Notes
+                                </label>
+                                <textarea id="vpPricingNotes" name="pricing_notes" 
+                                          class="vp-form-textarea" rows="3"></textarea>
+                                <span class="vp-error-message" id="vpErrorPricingNotes"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Insurance & Verification Card -->
+                <div class="vp-card">
+                    <div class="vp-card-header">
+                        <h3 class="vp-card-title">
+                            <i class="fas fa-shield-alt"></i> Insurance & Verification
+                        </h3>
+                    </div>
+                    <div class="vp-card-body">
+                        <div class="vp-form-grid">
+                            <div class="vp-form-group vp-form-full">
+                                <label for="vpInsuranceDetails" class="vp-form-label">
+                                    Insurance Details
+                                </label>
+                                <textarea id="vpInsuranceDetails" name="insurance_details" 
+                                          class="vp-form-textarea" rows="3"></textarea>
+                                <span class="vp-error-message" id="vpErrorInsuranceDetails"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="vp-form-actions">
+                    <button type="button" id="vpCancelBtn" class="vp-btn vp-btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button type="submit" id="vpSaveBtn" class="vp-btn vp-btn-success">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>

@@ -1,27 +1,160 @@
-<div class="vp-search-box">
-    <input type="text" id="bookingSearch" placeholder="Search...">
+<!-- Vendor Bookings Management Tab -->
+<div class="vb-bookings-container">
+    <!-- Header Section with Stats -->
+    <div class="vb-header-section">
+        <div class="vb-header-top">
+            <h2 class="vb-section-title">
+                <i class="fas fa-calendar-check"></i> Service Bookings
+            </h2>
+            <div class="vb-header-actions">
+                <button class="vb-btn vb-btn-secondary" id="vbCalendarViewBtn">
+                    <i class="fas fa-calendar-alt"></i> Calendar View
+                </button>
+                <button class="vb-btn vb-btn-secondary" id="vbRefreshBtn">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="vb-stats-grid" id="vbStatsGrid">
+            <div class="vb-stat-card vb-stat-pending">
+                <div class="vb-stat-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="vb-stat-content">
+                    <h3 class="vb-stat-value" id="vbStatPending">0</h3>
+                    <p class="vb-stat-label">Pending</p>
+                </div>
+            </div>
+            <div class="vb-stat-card vb-stat-confirmed">
+                <div class="vb-stat-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="vb-stat-content">
+                    <h3 class="vb-stat-value" id="vbStatConfirmed">0</h3>
+                    <p class="vb-stat-label">Confirmed</p>
+                </div>
+            </div>
+            <div class="vb-stat-card vb-stat-progress">
+                <div class="vb-stat-icon">
+                    <i class="fas fa-spinner"></i>
+                </div>
+                <div class="vb-stat-content">
+                    <h3 class="vb-stat-value" id="vbStatProgress">0</h3>
+                    <p class="vb-stat-label">In Progress</p>
+                </div>
+            </div>
+            <div class="vb-stat-card vb-stat-completed">
+                <div class="vb-stat-icon">
+                    <i class="fas fa-check-double"></i>
+                </div>
+                <div class="vb-stat-content">
+                    <h3 class="vb-stat-value" id="vbStatCompleted">0</h3>
+                    <p class="vb-stat-label">Completed</p>
+                </div>
+            </div>
+            <div class="vb-stat-card vb-stat-total">
+                <div class="vb-stat-icon">
+                    <i class="fas fa-list"></i>
+                </div>
+                <div class="vb-stat-content">
+                    <h3 class="vb-stat-value" id="vbStatTotal">0</h3>
+                    <p class="vb-stat-label">Total Bookings</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters and Search -->
+    <div class="vb-filters-section">
+        <div class="vb-search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="vbSearchInput" placeholder="Search bookings..." class="vb-search-input">
+        </div>
+        <div class="vb-filters">
+            <select id="vbFilterStatus" class="vb-filter-select">
+                <option value="">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="in_progress">In Progress</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+            </select>
+            <select id="vbFilterType" class="vb-filter-select">
+                <option value="">All Types</option>
+                <option value="transportation">Transportation</option>
+                <option value="accommodation">Accommodation</option>
+                <option value="activity">Activity</option>
+            </select>
+            <input type="date" id="vbFilterStartDate" class="vb-filter-input" placeholder="Start Date">
+            <input type="date" id="vbFilterEndDate" class="vb-filter-input" placeholder="End Date">
+            <button class="vb-btn vb-btn-primary" id="vbApplyFiltersBtn">
+                <i class="fas fa-filter"></i> Apply Filters
+            </button>
+            <button class="vb-btn vb-btn-secondary" id="vbClearFiltersBtn">
+                <i class="fas fa-times"></i> Clear
+            </button>
+        </div>
+    </div>
+
+    <!-- Bookings Table -->
+    <div class="vb-table-container">
+        <div class="vb-loading" id="vbLoadingIndicator">
+            <div class="vb-spinner"></div>
+            <p>Loading bookings...</p>
+        </div>
+
+        <div class="vb-error-message" id="vbErrorMessage" style="display: none;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span id="vbErrorText"></span>
+            <button class="vb-btn-close" onclick="document.getElementById('vbErrorMessage').style.display='none'">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="vb-table-wrapper" id="vbTableWrapper" style="display: none;">
+            <table class="vb-table">
+                <thead>
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>Trip Details</th>
+                        <th>Booking Type</th>
+                        <th>Service Dates</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Payment</th>
+                        <th>Booked On</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="vbTableBody">
+                    <!-- Rows will be dynamically inserted -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="vb-empty-state" id="vbEmptyState" style="display: none;">
+            <i class="fas fa-inbox"></i>
+            <h3>No Bookings Found</h3>
+            <p>You don't have any bookings yet or no results match your filters.</p>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="vb-pagination" id="vbPagination" style="display: none;">
+        <div class="vb-pagination-info">
+            <span id="vbPaginationInfo">Showing 0 of 0 bookings</span>
+        </div>
+        <div class="vb-pagination-controls">
+            <button class="vb-pagination-btn" id="vbPrevPageBtn" disabled>
+                <i class="fas fa-chevron-left"></i> Previous
+            </button>
+            <div class="vb-page-numbers" id="vbPageNumbers"></div>
+            <button class="vb-pagination-btn" id="vbNextPageBtn" disabled>
+                Next <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
 </div>
-<table class="vp-bookings-table">
-    <thead>
-        <tr>
-            <th>Service</th>
-            <th>Trip</th>
-            <th>Status</th>
-            <th>Amount</th>
-        </tr>
-    </thead>
-    <tbody id="bookingsTableBody">
-        <tr>
-            <td>Transportation</td>
-            <td>Serengeti Wildlife Adventure</td>
-            <td><span class="vp-status-badge">Confirmed</span></td>
-            <td class="vp-amount">$5,000</td>
-        </tr>
-        <tr>
-            <td>Guides & Equipment</td>
-            <td>Serengeti Wildlife Adventure</td>
-            <td><span class="vp-status-badge">Confirmed</span></td>
-            <td class="vp-amount">$8,000</td>
-        </tr>
-    </tbody>
-</table>
+

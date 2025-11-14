@@ -20,7 +20,7 @@ class ServiceBooking(BaseModel):
     # Pricing
     quoted_amount = db.Column(Numeric(10, 2))
     final_amount = db.Column(Numeric(10, 2))
-    currency = db.Column(db.String(3), default='USD', nullable=False)
+    currency = db.Column(db.String(3), default='KES', nullable=False)
     
     # Dates
     service_start_date = db.Column(db.DateTime)  # When service starts

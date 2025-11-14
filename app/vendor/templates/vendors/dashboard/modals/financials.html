@@ -1,0 +1,284 @@
+Modal Forms for Vendor Financials
+
+<!-- Payment Details Modal -->
+<div class="modal" id="paymentDetailsModal">
+    <div class="modal-overlay" onclick="closeModal('paymentDetailsModal')"></div>
+    <div class="modal-container modal-lg">
+        <div class="modal-header">
+            <h3 class="modal-title">
+                <i class="fas fa-receipt"></i>
+                Payment Details
+            </h3>
+            <button class="modal-close" onclick="closeModal('paymentDetailsModal')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="modal-body">
+            <div class="detail-grid">
+                <!-- Payment Information -->
+                <div class="detail-section">
+                    <h4 class="detail-section-title">Payment Information</h4>
+                    <div class="detail-row">
+                        <span class="detail-label">Reference Number:</span>
+                        <span class="detail-value" id="detail-reference"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Transaction ID:</span>
+                        <span class="detail-value" id="detail-transaction"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Amount:</span>
+                        <span class="detail-value detail-amount" id="detail-amount"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Status:</span>
+                        <span class="detail-value" id="detail-status"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Payment Method:</span>
+                        <span class="detail-value" id="detail-method"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Payment Date:</span>
+                        <span class="detail-value" id="detail-date"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Processed Date:</span>
+                        <span class="detail-value" id="detail-processed"></span>
+                    </div>
+                </div>
+                
+                <!-- Payer Information -->
+                <div class="detail-section">
+                    <h4 class="detail-section-title">Payer Information</h4>
+                    <div class="detail-row">
+                        <span class="detail-label">Name:</span>
+                        <span class="detail-value" id="detail-payer-name"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Email:</span>
+                        <span class="detail-value" id="detail-payer-email"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Phone:</span>
+                        <span class="detail-value" id="detail-payer-phone"></span>
+                    </div>
+                </div>
+                
+                <!-- Booking Information -->
+                <div class="detail-section full-width">
+                    <h4 class="detail-section-title">Booking Information</h4>
+                    <div class="detail-row">
+                        <span class="detail-label">Trip:</span>
+                        <span class="detail-value" id="detail-trip"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Booking Type:</span>
+                        <span class="detail-value" id="detail-booking-type"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Booking ID:</span>
+                        <span class="detail-value" id="detail-booking-id"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Description:</span>
+                        <span class="detail-value" id="detail-description"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="closeModal('paymentDetailsModal')">Close</button>
+            <button class="btn btn-primary" id="generateInvoiceFromDetails">
+                <i class="fas fa-file-invoice"></i>
+                Generate Invoice
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Generate Invoice Modal -->
+<div class="modal" id="generateInvoiceModal">
+    <div class="modal-overlay" onclick="closeModal('generateInvoiceModal')"></div>
+    <div class="modal-container">
+        <div class="modal-header">
+            <h3 class="modal-title">
+                <i class="fas fa-file-invoice"></i>
+                Generate Invoice
+            </h3>
+            <button class="modal-close" onclick="closeModal('generateInvoiceModal')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <form id="invoiceForm">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="invoice-payment-id" class="form-label required">
+                        Select Payment
+                    </label>
+                    <select id="invoice-payment-id" class="form-control" required>
+                        <option value="">Select a completed payment...</option>
+                    </select>
+                    <small class="form-help">Only completed payments can have invoices generated</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="invoice-number" class="form-label">
+                        Invoice Number (Optional)
+                    </label>
+                    <input 
+                        type="text" 
+                        id="invoice-number" 
+                        class="form-control"
+                        placeholder="Auto-generated if left blank">
+                    <small class="form-help">Leave blank to auto-generate</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="invoice-notes" class="form-label">
+                        Additional Notes (Optional)
+                    </label>
+                    <textarea 
+                        id="invoice-notes" 
+                        class="form-control"
+                        rows="4"
+                        placeholder="Enter any additional notes or terms for the invoice"></textarea>
+                </div>
+                
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <strong>Note:</strong> The invoice will include all payment details, 
+                        booking information, and your business details automatically.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeModal('generateInvoiceModal')">
+                    Cancel
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-file-invoice"></i>
+                    Generate Invoice
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Download Report Modal -->
+<div class="modal" id="downloadReportModal">
+    <div class="modal-overlay" onclick="closeModal('downloadReportModal')"></div>
+    <div class="modal-container">
+        <div class="modal-header">
+            <h3 class="modal-title">
+                <i class="fas fa-download"></i>
+                Download Financial Report
+            </h3>
+            <button class="modal-close" onclick="closeModal('downloadReportModal')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <form id="downloadReportForm">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="report-format" class="form-label required">
+                        File Format
+                    </label>
+                    <select id="report-format" class="form-control" required>
+                        <option value="csv">CSV (Spreadsheet)</option>
+                        <option value="json">JSON (Data)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="report-status" class="form-label">
+                        Payment Status Filter
+                    </label>
+                    <select id="report-status" class="form-control">
+                        <option value="">All Statuses</option>
+                        <option value="completed">Completed Only</option>
+                        <option value="pending">Pending Only</option>
+                        <option value="processing">Processing Only</option>
+                        <option value="failed">Failed Only</option>
+                        <option value="refunded">Refunded Only</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Date Range</label>
+                    <div class="date-range-inputs">
+                        <div class="form-group-inline">
+                            <label for="report-start-date" class="form-label-sm">From:</label>
+                            <input type="date" id="report-start-date" class="form-control">
+                        </div>
+                        <div class="form-group-inline">
+                            <label for="report-end-date" class="form-label-sm">To:</label>
+                            <input type="date" id="report-end-date" class="form-control">
+                        </div>
+                    </div>
+                    <small class="form-help">Leave blank to download all available data (max 2 years)</small>
+                </div>
+                
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div>
+                        <strong>Large Data Warning:</strong> Downloading data for extended periods 
+                        may take some time. Consider using date filters for faster downloads.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeModal('downloadReportModal')">
+                    Cancel
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-download"></i>
+                    Download Report
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Invoice Preview Modal -->
+<div class="modal" id="invoicePreviewModal">
+    <div class="modal-overlay" onclick="closeModal('invoicePreviewModal')"></div>
+    <div class="modal-container modal-lg">
+        <div class="modal-header">
+            <h3 class="modal-title">
+                <i class="fas fa-file-invoice-dollar"></i>
+                Invoice Preview
+            </h3>
+            <button class="modal-close" onclick="closeModal('invoicePreviewModal')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="modal-body">
+            <div class="invoice-preview" id="invoicePreviewContent">
+                <!-- Invoice content will be populated here -->
+            </div>
+        </div>
+        
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="closeModal('invoicePreviewModal')">
+                Close
+            </button>
+            <button class="btn btn-outline" onclick="printInvoice()">
+                <i class="fas fa-print"></i>
+                Print
+            </button>
+            <button class="btn btn-primary" onclick="downloadInvoice()">
+                <i class="fas fa-download"></i>
+                Download PDF
+            </button>
+        </div>
+    </div>
+</div>

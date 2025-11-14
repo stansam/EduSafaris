@@ -25,7 +25,7 @@ class TripRegistration(BaseModel):
                                        name='registration_payment_status'), default='unpaid', nullable=False)
     total_amount = db.Column(Numeric(10, 2), nullable=False)  # Copy from trip price at registration
     amount_paid = db.Column(Numeric(10, 2), default=0)
-    currency = db.Column(db.String(3), default='USD', nullable=False)
+    currency = db.Column(db.String(3), default='KES', nullable=False)
     
     # Payment Plan
     payment_plan = db.Column(db.String(50))  # 'full', 'installment', 'deposit'

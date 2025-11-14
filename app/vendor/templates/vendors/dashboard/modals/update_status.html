@@ -1,0 +1,64 @@
+<!-- Update Booking Status Modal -->
+<div class="vbm-modal-overlay" id="vbmUpdateStatusModal" style="display: none;">
+    <div class="vbm-modal vbm-modal-medium">
+        <div class="vbm-modal-header">
+            <h2 class="vbm-modal-title">
+                <i class="fas fa-edit"></i> Update Booking Status
+            </h2>
+            <button class="vbm-modal-close" onclick="VBModalUpdateStatus.close()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <form id="vbmUpdateStatusForm">
+            <div class="vbm-modal-body">
+                <div class="vbm-form-group">
+                    <label class="vbm-form-label">
+                        Booking ID
+                    </label>
+                    <input type="text" class="vbm-form-input" id="vbmUpdateStatusBookingId" readonly>
+                </div>
+
+                <div class="vbm-form-group">
+                    <label class="vbm-form-label">
+                        Current Status
+                    </label>
+                    <div id="vbmUpdateCurrentStatus"></div>
+                </div>
+
+                <div class="vbm-form-group">
+                    <label class="vbm-form-label vbm-required">
+                        New Status *
+                    </label>
+                    <select class="vbm-form-select" id="vbmUpdateNewStatus" required>
+                        <option value="">Select new status...</option>
+                    </select>
+                    <small class="vbm-form-help">Only valid status transitions are shown</small>
+                </div>
+
+                <div class="vbm-form-group" id="vbmUpdateCancellationReasonGroup" style="display: none;">
+                    <label class="vbm-form-label vbm-required">
+                        Cancellation Reason *
+                    </label>
+                    <textarea class="vbm-form-textarea" id="vbmUpdateCancellationReason" rows="4" placeholder="Please provide a reason for cancellation..."></textarea>
+                </div>
+
+                <div class="vbm-form-group">
+                    <label class="vbm-form-label">
+                        Additional Notes (Optional)
+                    </label>
+                    <textarea class="vbm-form-textarea" id="vbmUpdateNotes" rows="4" placeholder="Add any notes about this status update..."></textarea>
+                </div>
+            </div>
+
+            <div class="vbm-modal-footer">
+                <button type="button" class="vbm-btn vbm-btn-secondary" onclick="VBModalUpdateStatus.close()">
+                    Cancel
+                </button>
+                <button type="submit" class="vbm-btn vbm-btn-primary" id="vbmUpdateStatusSubmitBtn">
+                    <i class="fas fa-save"></i> Update Status
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

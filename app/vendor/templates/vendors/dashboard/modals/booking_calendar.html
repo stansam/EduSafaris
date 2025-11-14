@@ -1,0 +1,94 @@
+<!-- Booking Calendar Modal -->
+<div class="vbm-modal-overlay" id="vbmBookingCalendarModal" style="display: none;">
+    <div class="vbm-modal vbm-modal-large">
+        <div class="vbm-modal-header">
+            <h2 class="vbm-modal-title">
+                <i class="fas fa-calendar-alt"></i> Booking Calendar
+            </h2>
+            <button class="vbm-modal-close" onclick="VBModalCalendar.close()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="vbm-modal-body">
+            <div class="vbm-calendar-controls">
+                <div class="vbm-date-range-selector">
+                    <label class="vbm-form-label">Select Date Range:</label>
+                    <div class="vbm-date-range">
+                        <div>
+                            <input type="date" class="vbm-form-input" id="vbmCalendarStartDate">
+                        </div>
+                        <div>
+                            <input type="date" class="vbm-form-input" id="vbmCalendarEndDate">
+                        </div>
+                    </div>
+                </div>
+                <button class="vbm-btn vbm-btn-primary" id="vbmCalendarLoadBtn">
+                    <i class="fas fa-sync"></i> Load Calendar
+                </button>
+            </div>
+
+            <div class="vbm-loading" id="vbmCalendarLoading" style="display: none;">
+                <div class="vbm-spinner"></div>
+                <p>Loading calendar...</p>
+            </div>
+
+            <div id="vbmCalendarContent" style="display: none;">
+                <!-- Calendar Legend -->
+                <div class="vbm-calendar-legend">
+                    <div class="vbm-legend-item">
+                        <span class="vbm-legend-color" style="background: #4CAF50;"></span>
+                        <span>Confirmed</span>
+                    </div>
+                    <div class="vbm-legend-item">
+                        <span class="vbm-legend-color" style="background: #2196F3;"></span>
+                        <span>In Progress</span>
+                    </div>
+                </div>
+
+                <!-- Availability Summary -->
+                <div class="vbm-availability-summary" id="vbmAvailabilitySummary">
+                    <div class="vbm-availability-card">
+                        <div class="vbm-availability-label">Total Days</div>
+                        <div class="vbm-availability-value" id="vbmTotalDays">0</div>
+                    </div>
+                    <div class="vbm-availability-card">
+                        <div class="vbm-availability-label">Booked Days</div>
+                        <div class="vbm-availability-value" id="vbmBookedDays">0</div>
+                    </div>
+                    <div class="vbm-availability-card">
+                        <div class="vbm-availability-label">Available Days</div>
+                        <div class="vbm-availability-value" id="vbmAvailableDays">0</div>
+                    </div>
+                    <div class="vbm-availability-card">
+                        <div class="vbm-availability-label">Availability</div>
+                        <div class="vbm-availability-value" id="vbmAvailabilityPercent">0%</div>
+                    </div>
+                </div>
+
+                <!-- Calendar Events List -->
+                <div class="vbm-calendar-events">
+                    <h3 class="vbm-section-title">
+                        <i class="fas fa-list"></i> Booking Events
+                        <span class="vbm-event-count" id="vbmEventCount">(0)</span>
+                    </h3>
+                    <div class="vbm-events-list" id="vbmEventsList"></div>
+                </div>
+            </div>
+
+            <div class="vbm-empty-state" id="vbmCalendarEmpty" style="display: none;">
+                <i class="fas fa-calendar-times"></i>
+                <h3>No Bookings Found</h3>
+                <p>No confirmed or in-progress bookings in the selected date range.</p>
+            </div>
+        </div>
+
+        <div class="vbm-modal-footer">
+            <button class="vbm-btn vbm-btn-secondary" onclick="VBModalCalendar.close()">
+                Close
+            </button>
+        </div>
+    </div>
+</div>
+
+

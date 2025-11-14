@@ -1,0 +1,223 @@
+<!-- Vendor Financials Dashboard -->
+<div class="vp-financials-wrapper">
+    <!-- Page Header -->
+    <div class="vp-financials-header">
+        <div class="vp-financials-title-section">
+            <h2 class="vp-financials-title">
+                <i class="fas fa-chart-line"></i> Financial Overview
+            </h2>
+            <p class="vp-financials-subtitle">Track your revenue, payments, and financial performance</p>
+        </div>
+        <div class="vp-financials-actions">
+            <button class="vp-btn vp-btn-secondary" onclick="vpFinancialsDownloadHistory()">
+                <i class="fas fa-download"></i> Download History
+            </button>
+            <button class="vp-btn vp-btn-primary" onclick="vpFinancialsGenerateReport()">
+                <i class="fas fa-file-pdf"></i> Generate Report
+            </button>
+        </div>
+    </div>
+
+    <!-- Financial Summary Cards -->
+    <div class="vp-financials-summary-grid">
+        <div class="vp-financials-card vp-summary-card">
+            <div class="vp-summary-icon vp-icon-revenue">
+                <i class="fas fa-coins"></i>
+            </div>
+            <div class="vp-summary-content">
+                <h3 class="vp-summary-label">Total Revenue</h3>
+                <p class="vp-summary-value" id="vpTotalRevenue">
+                    <span class="vp-loading-skeleton">Loading...</span>
+                </p>
+                <span class="vp-summary-change vp-positive" id="vpRevenueChange"></span>
+            </div>
+        </div>
+
+        <div class="vp-financials-card vp-summary-card">
+            <div class="vp-summary-icon vp-icon-pending">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="vp-summary-content">
+                <h3 class="vp-summary-label">Pending Payments</h3>
+                <p class="vp-summary-value" id="vpPendingAmount">
+                    <span class="vp-loading-skeleton">Loading...</span>
+                </p>
+                <span class="vp-summary-count" id="vpPendingCount"></span>
+            </div>
+        </div>
+
+        <div class="vp-financials-card vp-summary-card">
+            <div class="vp-summary-icon vp-icon-transactions">
+                <i class="fas fa-exchange-alt"></i>
+            </div>
+            <div class="vp-summary-content">
+                <h3 class="vp-summary-label">Total Transactions</h3>
+                <p class="vp-summary-value" id="vpTotalTransactions">
+                    <span class="vp-loading-skeleton">Loading...</span>
+                </p>
+                <span class="vp-summary-count" id="vpTransactionPeriod"></span>
+            </div>
+        </div>
+
+        <div class="vp-financials-card vp-summary-card">
+            <div class="vp-summary-icon vp-icon-avg">
+                <i class="fas fa-chart-bar"></i>
+            </div>
+            <div class="vp-summary-content">
+                <h3 class="vp-summary-label">Average Transaction</h3>
+                <p class="vp-summary-value" id="vpAvgTransaction">
+                    <span class="vp-loading-skeleton">Loading...</span>
+                </p>
+                <span class="vp-summary-count" id="vpSuccessRate"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Revenue Chart Section -->
+    <div class="vp-financials-card vp-chart-section">
+        <div class="vp-chart-header">
+            <h3 class="vp-chart-title">
+                <i class="fas fa-chart-area"></i> Revenue Trends
+            </h3>
+            <div class="vp-chart-controls">
+                <select id="vpRevenuePeriod" class="vp-select-control" onchange="vpFinancialsLoadRevenueReport()">
+                    <option value="weekly">Last 7 Days</option>
+                    <option value="monthly" selected>Last 30 Days</option>
+                    <option value="quarterly">Last 3 Months</option>
+                    <option value="yearly">Last Year</option>
+                    <option value="custom">Custom Range</option>
+                </select>
+                <button class="vp-btn vp-btn-icon" onclick="vpFinancialsRefreshChart()" title="Refresh">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+            </div>
+        </div>
+        <div class="vp-chart-container">
+            <canvas id="vpRevenueChart"></canvas>
+            <div id="vpChartLoader" class="vp-chart-loader">
+                <div class="vp-spinner"></div>
+                <p>Loading chart data...</p>
+            </div>
+            <div id="vpChartError" class="vp-chart-error" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>Failed to load chart data</p>
+                <button class="vp-btn vp-btn-sm" onclick="vpFinancialsLoadRevenueReport()">Retry</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Revenue Breakdown -->
+    <div class="vp-financials-row">
+        <div class="vp-financials-card vp-revenue-breakdown">
+            <h3 class="vp-card-title">
+                <i class="fas fa-pie-chart"></i> Revenue by Service Type
+            </h3>
+            <div id="vpServiceTypeBreakdown" class="vp-breakdown-container">
+                <div class="vp-loading-placeholder">
+                    <div class="vp-spinner"></div>
+                    <p>Loading breakdown...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="vp-financials-card vp-payment-stats">
+            <h3 class="vp-card-title">
+                <i class="fas fa-credit-card"></i> Payment Statistics
+            </h3>
+            <div id="vpPaymentStats" class="vp-stats-container">
+                <div class="vp-loading-placeholder">
+                    <div class="vp-spinner"></div>
+                    <p>Loading statistics...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Payments Table -->
+    <div class="vp-financials-card vp-payments-table-section">
+        <div class="vp-table-header">
+            <h3 class="vp-card-title">
+                <i class="fas fa-list"></i> Recent Payments
+            </h3>
+            <div class="vp-table-filters">
+                <select id="vpPaymentStatusFilter" class="vp-select-control" onchange="vpFinancialsFilterPayments()">
+                    <option value="">All Status</option>
+                    <option value="completed">Completed</option>
+                    <option value="pending">Pending</option>
+                    <option value="processing">Processing</option>
+                    <option value="failed">Failed</option>
+                    <option value="refunded">Refunded</option>
+                </select>
+                <input type="date" id="vpPaymentStartDate" class="vp-input-control" placeholder="Start Date">
+                <input type="date" id="vpPaymentEndDate" class="vp-input-control" placeholder="End Date">
+                <button class="vp-btn vp-btn-secondary vp-btn-sm" onclick="vpFinancialsFilterPayments()">
+                    <i class="fas fa-filter"></i> Filter
+                </button>
+                <button class="vp-btn vp-btn-secondary vp-btn-sm" onclick="vpFinancialsClearFilters()">
+                    <i class="fas fa-times"></i> Clear
+                </button>
+            </div>
+        </div>
+
+        <div class="vp-table-responsive">
+            <table class="vp-payments-table">
+                <thead>
+                    <tr>
+                        <th>Payment ID</th>
+                        <th>Reference</th>
+                        <th>Booking Type</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Payment Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="vpPaymentsTableBody">
+                    <tr class="vp-table-loading">
+                        <td colspan="7">
+                            <div class="vp-table-loader">
+                                <div class="vp-spinner"></div>
+                                <p>Loading payments...</p>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="vp-table-pagination" id="vpPaymentsPagination" style="display: none;">
+            <div class="vp-pagination-info">
+                <span id="vpPaginationInfo">Showing 0 of 0 payments</span>
+            </div>
+            <div class="vp-pagination-controls">
+                <button class="vp-btn vp-btn-icon" id="vpPrevPage" onclick="vpFinancialsChangePage(-1)" disabled>
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <span id="vpPageNumbers" class="vp-page-numbers"></span>
+                <button class="vp-btn vp-btn-icon" id="vpNextPage" onclick="vpFinancialsChangePage(1)" disabled>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Bookings Section -->
+    <div class="vp-financials-card vp-top-bookings-section">
+        <h3 class="vp-card-title">
+            <i class="fas fa-trophy"></i> Top Performing Bookings
+        </h3>
+        <div id="vpTopBookings" class="vp-top-bookings-container">
+            <div class="vp-loading-placeholder">
+                <div class="vp-spinner"></div>
+                <p>Loading top bookings...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modals will be injected here -->
+<div id="vpFinancialsModalsContainer"></div>
+
+<!-- Toast Notification Container -->
+<div id="vpFinancialsToastContainer" class="vp-toast-container"></div>

@@ -1,0 +1,114 @@
+<!-- Request Modification Modal -->
+<div class="vbm-modal-overlay" id="vbmRequestModificationModal" style="display: none;">
+    <div class="vbm-modal vbm-modal-large">
+        <div class="vbm-modal-header">
+            <h2 class="vbm-modal-title">
+                <i class="fas fa-pen"></i> Request Booking Modification
+            </h2>
+            <button class="vbm-modal-close" onclick="VBModalRequestModification.close()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <form id="vbmRequestModificationForm">
+            <div class="vbm-modal-body">
+                <div class="vbm-alert vbm-alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Request changes to this booking. The trip organizer will review your request and respond accordingly.</span>
+                </div>
+
+                <div class="vbm-form-group">
+                    <label class="vbm-form-label">
+                        Booking ID
+                    </label>
+                    <input type="text" class="vbm-form-input" id="vbmModifyBookingId" readonly>
+                </div>
+
+                <div class="vbm-form-group">
+                    <label class="vbm-form-label vbm-required">
+                        Modification Type *
+                    </label>
+                    <select class="vbm-form-select" id="vbmModifyType" required>
+                        <option value="">Select modification type...</option>
+                        <option value="dates">Service Dates</option>
+                        <option value="pricing">Pricing/Amount</option>
+                        <option value="requirements">Service Requirements</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <!-- Date Modification Section -->
+                <div id="vbmModifyDatesSection" style="display: none;">
+                    <div class="vbm-form-group">
+                        <label class="vbm-form-label">
+                            Current Service Dates
+                        </label>
+                        <div id="vbmModifyCurrentDates" class="vbm-detail-value"></div>
+                    </div>
+
+                    <div class="vbm-form-group">
+                        <label class="vbm-form-label">
+                            Suggested New Dates
+                        </label>
+                        <div class="vbm-date-range">
+                            <div>
+                                <label class="vbm-form-label">Start Date</label>
+                                <input type="date" class="vbm-form-input" id="vbmModifySuggestedStartDate">
+                            </div>
+                            <div>
+                                <label class="vbm-form-label">End Date</label>
+                                <input type="date" class="vbm-form-input" id="vbmModifySuggestedEndDate">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pricing Modification Section -->
+                <div id="vbmModifyPricingSection" style="display: none;">
+                    <div class="vbm-form-group">
+                        <label class="vbm-form-label">
+                            Current Amount
+                        </label>
+                        <div id="vbmModifyCurrentAmount" class="vbm-detail-value"></div>
+                    </div>
+
+                    <div class="vbm-form-group">
+                        <label class="vbm-form-label">
+                            Suggested New Amount
+                        </label>
+                        <div class="vbm-input-group">
+                            <span class="vbm-input-prefix">$</span>
+                            <input type="number" step="0.01" min="0" class="vbm-form-input" id="vbmModifySuggestedAmount" placeholder="Enter suggested amount">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vbm-form-group">
+                    <label class="vbm-form-label vbm-required">
+                        Modification Details *
+                    </label>
+                    <textarea class="vbm-form-textarea" id="vbmModifyDetails" rows="6" placeholder="Please provide detailed information about the requested modification (minimum 20 characters)..." required></textarea>
+                    <small class="vbm-form-help">
+                        <span id="vbmModifyCharCount">0</span> / 20 characters minimum
+                    </small>
+                    <div class="vbm-form-error" id="vbmModifyDetailsError" style="display: none;"></div>
+                </div>
+
+                <div class="vbm-alert vbm-alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>This is a request only. The booking remains active until the organizer approves or denies your modification request.</span>
+                </div>
+            </div>
+
+            <div class="vbm-modal-footer">
+                <button type="button" class="vbm-btn vbm-btn-secondary" onclick="VBModalRequestModification.close()">
+                    Cancel
+                </button>
+                <button type="submit" class="vbm-btn vbm-btn-warning" id="vbmModifySubmitBtn">
+                    <i class="fas fa-paper-plane"></i> Send Request
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+

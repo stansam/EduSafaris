@@ -1,0 +1,69 @@
+<!-- Cancel Booking Modal -->
+<div class="vbm-modal-overlay" id="vbmCancelBookingModal" style="display: none;">
+    <div class="vbm-modal vbm-modal-medium">
+        <div class="vbm-modal-header">
+            <h2 class="vbm-modal-title">
+                <i class="fas fa-ban"></i> Cancel Booking
+            </h2>
+            <button class="vbm-modal-close" onclick="VBModalCancelBooking.close()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <form id="vbmCancelBookingForm">
+            <div class="vbm-modal-body">
+                <div class="vbm-alert vbm-alert-danger">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Cancelling this booking will notify the trip organizer and may affect your vendor rating. Please provide a clear reason.</span>
+                </div>
+
+                <div class="vbm-form-group">
+                    <label class="vbm-form-label">
+                        Booking ID
+                    </label>
+                    <input type="text" class="vbm-form-input" id="vbmCancelBookingId" readonly>
+                </div>
+
+                <div class="vbm-form-group">
+                    <label class="vbm-form-label">
+                        Current Status
+                    </label>
+                    <div id="vbmCancelCurrentStatus"></div>
+                </div>
+
+                <div class="vbm-form-group">
+                    <label class="vbm-form-label vbm-required">
+                        Cancellation Reason *
+                    </label>
+                    <textarea class="vbm-form-textarea" id="vbmCancelReason" rows="5" placeholder="Please provide a detailed reason for cancelling this booking (minimum 10 characters)..." required></textarea>
+                    <small class="vbm-form-help">
+                        <span id="vbmCancelCharCount">0</span> / 10 characters minimum
+                    </small>
+                    <div class="vbm-form-error" id="vbmCancelReasonError" style="display: none;"></div>
+                </div>
+
+                <div class="vbm-alert vbm-alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <strong>Common cancellation reasons:</strong>
+                        <ul style="margin: 5px 0 0 20px; padding: 0;">
+                            <li>Unavailable for the service dates</li>
+                            <li>Equipment or resource unavailability</li>
+                            <li>Staff shortage or capacity constraints</li>
+                            <li>Unforeseen circumstances or emergencies</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="vbm-modal-footer">
+                <button type="button" class="vbm-btn vbm-btn-secondary" onclick="VBModalCancelBooking.close()">
+                    Go Back
+                </button>
+                <button type="submit" class="vbm-btn vbm-btn-danger" id="vbmCancelSubmitBtn">
+                    <i class="fas fa-ban"></i> Cancel Booking
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

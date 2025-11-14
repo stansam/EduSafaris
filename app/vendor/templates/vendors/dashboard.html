@@ -3,11 +3,30 @@
 {% block title %} Vendor Dash {% endblock %}
 
 {% block styles %} 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <link rel="stylesheet" href="{{url_for('vendor.static', filename='css/dash.css')}}">
+<link rel="stylesheet" href="{{url_for('vendor.static', filename='css/dashboard/bookings.css')}}">
+<link rel="stylesheet" href="{{url_for('vendor.static', filename='css/dashboard/financials.css')}}">
+<link rel="stylesheet" href="{{url_for('vendor.static', filename='css/dashboard/profile.css')}}">
+<link rel="stylesheet" href="{{url_for('vendor.static', filename='css/dashboard/booking_modals.css')}}">
+<link rel="stylesheet" href="{{url_for('vendor.static', filename='css/dashboard/modals/booking_calender.css')}}">
+<link rel="stylesheet" href="{{url_for('vendor.static', filename='css/dashboard/modals/financials.css')}}">
 {% endblock %}
 
 {% block scripts %} 
 <script src="{{url_for('vendor.static', filename='js/dash.js')}}"></script>
+<script src="{{url_for('vendor.static', filename='js/dashboard/bookings.js')}}"></script>
+<script src="{{url_for('vendor.static', filename='js/dashboard/financials.js')}}"></script>
+<script src="{{url_for('vendor.static', filename='js/dashboard/profile.js')}}"></script>
+<script src="{{url_for('vendor.static', filename='js/dashboard/modals/booking_details.js')}}"></script>
+<script src="{{url_for('vendor.static', filename='js/dashboard/modals/accept_bookings.js')}}"></script>
+<script src="{{url_for('vendor.static', filename='js/dashboard/modals/reject_booking.js')}}"></script>
+<script src="{{url_for('vendor.static', filename='js/dashboard/modals/cancel_booking.js')}}"></script>
+<script src="{{url_for('vendor.static', filename='js/dashboard/modals/request_modification.js')}}"></script>
+<script src="{{url_for('vendor.static', filename='js/dashboard/modals/booking_calendar.js')}}"></script>
+<script src="{{url_for('vendor.static', filename='js/dashboard/modals/update_status.js')}}"></script>
+<script src="{{url_for('vendor.static', filename='js/dashboard/modals/add_notes.js')}}"></script>
+<script src="{{url_for('vendor.static', filename='js/dashboard/modals/financials.js')}}"></script>
 {% endblock %}
 
 {% block content %} 
@@ -28,9 +47,19 @@
         </div>
 
         <div id="revenue" class="vp-tab-content">
-            {% include 'vendors/dashboard/revenue.html' %}
+            {% include 'vendors/dashboard/financials.html' %}
         </div>
     </div>
+
+{% include 'vendors/dashboard/modals/booking_details.html' %}
+{% include 'vendors/dashboard/modals/accept_booking.html' %}
+{% include 'vendors/dashboard/modals/reject_booking.html' %}
+{% include 'vendors/dashboard/modals/update_status.html' %}
+{% include 'vendors/dashboard/modals/cancel_booking.html' %}
+{% include 'vendors/dashboard/modals/request_modification.html' %}
+{% include 'vendors/dashboard/modals/booking_calendar.html' %}
+{% include 'vendors/dashboard/modals/add_note.html' %}
+{% include 'vendors/dashboard/modals/financials.html' %}
 
 
 {% endblock %}

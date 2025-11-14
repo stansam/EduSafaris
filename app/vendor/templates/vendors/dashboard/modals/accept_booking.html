@@ -1,0 +1,62 @@
+<!-- Accept Booking Modal -->
+<div class="vbm-modal-overlay" id="vbmAcceptBookingModal" style="display: none;">
+    <div class="vbm-modal vbm-modal-medium">
+        <div class="vbm-modal-header">
+            <h2 class="vbm-modal-title">
+                <i class="fas fa-check-circle"></i> Accept Booking Request
+            </h2>
+            <button class="vbm-modal-close" onclick="VBModalAcceptBooking.close()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <form id="vbmAcceptBookingForm">
+            <div class="vbm-modal-body">
+                <div class="vbm-alert vbm-alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    <span>You are about to accept this booking request. Please review and confirm the details below.</span>
+                </div>
+
+                <div class="vbm-form-group">
+                    <label class="vbm-form-label">
+                        Booking ID
+                    </label>
+                    <input type="text" class="vbm-form-input" id="vbmAcceptBookingId" readonly>
+                </div>
+
+                <div class="vbm-form-group">
+                    <label class="vbm-form-label">
+                        Final Confirmed Amount (Optional)
+                        <small class="vbm-label-help">Leave empty to use quoted amount</small>
+                    </label>
+                    <div class="vbm-input-group">
+                        <span class="vbm-input-prefix">$</span>
+                        <input type="number" step="0.01" min="0" class="vbm-form-input" id="vbmAcceptFinalAmount" placeholder="Enter final amount">
+                    </div>
+                    <small class="vbm-form-help">Current quoted amount: <span id="vbmAcceptQuotedAmount"></span></small>
+                </div>
+
+                <div class="vbm-form-group">
+                    <label class="vbm-form-label">
+                        Acceptance Notes (Optional)
+                    </label>
+                    <textarea class="vbm-form-textarea" id="vbmAcceptNotes" rows="4" placeholder="Add any notes or special instructions for this booking..."></textarea>
+                </div>
+
+                <div class="vbm-alert vbm-alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>The trip organizer will be notified once you accept this booking.</span>
+                </div>
+            </div>
+
+            <div class="vbm-modal-footer">
+                <button type="button" class="vbm-btn vbm-btn-secondary" onclick="VBModalAcceptBooking.close()">
+                    Cancel
+                </button>
+                <button type="submit" class="vbm-btn vbm-btn-success" id="vbmAcceptSubmitBtn">
+                    <i class="fas fa-check"></i> Accept Booking
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

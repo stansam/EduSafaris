@@ -1,0 +1,49 @@
+<!-- Add Note Modal -->
+<div class="vbm-modal-overlay" id="vbmAddNoteModal" style="display: none;">
+    <div class="vbm-modal vbm-modal-medium">
+        <div class="vbm-modal-header">
+            <h2 class="vbm-modal-title">
+                <i class="fas fa-sticky-note"></i> Add Internal Note
+            </h2>
+            <button class="vbm-modal-close" onclick="VBModalAddNote.close()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <form id="vbmAddNoteForm">
+            <div class="vbm-modal-body">
+                <div class="vbm-alert vbm-alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Add an internal note to this booking for your records. This note will be timestamped and associated with your account.</span>
+                </div>
+
+                <div class="vbm-form-group">
+                    <label class="vbm-form-label">
+                        Booking ID
+                    </label>
+                    <input type="text" class="vbm-form-input" id="vbmAddNoteBookingId" readonly>
+                </div>
+
+                <div class="vbm-form-group">
+                    <label class="vbm-form-label vbm-required">
+                        Note *
+                    </label>
+                    <textarea class="vbm-form-textarea" id="vbmAddNoteText" rows="6" placeholder="Enter your note here..." required></textarea>
+                    <small class="vbm-form-help">
+                        Notes are for internal use only and will not be visible to the trip organizer.
+                    </small>
+                    <div class="vbm-form-error" id="vbmAddNoteError" style="display: none;"></div>
+                </div>
+            </div>
+
+            <div class="vbm-modal-footer">
+                <button type="button" class="vbm-btn vbm-btn-secondary" onclick="VBModalAddNote.close()">
+                    Cancel
+                </button>
+                <button type="submit" class="vbm-btn vbm-btn-primary" id="vbmAddNoteSubmitBtn">
+                    <i class="fas fa-save"></i> Add Note
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

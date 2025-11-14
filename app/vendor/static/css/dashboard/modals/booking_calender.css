@@ -1,0 +1,133 @@
+.vbm-calendar-controls {
+    display: flex;
+    gap: 15px;
+    align-items: flex-end;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.vbm-date-range-selector {
+    flex: 1;
+    min-width: 300px;
+}
+
+.vbm-calendar-legend {
+    display: flex;
+    gap: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.vbm-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.vbm-legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+}
+
+.vbm-availability-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.vbm-availability-card {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.vbm-availability-label {
+    font-size: 12px;
+    color: #7f8c8d;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.vbm-availability-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.vbm-calendar-events {
+    margin-top: 25px;
+}
+
+.vbm-event-count {
+    font-size: 14px;
+    color: #7f8c8d;
+    font-weight: normal;
+}
+
+.vbm-events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.vbm-event-item {
+    background: white;
+    border: 2px solid #ecf0f1;
+    border-left: 4px solid;
+    border-radius: 8px;
+    padding: 15px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.vbm-event-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.vbm-event-item.confirmed {
+    border-left-color: #4CAF50;
+}
+
+.vbm-event-item.in_progress {
+    border-left-color: #2196F3;
+}
+
+.vbm-event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.vbm-event-title {
+    font-weight: 700;
+    font-size: 16px;
+    color: #2c3e50;
+    flex: 1;
+}
+
+.vbm-event-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    font-size: 14px;
+    color: #7f8c8d;
+}
+
+.vbm-event-detail {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.vbm-event-actions {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #ecf0f1;
+}

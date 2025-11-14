@@ -1,0 +1,166 @@
+<!-- Booking Details Modal -->
+<div class="vbm-modal-overlay" id="vbmBookingDetailsModal" style="display: none;">
+    <div class="vbm-modal vbm-modal-large">
+        <div class="vbm-modal-header">
+            <h2 class="vbm-modal-title">
+                <i class="fas fa-file-alt"></i> Booking Details
+            </h2>
+            <button class="vbm-modal-close" onclick="VBModalBookingDetails.close()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="vbm-modal-body">
+            <div class="vbm-loading" id="vbmDetailsLoading">
+                <div class="vbm-spinner"></div>
+                <p>Loading booking details...</p>
+            </div>
+
+            <div class="vbm-content" id="vbmDetailsContent" style="display: none;">
+                <!-- Booking Header -->
+                <div class="vbm-details-header">
+                    <div class="vbm-detail-row">
+                        <span class="vbm-detail-label">Booking ID:</span>
+                        <span class="vbm-detail-value"><strong id="vbmDetailBookingId">#</strong></span>
+                    </div>
+                    <div class="vbm-detail-row">
+                        <span class="vbm-detail-label">Status:</span>
+                        <span class="vbm-detail-value" id="vbmDetailStatus"></span>
+                    </div>
+                    <div class="vbm-detail-row">
+                        <span class="vbm-detail-label">Payment Status:</span>
+                        <span class="vbm-detail-value" id="vbmDetailPaymentStatus"></span>
+                    </div>
+                </div>
+
+                <!-- Trip Information -->
+                <div class="vbm-section">
+                    <h3 class="vbm-section-title">
+                        <i class="fas fa-route"></i> Trip Information
+                    </h3>
+                    <div class="vbm-section-content">
+                        <div class="vbm-detail-grid">
+                            <div class="vbm-detail-item">
+                                <span class="vbm-detail-label">Trip Title:</span>
+                                <span class="vbm-detail-value" id="vbmDetailTripTitle"></span>
+                            </div>
+                            <div class="vbm-detail-item">
+                                <span class="vbm-detail-label">Trip Dates:</span>
+                                <span class="vbm-detail-value" id="vbmDetailTripDates"></span>
+                            </div>
+                            <div class="vbm-detail-item">
+                                <span class="vbm-detail-label">Organizer:</span>
+                                <span class="vbm-detail-value" id="vbmDetailOrganizer"></span>
+                            </div>
+                            <div class="vbm-detail-item">
+                                <span class="vbm-detail-label">Contact:</span>
+                                <span class="vbm-detail-value" id="vbmDetailOrganizerContact"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service Details -->
+                <div class="vbm-section">
+                    <h3 class="vbm-section-title">
+                        <i class="fas fa-concierge-bell"></i> Service Details
+                    </h3>
+                    <div class="vbm-section-content">
+                        <div class="vbm-detail-grid">
+                            <div class="vbm-detail-item">
+                                <span class="vbm-detail-label">Service Type:</span>
+                                <span class="vbm-detail-value" id="vbmDetailBookingType"></span>
+                            </div>
+                            <div class="vbm-detail-item">
+                                <span class="vbm-detail-label">Service Dates:</span>
+                                <span class="vbm-detail-value" id="vbmDetailServiceDates"></span>
+                            </div>
+                            <div class="vbm-detail-item">
+                                <span class="vbm-detail-label">Booked On:</span>
+                                <span class="vbm-detail-value" id="vbmDetailBookingDate"></span>
+                            </div>
+                            <div class="vbm-detail-item">
+                                <span class="vbm-detail-label">Confirmed On:</span>
+                                <span class="vbm-detail-value" id="vbmDetailConfirmedDate"></span>
+                            </div>
+                        </div>
+                        <div class="vbm-detail-full">
+                            <span class="vbm-detail-label">Service Description:</span>
+                            <p class="vbm-detail-value" id="vbmDetailServiceDesc"></p>
+                        </div>
+                        <div class="vbm-detail-full" id="vbmDetailSpecialReqSection" style="display: none;">
+                            <span class="vbm-detail-label">Special Requirements:</span>
+                            <p class="vbm-detail-value" id="vbmDetailSpecialReq"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pricing Information -->
+                <div class="vbm-section">
+                    <h3 class="vbm-section-title">
+                        <i class="fas fa-dollar-sign"></i> Pricing Information
+                    </h3>
+                    <div class="vbm-section-content">
+                        <div class="vbm-pricing-table">
+                            <div class="vbm-pricing-row">
+                                <span>Quoted Amount:</span>
+                                <span id="vbmDetailQuotedAmount"></span>
+                            </div>
+                            <div class="vbm-pricing-row">
+                                <span>Final Amount:</span>
+                                <span id="vbmDetailFinalAmount"></span>
+                            </div>
+                            <div class="vbm-pricing-row vbm-pricing-total">
+                                <span><strong>Total Amount:</strong></span>
+                                <span><strong id="vbmDetailTotalAmount"></strong></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Information -->
+                <div class="vbm-section" id="vbmDetailPaymentsSection" style="display: none;">
+                    <h3 class="vbm-section-title">
+                        <i class="fas fa-credit-card"></i> Payment History
+                    </h3>
+                    <div class="vbm-section-content">
+                        <div class="vbm-payments-list" id="vbmDetailPaymentsList"></div>
+                    </div>
+                </div>
+
+                <!-- Notes -->
+                <div class="vbm-section" id="vbmDetailNotesSection" style="display: none;">
+                    <h3 class="vbm-section-title">
+                        <i class="fas fa-sticky-note"></i> Notes
+                    </h3>
+                    <div class="vbm-section-content">
+                        <div class="vbm-notes-content" id="vbmDetailNotes"></div>
+                        <button class="vbm-btn vbm-btn-secondary vbm-mt-2" onclick="VBModalAddNote.open(VBModalBookingDetails.currentBookingId)">
+                            <i class="fas fa-plus"></i> Add Note
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Rating & Review -->
+                <div class="vbm-section" id="vbmDetailReviewSection" style="display: none;">
+                    <h3 class="vbm-section-title">
+                        <i class="fas fa-star"></i> Rating & Review
+                    </h3>
+                    <div class="vbm-section-content">
+                        <div class="vbm-rating-display" id="vbmDetailRating"></div>
+                        <p class="vbm-review-text" id="vbmDetailReview"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="vbm-modal-footer">
+            <button class="vbm-btn vbm-btn-secondary" onclick="VBModalBookingDetails.close()">
+                Close
+            </button>
+            <button class="vbm-btn vbm-btn-primary" id="vbmDetailsPrintBtn">
+                <i class="fas fa-print"></i> Print Details
+            </button>
+        </div>
+    </div>
+</div>
