@@ -1,0 +1,64 @@
+<!-- View User Modal -->
+<div class="view-user-modal-overlay" id="viewUserModalOverlay">
+    <div class="view-user-modal">
+        <div class="view-user-modal-header">
+            <h2 class="view-user-modal-title">
+                <i class="fas fa-user-circle"></i>
+                <span id="viewUserModalHeaderTitle">User Details</span>
+            </h2>
+            <button class="view-user-modal-close" onclick="viewUserModal.close()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="view-user-modal-body" id="viewUserModalBody">
+            <div class="view-user-loading">
+                <i class="fas fa-spinner"></i>
+                <p>Loading user details...</p>
+            </div>
+        </div>
+
+        <div class="view-user-modal-footer" id="viewUserModalFooter" style="display: none;">
+            <button class="view-user-btn view-user-btn-secondary" onclick="viewUserModal.close()">
+                <i class="fas fa-times"></i>
+                Close
+            </button>
+            <button class="view-user-btn view-user-btn-primary" id="editUserBtn" onclick="viewUserModal.switchToEdit()">
+                <i class="fas fa-edit"></i>
+                Edit User
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Edit User Modal -->
+<div class="view-user-modal-overlay" id="editUserModalOverlay">
+    <div class="view-user-modal">
+        <div class="view-user-modal-header" style="background: linear-gradient(135deg, var(--success-color), #229954);">
+            <h2 class="view-user-modal-title">
+                <i class="fas fa-user-edit"></i>
+                <span>Edit User</span>
+            </h2>
+            <button class="view-user-modal-close" onclick="editUserModal.close()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="view-user-modal-body" id="editUserModalBody">
+            <form id="editUserForm" onsubmit="editUserModal.submit(event)">
+                <!-- Form will be populated dynamically -->
+            </form>
+        </div>
+
+        <div class="view-user-modal-footer">
+            <button type="button" class="view-user-btn view-user-btn-secondary" onclick="editUserModal.close()">
+                <i class="fas fa-times"></i>
+                Cancel
+            </button>
+            <button type="submit" form="editUserForm" class="view-user-btn view-user-btn-success">
+                <i class="fas fa-save"></i>
+                Save Changes
+            </button>
+        </div>
+    </div>
+</div>

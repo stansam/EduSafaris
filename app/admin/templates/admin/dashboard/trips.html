@@ -1,64 +1,268 @@
-<h3 class="safari-chart-title" style="margin-bottom: 20px;">
-    <i class="fa-solid fa-map"></i>
-    All Trips
-</h3>
-<table class="safari-table">
-    <thead>
-        <tr>
-            <th>Trip ID</th>
-            <th>Destination</th>
-            <th>Start Date</th>
-            <th>Duration</th>
-            <th>Participants</th>
-            <th>Status</th>
-            <th>Revenue</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>#T001</td>
-            <td>Serengeti National Park</td>
-            <td>Oct 15, 2025</td>
-            <td>7 days</td>
-            <td>12</td>
-            <td><span class="safari-status-badge safari-status-active">Active</span></td>
-            <td>$8,400</td>
-        </tr>
-        <tr>
-            <td>#T002</td>
-            <td>Masai Mara Reserve</td>
-            <td>Oct 18, 2025</td>
-            <td>5 days</td>
-            <td>8</td>
-            <td><span class="safari-status-badge safari-status-active">Active</span></td>
-            <td>$5,600</td>
-        </tr>
-        <tr>
-            <td>#T003</td>
-            <td>Amboseli National Park</td>
-            <td>Nov 01, 2025</td>
-            <td>3 days</td>
-            <td>6</td>
-            <td><span class="safari-status-badge safari-status-pending">Pending</span></td>
-            <td>$4,200</td>
-        </tr>
-        <tr>
-            <td>#T004</td>
-            <td>Tsavo East & West</td>
-            <td>Oct 10, 2025</td>
-            <td>9 days</td>
-            <td>15</td>
-            <td><span class="safari-status-badge safari-status-completed">Completed</span></td>
-            <td>$10,500</td>
-        </tr>
-        <tr>
-            <td>#T005</td>
-            <td>Lake Nakuru</td>
-            <td>Nov 05, 2025</td>
-            <td>2 days</td>
-            <td>4</td>
-            <td><span class="safari-status-badge safari-status-pending">Pending</span></td>
-            <td>$2,800</td>
-        </tr>
-    </tbody>
-</table>
+<!-- trips.html - Main Trips Tab Content -->
+<div class="edusafari-trips-container">
+    <!-- Header Section -->
+    <div class="edusafari-trips-header">
+        <div class="edusafari-trips-header-left">
+            <h2 class="edusafari-trips-title">
+                <i class="fas fa-plane-departure"></i> Trips Management
+            </h2>
+            <p class="edusafari-trips-subtitle">Manage and monitor all educational trips</p>
+        </div>
+        <div class="edusafari-trips-header-right">
+            <button class="edusafari-btn edusafari-btn-secondary" id="edusafariTripsStatsBtn">
+                <i class="fas fa-chart-bar"></i> View Statistics
+            </button>
+            <button class="edusafari-btn edusafari-btn-primary" id="edusafariCreateTripBtn">
+                <i class="fas fa-plus"></i> Create New Trip
+            </button>
+        </div>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="edusafari-trips-filters">
+        <div class="edusafari-filters-row">
+            <div class="edusafari-filter-group">
+                <label for="edusafariTripStatusFilter">
+                    <i class="fas fa-filter"></i> Status
+                </label>
+                <select id="edusafariTripStatusFilter" class="edusafari-filter-select" multiple>
+                    <option value="draft">Draft</option>
+                    <option value="published">Published</option>
+                    <option value="registration_open">Registration Open</option>
+                    <option value="registration_closed">Registration Closed</option>
+                    <option value="full">Full</option>
+                    <option value="in_progress">In Progress</option>
+                    <option value="completed">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </div>
+
+            <div class="edusafari-filter-group">
+                <label for="edusafariTripCategoryFilter">
+                    <i class="fas fa-tags"></i> Category
+                </label>
+                <select id="edusafariTripCategoryFilter" class="edusafari-filter-select" multiple>
+                    <option value="science">Science</option>
+                    <option value="history">History</option>
+                    <option value="cultural">Cultural</option>
+                    <option value="sports">Sports</option>
+                    <option value="adventure">Adventure</option>
+                    <option value="educational">Educational</option>
+                </select>
+            </div>
+
+            <div class="edusafari-filter-group">
+                <label for="edusafariTripSearchInput">
+                    <i class="fas fa-search"></i> Search
+                </label>
+                <input type="text" id="edusafariTripSearchInput" 
+                       class="edusafari-filter-input" 
+                       placeholder="Search trips...">
+            </div>
+
+            <div class="edusafari-filter-group">
+                <label for="edusafariTripDateFromFilter">
+                    <i class="fas fa-calendar-alt"></i> From Date
+                </label>
+                <input type="date" id="edusafariTripDateFromFilter" 
+                       class="edusafari-filter-input">
+            </div>
+
+            <div class="edusafari-filter-group">
+                <label for="edusafariTripDateToFilter">
+                    <i class="fas fa-calendar-alt"></i> To Date
+                </label>
+                <input type="date" id="edusafariTripDateToFilter" 
+                       class="edusafari-filter-input">
+            </div>
+
+            <div class="edusafari-filter-group">
+                <label>&nbsp;</label>
+                <div class="edusafari-filter-actions">
+                    <button class="edusafari-btn edusafari-btn-primary" id="edusafariApplyFiltersBtn">
+                        <i class="fas fa-check"></i> Apply
+                    </button>
+                    <button class="edusafari-btn edusafari-btn-secondary" id="edusafariResetFiltersBtn">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="edusafari-filters-row">
+            <div class="edusafari-filter-group edusafari-filter-checkbox">
+                <label>
+                    <input type="checkbox" id="edusafariFeaturedOnlyFilter">
+                    <span>Featured Only</span>
+                </label>
+            </div>
+            <div class="edusafari-filter-group edusafari-filter-checkbox">
+                <label>
+                    <input type="checkbox" id="edusafariPublishedOnlyFilter">
+                    <span>Published Only</span>
+                </label>
+            </div>
+            <div class="edusafari-filter-group edusafari-filter-checkbox">
+                <label>
+                    <input type="checkbox" id="edusafariAvailableSpotsFilter">
+                    <span>Available Spots</span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats Cards -->
+    <div class="edusafari-quick-stats">
+        <div class="edusafari-stat-card edusafari-stat-primary">
+            <div class="edusafari-stat-icon">
+                <i class="fas fa-plane"></i>
+            </div>
+            <div class="edusafari-stat-content">
+                <h3 id="edusafariTotalTripsCount">-</h3>
+                <p>Total Trips</p>
+            </div>
+        </div>
+
+        <div class="edusafari-stat-card edusafari-stat-success">
+            <div class="edusafari-stat-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="edusafari-stat-content">
+                <h3 id="edusafariActiveTripsCount">-</h3>
+                <p>Active Trips</p>
+            </div>
+        </div>
+
+        <div class="edusafari-stat-card edusafari-stat-warning">
+            <div class="edusafari-stat-icon">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="edusafari-stat-content">
+                <h3 id="edusafariPendingTripsCount">-</h3>
+                <p>Pending Approval</p>
+            </div>
+        </div>
+
+        <div class="edusafari-stat-card edusafari-stat-info">
+            <div class="edusafari-stat-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="edusafari-stat-content">
+                <h3 id="edusafariTotalParticipantsCount">-</h3>
+                <p>Total Participants</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Actions Bar -->
+    <div class="edusafari-bulk-actions" id="edusafariBulkActionsBar" style="display: none;">
+        <div class="edusafari-bulk-info">
+            <span id="edusafariSelectedCount">0</span> trip(s) selected
+        </div>
+        <div class="edusafari-bulk-buttons">
+            <button class="edusafari-btn edusafari-btn-sm edusafari-btn-success" id="edusafariBulkApproveBtn">
+                <i class="fas fa-check"></i> Approve
+            </button>
+            <button class="edusafari-btn edusafari-btn-sm edusafari-btn-warning" id="edusafariBulkFeatureBtn">
+                <i class="fas fa-star"></i> Feature
+            </button>
+            <button class="edusafari-btn edusafari-btn-sm edusafari-btn-danger" id="edusafariBulkCancelBtn">
+                <i class="fas fa-ban"></i> Cancel
+            </button>
+            <button class="edusafari-btn edusafari-btn-sm edusafari-btn-secondary" id="edusafariClearSelectionBtn">
+                <i class="fas fa-times"></i> Clear
+            </button>
+        </div>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div class="edusafari-loading" id="edusafariTripsLoading" style="display: none;">
+        <div class="edusafari-spinner"></div>
+        <p>Loading trips...</p>
+    </div>
+
+    <!-- Trips Table -->
+    <div class="edusafari-trips-table-container" id="edusafariTripsTableContainer">
+        <table class="edusafari-trips-table" id="edusafariTripsTable">
+            <thead>
+                <tr>
+                    <th class="edusafari-checkbox-col">
+                        <input type="checkbox" id="edusafariSelectAllTrips">
+                    </th>
+                    <th class="edusafari-sortable" data-sort="title">
+                        Title <i class="fas fa-sort"></i>
+                    </th>
+                    <th class="edusafari-sortable" data-sort="destination">
+                        Destination <i class="fas fa-sort"></i>
+                    </th>
+                    <th class="edusafari-sortable" data-sort="start_date">
+                        Start Date <i class="fas fa-sort"></i>
+                    </th>
+                    <th class="edusafari-sortable" data-sort="status">
+                        Status <i class="fas fa-sort"></i>
+                    </th>
+                    <th>Participants</th>
+                    <th class="edusafari-sortable" data-sort="price">
+                        Price <i class="fas fa-sort"></i>
+                    </th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="edusafariTripsTableBody">
+                <!-- Trips will be loaded here dynamically -->
+            </tbody>
+        </table>
+
+        <!-- Empty State -->
+        <div class="edusafari-empty-state" id="edusafariEmptyState" style="display: none;">
+            <i class="fas fa-plane-slash"></i>
+            <h3>No Trips Found</h3>
+            <p>No trips match your current filters. Try adjusting your search criteria.</p>
+        </div>
+
+        <!-- Error State -->
+        <div class="edusafari-error-state" id="edusafariErrorState" style="display: none;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>Error Loading Trips</h3>
+            <p id="edusafariErrorMessage">An error occurred while loading trips.</p>
+            <button class="edusafari-btn edusafari-btn-primary" id="edusafariRetryBtn">
+                <i class="fas fa-redo"></i> Retry
+            </button>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="edusafari-pagination" id="edusafariTripsPagination">
+        <div class="edusafari-pagination-info">
+            Showing <span id="edusafariShowingFrom">0</span> to <span id="edusafariShowingTo">0</span> 
+            of <span id="edusafariTotalItems">0</span> trips
+        </div>
+        <div class="edusafari-pagination-controls">
+            <button class="edusafari-btn edusafari-btn-sm" id="edusafariFirstPageBtn" disabled>
+                <i class="fas fa-angle-double-left"></i>
+            </button>
+            <button class="edusafari-btn edusafari-btn-sm" id="edusafariPrevPageBtn" disabled>
+                <i class="fas fa-angle-left"></i>
+            </button>
+            <div class="edusafari-page-numbers" id="edusafariPageNumbers"></div>
+            <button class="edusafari-btn edusafari-btn-sm" id="edusafariNextPageBtn">
+                <i class="fas fa-angle-right"></i>
+            </button>
+            <button class="edusafari-btn edusafari-btn-sm" id="edusafariLastPageBtn">
+                <i class="fas fa-angle-double-right"></i>
+            </button>
+        </div>
+        <div class="edusafari-pagination-size">
+            <label for="edusafariPageSizeSelect">Per page:</label>
+            <select id="edusafariPageSizeSelect" class="edusafari-select-sm">
+                <option value="10">10</option>
+                <option value="20" selected>20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Notification Container -->
+<div class="edusafari-toast-container" id="edusafariToastContainer"></div>

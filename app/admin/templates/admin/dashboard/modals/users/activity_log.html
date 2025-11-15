@@ -1,0 +1,62 @@
+<div class="activity-modal-overlay" id="activityLogModalOverlay">
+    <div class="activity-modal">
+        <div class="activity-modal-header">
+            <h2 class="activity-modal-title">
+                <i class="fas fa-history"></i>
+                Activity Log
+            </h2>
+            <button class="activity-modal-close" onclick="activityLogModal.close()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="activity-modal-user-bar" id="activityUserBar">
+            <div class="activity-loading">
+                <i class="fas fa-spinner"></i>
+            </div>
+        </div>
+
+        <div class="activity-modal-filters" id="activityFilters" style="display: none;">
+            <select class="activity-filter-select" id="activityActionFilter">
+                <option value="">All Actions</option>
+                <option value="login">Login</option>
+                <option value="logout">Logout</option>
+                <option value="payment_processed">Payment</option>
+                <option value="trip_registration_created">Registration</option>
+                <option value="service_booking_created">Booking</option>
+            </select>
+
+            <select class="activity-filter-select" id="activityCategoryFilter">
+                <option value="">All Categories</option>
+                <option value="user">User</option>
+                <option value="trip">Trip</option>
+                <option value="payment">Payment</option>
+                <option value="booking">Booking</option>
+                <option value="security">Security</option>
+                <option value="emergency">Emergency</option>
+            </select>
+
+            <select class="activity-filter-select" id="activityStatusFilter">
+                <option value="">All Status</option>
+                <option value="success">Success</option>
+                <option value="failed">Failed</option>
+                <option value="warning">Warning</option>
+            </select>
+        </div>
+
+        <div class="activity-modal-body" id="activityModalBody">
+            <div class="activity-loading">
+                <i class="fas fa-spinner"></i>
+                <p>Loading activity log...</p>
+            </div>
+        </div>
+
+        <div class="activity-pagination" id="activityPagination" style="display: none;">
+            <div class="activity-pagination-info" id="activityPaginationInfo">
+                Showing 0 of 0 activities
+            </div>
+            <div class="activity-pagination-controls" id="activityPaginationControls">
+            </div>
+        </div>
+    </div>
+</div>

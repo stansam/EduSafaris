@@ -1,0 +1,242 @@
+<!-- Toggle Status Modal -->
+<div class="action-modal-overlay" id="toggleStatusModalOverlay">
+    <div class="action-modal">
+        <div class="action-modal-header warning">
+            <h3 class="action-modal-title">
+                <i class="fas fa-toggle-on"></i>
+                <span id="toggleStatusTitle">Toggle User Status</span>
+            </h3>
+            <button class="action-modal-close" onclick="toggleStatusModal.close()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="action-modal-body">
+            <div class="action-loading" id="toggleStatusLoading">
+                <i class="fas fa-spinner"></i>
+                <p>Loading...</p>
+            </div>
+
+            <div id="toggleStatusContent" style="display: none;">
+                <div class="action-modal-user-info" id="toggleStatusUserInfo"></div>
+
+                <div class="action-alert action-alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div>
+                        <strong>Warning:</strong>
+                        <p id="toggleStatusWarning" style="margin: 5px 0 0 0;"></p>
+                    </div>
+                </div>
+
+                <form id="toggleStatusForm" onsubmit="toggleStatusModal.submit(event)">
+                    <div class="action-form-group">
+                        <label class="action-form-label">Reason</label>
+                        <textarea class="action-form-textarea" name="reason" placeholder="Enter reason for status change..."></textarea>
+                        <div class="action-form-help">This will be logged in the activity history</div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="action-modal-footer">
+            <button type="button" class="action-btn action-btn-secondary" onclick="toggleStatusModal.close()">
+                <i class="fas fa-times"></i>
+                Cancel
+            </button>
+            <button type="submit" form="toggleStatusForm" class="action-btn action-btn-warning" id="toggleStatusSubmitBtn">
+                <i class="fas fa-toggle-on"></i>
+                <span id="toggleStatusBtnText">Change Status</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Change Role Modal -->
+<div class="action-modal-overlay" id="changeRoleModalOverlay">
+    <div class="action-modal">
+        <div class="action-modal-header primary">
+            <h3 class="action-modal-title">
+                <i class="fas fa-user-tag"></i>
+                Change User Role
+            </h3>
+            <button class="action-modal-close" onclick="changeRoleModal.close()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="action-modal-body">
+            <div class="action-loading" id="changeRoleLoading">
+                <i class="fas fa-spinner"></i>
+                <p>Loading...</p>
+            </div>
+
+            <div id="changeRoleContent" style="display: none;">
+                <div class="action-modal-user-info" id="changeRoleUserInfo"></div>
+
+                <div class="action-alert action-alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <strong>Note:</strong>
+                        <p style="margin: 5px 0 0 0;">Changing a user's role will affect their permissions and dashboard access.</p>
+                    </div>
+                </div>
+
+                <form id="changeRoleForm" onsubmit="changeRoleModal.submit(event)">
+                    <div class="action-form-group">
+                        <label class="action-form-label">Current Role: <span id="currentRoleDisplay"></span></label>
+                    </div>
+
+                    <div class="action-form-group">
+                        <label class="action-form-label">New Role *</label>
+                        <select class="action-form-select" name="role" required>
+                            <option value="">Select new role...</option>
+                            <option value="parent">Parent</option>
+                            <option value="teacher">Teacher</option>
+                            <option value="vendor">Vendor</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+
+                    <div class="action-form-group">
+                        <label class="action-form-label">Reason for Change *</label>
+                        <textarea class="action-form-textarea" name="reason" required placeholder="Enter reason for role change..."></textarea>
+                        <div class="action-form-help">This will be logged in the activity history</div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="action-modal-footer">
+            <button type="button" class="action-btn action-btn-secondary" onclick="changeRoleModal.close()">
+                <i class="fas fa-times"></i>
+                Cancel
+            </button>
+            <button type="submit" form="changeRoleForm" class="action-btn action-btn-primary">
+                <i class="fas fa-save"></i>
+                Change Role
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Reset Password Modal -->
+<div class="action-modal-overlay" id="resetPasswordModalOverlay">
+    <div class="action-modal">
+        <div class="action-modal-header danger">
+            <h3 class="action-modal-title">
+                <i class="fas fa-key"></i>
+                Reset Password
+            </h3>
+            <button class="action-modal-close" onclick="resetPasswordModal.close()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="action-modal-body">
+            <div class="action-loading" id="resetPasswordLoading">
+                <i class="fas fa-spinner"></i>
+                <p>Loading...</p>
+            </div>
+
+            <div id="resetPasswordContent" style="display: none;">
+                <div class="action-modal-user-info" id="resetPasswordUserInfo"></div>
+
+                <div class="action-alert action-alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <strong>Note:</strong>
+                        <p style="margin: 5px 0 0 0;">This will generate a password reset link valid for 24 hours.</p>
+                    </div>
+                </div>
+
+                <form id="resetPasswordForm" onsubmit="resetPasswordModal.submit(event)">
+                    <div class="action-form-checkbox-group">
+                        <input type="checkbox" class="action-form-checkbox" name="send_email" id="sendResetEmail" checked>
+                        <label for="sendResetEmail" style="margin: 0; cursor: pointer;">
+                            Send password reset email to user
+                        </label>
+                    </div>
+                    <div class="action-form-help" style="margin-left: 30px;">
+                        If unchecked, you'll need to manually provide the reset link
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="action-modal-footer">
+            <button type="button" class="action-btn action-btn-secondary" onclick="resetPasswordModal.close()">
+                <i class="fas fa-times"></i>
+                Cancel
+            </button>
+            <button type="submit" form="resetPasswordForm" class="action-btn action-btn-danger">
+                <i class="fas fa-key"></i>
+                Reset Password
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Verify Email Modal -->
+<div class="action-modal-overlay" id="verifyEmailModalOverlay">
+    <div class="action-modal">
+        <div class="action-modal-header success">
+            <h3 class="action-modal-title">
+                <i class="fas fa-envelope-circle-check"></i>
+                Verify Email
+            </h3>
+            <button class="action-modal-close" onclick="verifyEmailModal.close()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="action-modal-body">
+            <div class="action-loading" id="verifyEmailLoading">
+                <i class="fas fa-spinner"></i>
+                <p>Loading...</p>
+            </div>
+
+            <div id="verifyEmailContent" style="display: none;">
+                <div class="action-modal-user-info" id="verifyEmailUserInfo"></div>
+
+                <div class="action-alert action-alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <strong>Options:</strong>
+                        <p style="margin: 5px 0 0 0;">You can manually verify the email or send a verification link.</p>
+                    </div>
+                </div>
+
+                <form id="verifyEmailForm" onsubmit="verifyEmailModal.submit(event)">
+                    <div class="action-form-group">
+                        <label class="action-form-label">Verification Method</label>
+                        <select class="action-form-select" name="method" id="verifyMethod" onchange="verifyEmailModal.toggleMethod()">
+                            <option value="send">Send verification email</option>
+                            <option value="manual">Manually verify now</option>
+                        </select>
+                    </div>
+
+                    <div id="manualVerifyWarning" style="display: none;">
+                        <div class="action-alert action-alert-warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div>
+                                <strong>Warning:</strong>
+                                <p style="margin: 5px 0 0 0;">This will immediately verify the email address without sending a confirmation.</p>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="action-modal-footer">
+            <button type="button" class="action-btn action-btn-secondary" onclick="verifyEmailModal.close()">
+                <i class="fas fa-times"></i>
+                Cancel
+            </button>
+            <button type="submit" form="verifyEmailForm" class="action-btn action-btn-success">
+                <i class="fas fa-check"></i>
+                <span id="verifyEmailBtnText">Send Verification</span>
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,130 @@
+/* Form Styles */
+.edusafari-form-section {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.edusafari-form-section h3 {
+    margin: 0 0 20px 0;
+    font-size: 18px;
+    color: var(--edusafari-dark);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--edusafari-border);
+}
+
+.edusafari-form-section h3 i {
+    color: var(--edusafari-primary);
+}
+
+.edusafari-form-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.edusafari-form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.edusafari-form-group.edusafari-form-full {
+    grid-column: 1 / -1;
+}
+
+.edusafari-form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--edusafari-dark);
+    margin-bottom: 5px;
+}
+
+.edusafari-form-input,
+.edusafari-form-select,
+.edusafari-form-textarea {
+    padding: 10px 12px;
+    border: 1px solid var(--edusafari-border);
+    border-radius: 5px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+    font-family: inherit;
+}
+
+.edusafari-form-input:focus,
+.edusafari-form-select:focus,
+.edusafari-form-textarea:focus {
+    outline: none;
+    border-color: var(--edusafari-primary);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.edusafari-form-textarea {
+    resize: vertical;
+}
+
+.edusafari-form-checkboxes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.edusafari-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 10px;
+    background: white;
+    border-radius: 5px;
+    border: 1px solid var(--edusafari-border);
+    transition: all 0.2s;
+}
+
+.edusafari-checkbox-label:hover {
+    border-color: var(--edusafari-primary);
+    background: #f8f9fa;
+}
+
+.edusafari-checkbox-label input[type="checkbox"] {
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+}
+
+.edusafari-checkbox-label span {
+    font-size: 14px;
+    color: var(--edusafari-dark);
+    font-weight: 500;
+}
+
+.edusafari-form-actions-section {
+    background: #fff3cd;
+    border: 2px solid var(--edusafari-warning);
+}
+
+.edusafari-quick-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .edusafari-form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .edusafari-form-checkboxes {
+        grid-template-columns: 1fr;
+    }
+    
+    .edusafari-quick-actions {
+        flex-direction: column;
+    }
+}

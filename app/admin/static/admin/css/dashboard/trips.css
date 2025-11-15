@@ -1,0 +1,731 @@
+:root {
+    --edusafari-primary: #3498db;
+    --edusafari-success: #27ae60;
+    --edusafari-warning: #f39c12;
+    --edusafari-danger: #e74c3c;
+    --edusafari-dark: #2c3e50;
+    --edusafari-light: #ecf0f1;
+    --edusafari-border: #dfe6e9;
+    --edusafari-shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* Container */
+.edusafari-trips-container {
+    padding: 20px;
+    background: #f8f9fa;
+    min-height: 100vh;
+}
+
+/* Header */
+.edusafari-trips-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.edusafari-trips-header-left {
+    flex: 1;
+}
+
+.edusafari-trips-title {
+    font-size: 28px;
+    color: var(--edusafari-dark);
+    margin: 0 0 5px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.edusafari-trips-subtitle {
+    color: #7f8c8d;
+    margin: 0;
+    font-size: 14px;
+}
+
+.edusafari-trips-header-right {
+    display: flex;
+    gap: 10px;
+}
+
+/* Buttons */
+.edusafari-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.edusafari-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.edusafari-btn-primary {
+    background: var(--edusafari-primary);
+    color: white;
+}
+
+.edusafari-btn-primary:hover:not(:disabled) {
+    background: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--edusafari-shadow);
+}
+
+.edusafari-btn-secondary {
+    background: #95a5a6;
+    color: white;
+}
+
+.edusafari-btn-secondary:hover:not(:disabled) {
+    background: #7f8c8d;
+}
+
+.edusafari-btn-success {
+    background: var(--edusafari-success);
+    color: white;
+}
+
+.edusafari-btn-success:hover:not(:disabled) {
+    background: #229954;
+}
+
+.edusafari-btn-warning {
+    background: var(--edusafari-warning);
+    color: white;
+}
+
+.edusafari-btn-warning:hover:not(:disabled) {
+    background: #d68910;
+}
+
+.edusafari-btn-danger {
+    background: var(--edusafari-danger);
+    color: white;
+}
+
+.edusafari-btn-danger:hover:not(:disabled) {
+    background: #c0392b;
+}
+
+.edusafari-btn-sm {
+    padding: 6px 12px;
+    font-size: 13px;
+}
+
+/* Filters Section */
+.edusafari-trips-filters {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px var(--edusafari-shadow);
+    margin-bottom: 20px;
+}
+
+.edusafari-filters-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.edusafari-filters-row:last-child {
+    margin-bottom: 0;
+    display: flex;
+    gap: 20px;
+}
+
+.edusafari-filter-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.edusafari-filter-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--edusafari-dark);
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.edusafari-filter-select,
+.edusafari-filter-input {
+    padding: 8px 12px;
+    border: 1px solid var(--edusafari-border);
+    border-radius: 5px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+.edusafari-filter-select:focus,
+.edusafari-filter-input:focus {
+    outline: none;
+    border-color: var(--edusafari-primary);
+}
+
+.edusafari-filter-select[multiple] {
+    min-height: 40px;
+}
+
+.edusafari-filter-checkbox {
+    flex-direction: row;
+    align-items: center;
+}
+
+.edusafari-filter-checkbox label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    margin: 0;
+}
+
+.edusafari-filter-checkbox input[type="checkbox"] {
+    cursor: pointer;
+}
+
+.edusafari-filter-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Quick Stats Cards */
+.edusafari-quick-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.edusafari-stat-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px var(--edusafari-shadow);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: transform 0.3s;
+}
+
+.edusafari-stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px var(--edusafari-shadow);
+}
+
+.edusafari-stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: white;
+}
+
+.edusafari-stat-primary .edusafari-stat-icon {
+    background: var(--edusafari-primary);
+}
+
+.edusafari-stat-success .edusafari-stat-icon {
+    background: var(--edusafari-success);
+}
+
+.edusafari-stat-warning .edusafari-stat-icon {
+    background: var(--edusafari-warning);
+}
+
+.edusafari-stat-info .edusafari-stat-icon {
+    background: #3498db;
+}
+
+.edusafari-stat-content h3 {
+    font-size: 32px;
+    margin: 0 0 5px 0;
+    color: var(--edusafari-dark);
+}
+
+.edusafari-stat-content p {
+    margin: 0;
+    color: #7f8c8d;
+    font-size: 14px;
+}
+
+/* Bulk Actions Bar */
+.edusafari-bulk-actions {
+    background: var(--edusafari-dark);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    animation: edusafariSlideDown 0.3s ease;
+}
+
+@keyframes edusafariSlideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.edusafari-bulk-info {
+    font-weight: 600;
+}
+
+.edusafari-bulk-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+/* Loading Indicator */
+.edusafari-loading {
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px var(--edusafari-shadow);
+}
+
+.edusafari-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid var(--edusafari-light);
+    border-top-color: var(--edusafari-primary);
+    border-radius: 50%;
+    animation: edusafariSpin 1s linear infinite;
+    margin: 0 auto 15px;
+}
+
+@keyframes edusafariSpin {
+    to { transform: rotate(360deg); }
+}
+
+/* Trips Table */
+.edusafari-trips-table-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px var(--edusafari-shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.edusafari-trips-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.edusafari-trips-table thead {
+    background: var(--edusafari-dark);
+    color: white;
+}
+
+.edusafari-trips-table th {
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.edusafari-trips-table th.edusafari-sortable {
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.3s;
+}
+
+.edusafari-trips-table th.edusafari-sortable:hover {
+    background: #34495e;
+}
+
+.edusafari-trips-table th.edusafari-sortable i {
+    margin-left: 5px;
+    font-size: 12px;
+}
+
+.edusafari-trips-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--edusafari-border);
+    font-size: 14px;
+}
+
+.edusafari-trips-table tbody tr {
+    transition: background 0.2s;
+}
+
+.edusafari-trips-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+.edusafari-trips-table tbody tr.edusafari-selected {
+    background: #e3f2fd;
+}
+
+.edusafari-checkbox-col {
+    width: 40px;
+    text-align: center;
+}
+
+/* Status Badges */
+.edusafari-status-badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.edusafari-status-draft {
+    background: #bdc3c7;
+    color: #2c3e50;
+}
+
+.edusafari-status-published {
+    background: #d4edda;
+    color: #155724;
+}
+
+.edusafari-status-registration_open {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.edusafari-status-registration_closed {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.edusafari-status-full {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.edusafari-status-in_progress {
+    background: #cce5ff;
+    color: #004085;
+}
+
+.edusafari-status-completed {
+    background: #d4edda;
+    color: #155724;
+}
+
+.edusafari-status-cancelled {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Participants Progress */
+.edusafari-participants-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.edusafari-participants-count {
+    font-weight: 600;
+    color: var(--edusafari-dark);
+}
+
+.edusafari-progress-bar {
+    width: 100%;
+    height: 6px;
+    background: var(--edusafari-light);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.edusafari-progress-fill {
+    height: 100%;
+    background: var(--edusafari-success);
+    transition: width 0.3s;
+}
+
+.edusafari-progress-fill.edusafari-progress-warning {
+    background: var(--edusafari-warning);
+}
+
+.edusafari-progress-fill.edusafari-progress-danger {
+    background: var(--edusafari-danger);
+}
+
+/* Action Buttons */
+.edusafari-action-buttons {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.edusafari-action-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s;
+    color: white;
+}
+
+.edusafari-action-btn:hover {
+    transform: translateY(-2px);
+}
+
+.edusafari-action-view {
+    background: var(--edusafari-primary);
+}
+
+.edusafari-action-edit {
+    background: var(--edusafari-warning);
+}
+
+.edusafari-action-report {
+    background: #9b59b6;
+}
+
+.edusafari-action-delete {
+    background: var(--edusafari-danger);
+}
+
+/* Featured Badge */
+.edusafari-featured-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #ffd700;
+    color: #333;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-left: 5px;
+}
+
+/* Empty State */
+.edusafari-empty-state,
+.edusafari-error-state {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.edusafari-empty-state i,
+.edusafari-error-state i {
+    font-size: 64px;
+    color: #bdc3c7;
+    margin-bottom: 20px;
+}
+
+.edusafari-empty-state h3,
+.edusafari-error-state h3 {
+    color: var(--edusafari-dark);
+    margin: 0 0 10px 0;
+}
+
+.edusafari-empty-state p,
+.edusafari-error-state p {
+    color: #7f8c8d;
+    margin: 0 0 20px 0;
+}
+
+/* Pagination */
+.edusafari-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px var(--edusafari-shadow);
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.edusafari-pagination-info {
+    color: #7f8c8d;
+    font-size: 14px;
+}
+
+.edusafari-pagination-controls {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.edusafari-page-numbers {
+    display: flex;
+    gap: 3px;
+}
+
+.edusafari-page-btn {
+    padding: 6px 12px;
+    border: 1px solid var(--edusafari-border);
+    background: white;
+    color: var(--edusafari-dark);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 13px;
+}
+
+.edusafari-page-btn:hover:not(:disabled) {
+    background: var(--edusafari-primary);
+    color: white;
+    border-color: var(--edusafari-primary);
+}
+
+.edusafari-page-btn.edusafari-active {
+    background: var(--edusafari-primary);
+    color: white;
+    border-color: var(--edusafari-primary);
+}
+
+.edusafari-pagination-size {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.edusafari-select-sm {
+    padding: 5px 10px;
+    border: 1px solid var(--edusafari-border);
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* Toast Notifications */
+.edusafari-toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.edusafari-toast {
+    background: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px var(--edusafari-shadow);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 300px;
+    max-width: 500px;
+    animation: edusafariToastSlide 0.3s ease;
+}
+
+@keyframes edusafariToastSlide {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.edusafari-toast-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.edusafari-toast-content {
+    flex: 1;
+}
+
+.edusafari-toast-title {
+    font-weight: 600;
+    margin: 0 0 3px 0;
+    color: var(--edusafari-dark);
+}
+
+.edusafari-toast-message {
+    margin: 0;
+    font-size: 14px;
+    color: #7f8c8d;
+}
+
+.edusafari-toast-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #95a5a6;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+}
+
+.edusafari-toast-close:hover {
+    color: var(--edusafari-dark);
+}
+
+.edusafari-toast-success .edusafari-toast-icon {
+    color: var(--edusafari-success);
+}
+
+.edusafari-toast-error .edusafari-toast-icon {
+    color: var(--edusafari-danger);
+}
+
+.edusafari-toast-warning .edusafari-toast-icon {
+    color: var(--edusafari-warning);
+}
+
+.edusafari-toast-info .edusafari-toast-icon {
+    color: var(--edusafari-primary);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .edusafari-trips-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .edusafari-trips-header-right {
+        width: 100%;
+        flex-direction: column;
+    }
+    
+    .edusafari-quick-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .edusafari-filters-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .edusafari-pagination {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .edusafari-trips-table-container {
+        overflow-x: auto;
+    }
+    
+    .edusafari-trips-table {
+        min-width: 800px;
+    }
+}

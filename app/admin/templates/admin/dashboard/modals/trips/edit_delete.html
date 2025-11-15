@@ -1,0 +1,272 @@
+<!-- Edit/Delete Trip Modal -->
+<div id="edusafariEditTripModal" class="edusafari-modal" style="display: none;">
+    <div class="edusafari-modal-overlay"></div>
+    <div class="edusafari-modal-container edusafari-modal-large">
+        <div class="edusafari-modal-header">
+            <h2><i class="fas fa-edit"></i> Edit Trip</h2>
+            <button class="edusafari-modal-close" id="edusafariEditTripCloseBtn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="edusafari-modal-body">
+            <!-- Loading State -->
+            <div id="edusafariEditTripLoading" class="edusafari-modal-loading">
+                <div class="edusafari-spinner"></div>
+                <p>Loading trip data...</p>
+            </div>
+
+            <!-- Edit Form -->
+            <form id="edusafariEditTripForm" style="display: none;">
+                <!-- Basic Information Section -->
+                <div class="edusafari-form-section">
+                    <h3><i class="fas fa-info-circle"></i> Basic Information</h3>
+                    
+                    <div class="edusafari-form-row">
+                        <div class="edusafari-form-group edusafari-form-full">
+                            <label for="edusafariEditTitle">Trip Title *</label>
+                            <input type="text" id="edusafariEditTitle" name="title" 
+                                   class="edusafari-form-input" required>
+                        </div>
+                    </div>
+
+                    <div class="edusafari-form-row">
+                        <div class="edusafari-form-group edusafari-form-full">
+                            <label for="edusafariEditDescription">Description</label>
+                            <textarea id="edusafariEditDescription" name="description" 
+                                      class="edusafari-form-textarea" rows="4"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="edusafari-form-row">
+                        <div class="edusafari-form-group">
+                            <label for="edusafariEditDestination">Destination *</label>
+                            <input type="text" id="edusafariEditDestination" name="destination" 
+                                   class="edusafari-form-input" required>
+                        </div>
+                        <div class="edusafari-form-group">
+                            <label for="edusafariEditCountry">Country</label>
+                            <input type="text" id="edusafariEditCountry" name="destination_country" 
+                                   class="edusafari-form-input">
+                        </div>
+                    </div>
+
+                    <div class="edusafari-form-row">
+                        <div class="edusafari-form-group">
+                            <label for="edusafariEditCategory">Category</label>
+                            <select id="edusafariEditCategory" name="category" class="edusafari-form-select">
+                                <option value="">Select Category</option>
+                                <option value="science">Science</option>
+                                <option value="history">History</option>
+                                <option value="cultural">Cultural</option>
+                                <option value="sports">Sports</option>
+                                <option value="adventure">Adventure</option>
+                                <option value="educational">Educational</option>
+                            </select>
+                        </div>
+                        <div class="edusafari-form-group">
+                            <label for="edusafariEditGradeLevel">Grade Level</label>
+                            <input type="text" id="edusafariEditGradeLevel" name="grade_level" 
+                                   class="edusafari-form-input" placeholder="e.g., 9-12">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dates Section -->
+                <div class="edusafari-form-section">
+                    <h3><i class="fas fa-calendar-alt"></i> Dates & Timeline</h3>
+                    
+                    <div class="edusafari-form-row">
+                        <div class="edusafari-form-group">
+                            <label for="edusafariEditStartDate">Start Date *</label>
+                            <input type="date" id="edusafariEditStartDate" name="start_date" 
+                                   class="edusafari-form-input" required>
+                        </div>
+                        <div class="edusafari-form-group">
+                            <label for="edusafariEditEndDate">End Date *</label>
+                            <input type="date" id="edusafariEditEndDate" name="end_date" 
+                                   class="edusafari-form-input" required>
+                        </div>
+                    </div>
+
+                    <div class="edusafari-form-row">
+                        <div class="edusafari-form-group">
+                            <label for="edusafariEditRegStart">Registration Start</label>
+                            <input type="date" id="edusafariEditRegStart" name="registration_start_date" 
+                                   class="edusafari-form-input">
+                        </div>
+                        <div class="edusafari-form-group">
+                            <label for="edusafariEditRegDeadline">Registration Deadline</label>
+                            <input type="date" id="edusafariEditRegDeadline" name="registration_deadline" 
+                                   class="edusafari-form-input">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Capacity & Pricing Section -->
+                <div class="edusafari-form-section">
+                    <h3><i class="fas fa-users"></i> Capacity & Pricing</h3>
+                    
+                    <div class="edusafari-form-row">
+                        <div class="edusafari-form-group">
+                            <label for="edusafariEditMaxParticipants">Max Participants *</label>
+                            <input type="number" id="edusafariEditMaxParticipants" name="max_participants" 
+                                   class="edusafari-form-input" min="1" required>
+                        </div>
+                        <div class="edusafari-form-group">
+                            <label for="edusafariEditMinParticipants">Min Participants</label>
+                            <input type="number" id="edusafariEditMinParticipants" name="min_participants" 
+                                   class="edusafari-form-input" min="1">
+                        </div>
+                    </div>
+
+                    <div class="edusafari-form-row">
+                        <div class="edusafari-form-group">
+                            <label for="edusafariEditPrice">Price per Student (KES) *</label>
+                            <input type="number" id="edusafariEditPrice" name="price_per_student" 
+                                   class="edusafari-form-input" step="0.01" min="0" required>
+                        </div>
+                        <div class="edusafari-form-group">
+                            <label for="edusafariEditDeposit">Deposit Amount (KES)</label>
+                            <input type="number" id="edusafariEditDeposit" name="deposit_amount" 
+                                   class="edusafari-form-input" step="0.01" min="0">
+                        </div>
+                    </div>
+
+                    <div class="edusafari-form-row">
+                        <div class="edusafari-form-group">
+                            <label for="edusafariEditMinAge">Minimum Age</label>
+                            <input type="number" id="edusafariEditMinAge" name="min_age" 
+                                   class="edusafari-form-input" min="0">
+                        </div>
+                        <div class="edusafari-form-group">
+                            <label for="edusafariEditMaxAge">Maximum Age</label>
+                            <input type="number" id="edusafariEditMaxAge" name="max_age" 
+                                   class="edusafari-form-input" min="0">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Logistics Section -->
+                <div class="edusafari-form-section">
+                    <h3><i class="fas fa-cogs"></i> Logistics & Inclusions</h3>
+                    
+                    <div class="edusafari-form-row">
+                        <div class="edusafari-form-group edusafari-form-full">
+                            <label for="edusafariEditMeetingPoint">Meeting Point</label>
+                            <input type="text" id="edusafariEditMeetingPoint" name="meeting_point" 
+                                   class="edusafari-form-input">
+                        </div>
+                    </div>
+
+                    <div class="edusafari-form-checkboxes">
+                        <label class="edusafari-checkbox-label">
+                            <input type="checkbox" id="edusafariEditTransportation" name="transportation_included">
+                            <span>Transportation Included</span>
+                        </label>
+                        <label class="edusafari-checkbox-label">
+                            <input type="checkbox" id="edusafariEditMeals" name="meals_included">
+                            <span>Meals Included</span>
+                        </label>
+                        <label class="edusafari-checkbox-label">
+                            <input type="checkbox" id="edusafariEditAccommodation" name="accommodation_included">
+                            <span>Accommodation Included</span>
+                        </label>
+                        <label class="edusafari-checkbox-label">
+                            <input type="checkbox" id="edusafariEditInsurance" name="insurance_required">
+                            <span>Insurance Required</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Requirements Section -->
+                <div class="edusafari-form-section">
+                    <h3><i class="fas fa-shield-alt"></i> Requirements & Safety</h3>
+                    
+                    <div class="edusafari-form-checkboxes">
+                        <label class="edusafari-checkbox-label">
+                            <input type="checkbox" id="edusafariEditMedicalInfo" name="medical_info_required">
+                            <span>Medical Info Required</span>
+                        </label>
+                        <label class="edusafari-checkbox-label">
+                            <input type="checkbox" id="edusafariEditConsent" name="consent_required">
+                            <span>Consent Required</span>
+                        </label>
+                    </div>
+
+                    <div class="edusafari-form-row">
+                        <div class="edusafari-form-group edusafari-form-full">
+                            <label for="edusafariEditVaccinations">Vaccination Requirements</label>
+                            <textarea id="edusafariEditVaccinations" name="vaccination_requirements" 
+                                      class="edusafari-form-textarea" rows="2"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="edusafari-form-row">
+                        <div class="edusafari-form-group edusafari-form-full">
+                            <label for="edusafariEditEquipment">Special Equipment Needed</label>
+                            <textarea id="edusafariEditEquipment" name="special_equipment_needed" 
+                                      class="edusafari-form-textarea" rows="2"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="edusafari-form-row">
+                        <div class="edusafari-form-group edusafari-form-full">
+                            <label for="edusafariEditPhysical">Physical Requirements</label>
+                            <textarea id="edusafariEditPhysical" name="physical_requirements" 
+                                      class="edusafari-form-textarea" rows="2"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visibility Section -->
+                <div class="edusafari-form-section">
+                    <h3><i class="fas fa-eye"></i> Visibility</h3>
+                    
+                    <div class="edusafari-form-checkboxes">
+                        <label class="edusafari-checkbox-label">
+                            <input type="checkbox" id="edusafariEditFeatured" name="featured">
+                            <span><i class="fas fa-star" style="color: gold;"></i> Featured Trip</span>
+                        </label>
+                        <label class="edusafari-checkbox-label">
+                            <input type="checkbox" id="edusafariEditPublished" name="is_published">
+                            <span><i class="fas fa-globe"></i> Published</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Action Buttons in Form -->
+                <div class="edusafari-form-actions-section">
+                    <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                    <div class="edusafari-quick-actions">
+                        <button type="button" class="edusafari-btn edusafari-btn-sm edusafari-btn-success" 
+                                id="edusafariEditApproveBtn">
+                            <i class="fas fa-check"></i> Approve Trip
+                        </button>
+                        <button type="button" class="edusafari-btn edusafari-btn-sm edusafari-btn-warning" 
+                                id="edusafariEditFeatureToggleBtn">
+                            <i class="fas fa-star"></i> Toggle Feature
+                        </button>
+                        <button type="button" class="edusafari-btn edusafari-btn-sm edusafari-btn-danger" 
+                                id="edusafariEditCancelBtn">
+                            <i class="fas fa-ban"></i> Cancel Trip
+                        </button>
+                        <button type="button" class="edusafari-btn edusafari-btn-sm edusafari-btn-danger" 
+                                id="edusafariEditDeleteBtn">
+                            <i class="fas fa-trash"></i> Delete Trip
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="edusafari-modal-footer">
+            <button type="button" class="edusafari-btn edusafari-btn-primary" id="edusafariEditSaveBtn">
+                <i class="fas fa-save"></i> Save Changes
+            </button>
+            <button type="button" class="edusafari-btn edusafari-btn-secondary" id="edusafariEditCancelFormBtn">
+                Cancel
+            </button>
+        </div>
+    </div>
+</div>

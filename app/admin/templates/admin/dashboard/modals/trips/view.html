@@ -1,0 +1,245 @@
+<!-- View Trip Details Modal -->
+<div id="edusafariViewTripModal" class="edusafari-modal" style="display: none;">
+    <div class="edusafari-modal-overlay"></div>
+    <div class="edusafari-modal-container edusafari-modal-large">
+        <div class="edusafari-modal-header">
+            <h2><i class="fas fa-plane"></i> Trip Details</h2>
+            <button class="edusafari-modal-close" id="edusafariViewTripCloseBtn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="edusafari-modal-body">
+            <!-- Loading State -->
+            <div id="edusafariViewTripLoading" class="edusafari-modal-loading">
+                <div class="edusafari-spinner"></div>
+                <p>Loading trip details...</p>
+            </div>
+
+            <!-- Content -->
+            <div id="edusafariViewTripContent" style="display: none;">
+                <!-- Trip Header -->
+                <div class="edusafari-trip-header-section">
+                    <div class="edusafari-trip-cover">
+                        <img id="edusafariViewTripCover" src="" alt="Trip Cover" 
+                             onerror="this.src='https://placehold.co/800x400?text=No+Image&font=roboto'">
+                    </div>
+                    <div class="edusafari-trip-title-section">
+                        <h3 id="edusafariViewTripTitle"></h3>
+                        <div class="edusafari-trip-badges" id="edusafariViewTripBadges"></div>
+                    </div>
+                </div>
+
+                <!-- Quick Info Cards -->
+                <div class="edusafari-trip-quick-info">
+                    <div class="edusafari-info-card">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <label>Destination</label>
+                            <span id="edusafariViewTripDestination"></span>
+                        </div>
+                    </div>
+                    <div class="edusafari-info-card">
+                        <i class="fas fa-calendar"></i>
+                        <div>
+                            <label>Duration</label>
+                            <span id="edusafariViewTripDuration"></span>
+                        </div>
+                    </div>
+                    <div class="edusafari-info-card">
+                        <i class="fas fa-users"></i>
+                        <div>
+                            <label>Participants</label>
+                            <span id="edusafariViewTripParticipants"></span>
+                        </div>
+                    </div>
+                    <div class="edusafari-info-card">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <div>
+                            <label>Price</label>
+                            <span id="edusafariViewTripPrice"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="edusafari-modal-tabs">
+                    <button class="edusafari-tab-btn edusafari-tab-active" data-tab="overview">
+                        <i class="fas fa-info-circle"></i> Overview
+                    </button>
+                    <button class="edusafari-tab-btn" data-tab="registrations">
+                        <i class="fas fa-user-check"></i> Registrations
+                    </button>
+                    <button class="edusafari-tab-btn" data-tab="financials">
+                        <i class="fas fa-chart-line"></i> Financials
+                    </button>
+                    <button class="edusafari-tab-btn" data-tab="services">
+                        <i class="fas fa-concierge-bell"></i> Services
+                    </button>
+                    <button class="edusafari-tab-btn" data-tab="activity">
+                        <i class="fas fa-history"></i> Activity
+                    </button>
+                </div>
+
+                <!-- Tab Contents -->
+                <div class="edusafari-modal-tab-content">
+                    <!-- Overview Tab -->
+                    <div class="edusafari-tab-pane edusafari-tab-active" data-pane="overview">
+                        <div class="edusafari-detail-section">
+                            <h4><i class="fas fa-align-left"></i> Description</h4>
+                            <p id="edusafariViewTripDescription"></p>
+                        </div>
+
+                        <div class="edusafari-detail-section">
+                            <h4><i class="fas fa-map"></i> Itinerary</h4>
+                            <div id="edusafariViewTripItinerary"></div>
+                        </div>
+
+                        <div class="edusafari-detail-grid">
+                            <div class="edusafari-detail-section">
+                                <h4><i class="fas fa-graduation-cap"></i> Educational Info</h4>
+                                <div id="edusafariViewTripEducational"></div>
+                            </div>
+
+                            <div class="edusafari-detail-section">
+                                <h4><i class="fas fa-cogs"></i> Logistics</h4>
+                                <div id="edusafariViewTripLogistics"></div>
+                            </div>
+                        </div>
+
+                        <div class="edusafari-detail-section">
+                            <h4><i class="fas fa-shield-alt"></i> Safety & Requirements</h4>
+                            <div id="edusafariViewTripSafety"></div>
+                        </div>
+                    </div>
+
+                    <!-- Registrations Tab -->
+                    <div class="edusafari-tab-pane" data-pane="registrations">
+                        <div class="edusafari-stats-grid">
+                            <div class="edusafari-stat-box edusafari-stat-success">
+                                <h3 id="edusafariViewRegConfirmed">0</h3>
+                                <p>Confirmed</p>
+                            </div>
+                            <div class="edusafari-stat-box edusafari-stat-warning">
+                                <h3 id="edusafariViewRegPending">0</h3>
+                                <p>Pending</p>
+                            </div>
+                            <div class="edusafari-stat-box edusafari-stat-info">
+                                <h3 id="edusafariViewRegWaitlisted">0</h3>
+                                <p>Waitlisted</p>
+                            </div>
+                            <div class="edusafari-stat-box edusafari-stat-danger">
+                                <h3 id="edusafariViewRegCancelled">0</h3>
+                                <p>Cancelled</p>
+                            </div>
+                        </div>
+
+                        <div class="edusafari-table-container">
+                            <table class="edusafari-data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Registration #</th>
+                                        <th>Participant</th>
+                                        <th>Parent</th>
+                                        <th>Status</th>
+                                        <th>Payment</th>
+                                        <th>Amount Paid</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="edusafariViewRegTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Financials Tab -->
+                    <div class="edusafari-tab-pane" data-pane="financials">
+                        <div class="edusafari-financial-summary">
+                            <div class="edusafari-financial-card edusafari-revenue">
+                                <i class="fas fa-arrow-up"></i>
+                                <div>
+                                    <label>Total Revenue</label>
+                                    <h3 id="edusafariViewFinRevenue">KES 0</h3>
+                                </div>
+                            </div>
+                            <div class="edusafari-financial-card edusafari-expenses">
+                                <i class="fas fa-arrow-down"></i>
+                                <div>
+                                    <label>Total Expenses</label>
+                                    <h3 id="edusafariViewFinExpenses">KES 0</h3>
+                                </div>
+                            </div>
+                            <div class="edusafari-financial-card edusafari-profit">
+                                <i class="fas fa-chart-line"></i>
+                                <div>
+                                    <label>Profit Estimate</label>
+                                    <h3 id="edusafariViewFinProfit">KES 0</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="edusafari-detail-section">
+                            <h4><i class="fas fa-wallet"></i> Payment Breakdown</h4>
+                            <div class="edusafari-payment-stats">
+                                <div class="edusafari-payment-stat">
+                                    <span class="edusafari-payment-label">Fully Paid:</span>
+                                    <span id="edusafariViewPayFullyPaid" class="edusafari-payment-value">0</span>
+                                </div>
+                                <div class="edusafari-payment-stat">
+                                    <span class="edusafari-payment-label">Partial Payment:</span>
+                                    <span id="edusafariViewPayPartial" class="edusafari-payment-value">0</span>
+                                </div>
+                                <div class="edusafari-payment-stat">
+                                    <span class="edusafari-payment-label">Unpaid:</span>
+                                    <span id="edusafariViewPayUnpaid" class="edusafari-payment-value">0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Services Tab -->
+                    <div class="edusafari-tab-pane" data-pane="services">
+                        <div class="edusafari-table-container">
+                            <table class="edusafari-data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Service Type</th>
+                                        <th>Vendor</th>
+                                        <th>Status</th>
+                                        <th>Amount</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="edusafariViewServicesTableBody"></tbody>
+                            </table>
+                            <div id="edusafariViewServicesEmpty" class="edusafari-empty-message" style="display: none;">
+                                <i class="fas fa-inbox"></i>
+                                <p>No service bookings yet</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Activity Tab -->
+                    <div class="edusafari-tab-pane" data-pane="activity">
+                        <div class="edusafari-activity-timeline" id="edusafariViewActivityTimeline"></div>
+                        <div id="edusafariViewActivityEmpty" class="edusafari-empty-message" style="display: none;">
+                            <i class="fas fa-clipboard-list"></i>
+                            <p>No activity recorded</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="edusafari-modal-footer">
+            <button class="edusafari-btn edusafari-btn-primary" id="edusafariViewTripEditBtn">
+                <i class="fas fa-edit"></i> Edit Trip
+            </button>
+            <button class="edusafari-btn edusafari-btn-secondary" id="edusafariViewTripReportBtn">
+                <i class="fas fa-file-alt"></i> Generate Report
+            </button>
+            <button class="edusafari-btn edusafari-btn-secondary" id="edusafariViewTripCloseFooterBtn">
+                Close
+            </button>
+        </div>
+    </div>
+</div>

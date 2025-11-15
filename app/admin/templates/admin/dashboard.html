@@ -5,12 +5,32 @@
 {% block styles %} 
 <link rel="stylesheet" href="{{url_for('admin.static', filename='admin/css/dash.css')}}">
 <link rel="stylesheet" href="{{url_for('admin.static', filename='admin/css/tabs.css')}}">
+
+<link rel="stylesheet" href="{{url_for('admin.static', filename='admin/css/dashboard/user.css')}}">
+<link rel="stylesheet" href="{{url_for('admin.static', filename='admin/css/dashboard/modals/users/view_edit.css')}}">
+<link rel="stylesheet" href="{{url_for('admin.static', filename='admin/css/dashboard/modals/users/action.css')}}">
+<link rel="stylesheet" href="{{url_for('admin.static', filename='admin/css/dashboard/modals/users/activity_log.css')}}">
+
+<link rel="stylesheet" href="{{url_for('admin.static', filename='admin/css/dashboard/trips.css')}}">
+<link rel="stylesheet" href="{{url_for('admin.static', filename='admin/css/dashboard/modals/trips/view.css')}}">
+<link rel="stylesheet" href="{{url_for('admin.static', filename='admin/css/dashboard/modals/trips/edit_delete.css')}}">
+
 {% endblock %}
 
 {% block scripts %} 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 <script src="{{url_for('admin.static', filename='admin/js/revenueChart.js')}}"></script>
 <script src="{{url_for('admin.static', filename='admin/js/dash1.js')}}"></script>
+
+<script src="{{url_for('admin.static', filename='admin/js/dashboard/user.js')}}"></script>
+<script src="{{url_for('admin.static', filename='admin/js/dashboard/modals/users/view_edit.js')}}"></script>
+<script src="{{url_for('admin.static', filename='admin/js/dashboard/modals/users/action.js')}}"></script>
+<script src="{{url_for('admin.static', filename='admin/js/dashboard/modals/users/activity_log.js')}}"></script>
+
+<script src="{{url_for('admin.static', filename='admin/js/dashboard/trips.js')}}"></script>
+<script src="{{url_for('admin.static', filename='admin/js/dashboard/modals/trips/view.js')}}"></script>
+<script src="{{url_for('admin.static', filename='admin/js/dashboard/modals/trips/edit_delete.js')}}"></script>
+
 {% endblock %}
 
 {% block content %} 
@@ -19,6 +39,9 @@
         {% include 'admin/dashboard/header.html' %}
         <div class="safari-tab-content safari-tab-active" data-tab-content="overview">
             {% include 'admin/dashboard/overview.html' %}    
+        </div>
+        <div class="safari-tab-content" data-tab-content="users">
+            {% include 'admin/dashboard/user.html' %}    
         </div>
         <div class="safari-tab-content" data-tab-content="trips">
             {% include 'admin/dashboard/trips.html' %}    
@@ -33,6 +56,15 @@
             {% include 'admin/dashboard/reports.html' %}    
         </div>
     </div>
+
+{% include 'admin/dashboard/modals/users/view_edit.html' %}
+{% include 'admin/dashboard/modals/users/action.html' %}
+{% include 'admin/dashboard/modals/users/activity_log.html' %}
+
+{% include 'admin/dashboard/modals/trips/view.html' %}
+{% include 'admin/dashboard/modals/trips/edit_delete.html' %}
+{% include 'admin/dashboard/modals/trips/stats.html' %}
+{% include 'admin/dashboard/modals/trips/report.html' %}
 
 {% endblock %}
 

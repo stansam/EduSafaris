@@ -1,0 +1,71 @@
+<!-- Generate Report Modal -->
+<div id="edusafariReportModal" class="edusafari-modal" style="display: none;">
+    <div class="edusafari-modal-overlay"></div>
+    <div class="edusafari-modal-container">
+        <div class="edusafari-modal-header">
+            <h2><i class="fas fa-file-alt"></i> Generate Trip Report</h2>
+            <button class="edusafari-modal-close" id="edusafariReportCloseBtn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="edusafari-modal-body">
+            <div id="edusafariReportLoading" class="edusafari-modal-loading" style="display: none;">
+                <div class="edusafari-spinner"></div>
+                <p>Generating report...</p>
+            </div>
+
+            <form id="edusafariReportForm">
+                <div class="edusafari-form-section">
+                    <h3>Report Options</h3>
+                    
+                    <div class="edusafari-form-group">
+                        <label for="edusafariReportFormat">Report Format</label>
+                        <select id="edusafariReportFormat" class="edusafari-form-select">
+                            <option value="json">JSON (View in Browser)</option>
+                            <option value="summary">Summary (Quick View)</option>
+                        </select>
+                    </div>
+
+                    <div class="edusafari-form-group">
+                        <h4>Include in Report:</h4>
+                        <div class="edusafari-form-checkboxes">
+                            <label class="edusafari-checkbox-label">
+                                <input type="checkbox" id="edusafariReportParticipants" checked>
+                                <span>Participant Details</span>
+                            </label>
+                            <label class="edusafari-checkbox-label">
+                                <input type="checkbox" id="edusafariReportFinancials" checked>
+                                <span>Financial Breakdown</span>
+                            </label>
+                            <label class="edusafari-checkbox-label">
+                                <input type="checkbox" id="edusafariReportActivity" checked>
+                                <span>Activity Log</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Report Display Area -->
+            <div id="edusafariReportDisplay" style="display: none;">
+                <div class="edusafari-report-content">
+                    <pre id="edusafariReportJson"></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="edusafari-modal-footer">
+            <button class="edusafari-btn edusafari-btn-primary" id="edusafariReportGenerateBtn">
+                <i class="fas fa-file-download"></i> Generate Report
+            </button>
+            <button class="edusafari-btn edusafari-btn-secondary" id="edusafariReportDownloadBtn" 
+                    style="display: none;">
+                <i class="fas fa-download"></i> Download
+            </button>
+            <button class="edusafari-btn edusafari-btn-secondary" id="edusafariReportCloseFooterBtn">
+                Close
+            </button>
+        </div>
+    </div>
+</div>

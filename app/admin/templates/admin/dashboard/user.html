@@ -1,0 +1,164 @@
+
+<div class="user-management-wrapper">
+    <!-- Alert Container -->
+    <div id="userAlertContainer"></div>
+
+    <!-- Statistics Cards -->
+    <div class="user-stats-grid" id="userStatsGrid">
+        <div class="user-stat-card">
+            <div class="user-stat-header">
+                <div>
+                    <div class="user-stat-value" id="totalUsersCount">-</div>
+                    <div class="user-stat-label">Total Users</div>
+                </div>
+                <i class="fas fa-users user-stat-icon" style="color: var(--primary-color);"></i>
+            </div>
+        </div>
+
+        <div class="user-stat-card success">
+            <div class="user-stat-header">
+                <div>
+                    <div class="user-stat-value" id="activeUsersCount">-</div>
+                    <div class="user-stat-label">Active Users</div>
+                </div>
+                <i class="fas fa-user-check user-stat-icon" style="color: var(--success-color);"></i>
+            </div>
+        </div>
+
+        <div class="user-stat-card warning">
+            <div class="user-stat-header">
+                <div>
+                    <div class="user-stat-value" id="verifiedUsersCount">-</div>
+                    <div class="user-stat-label">Verified Users</div>
+                </div>
+                <i class="fas fa-certificate user-stat-icon" style="color: var(--warning-color);"></i>
+            </div>
+        </div>
+
+        <div class="user-stat-card danger">
+            <div class="user-stat-header">
+                <div>
+                    <div class="user-stat-value" id="newUsersCount">-</div>
+                    <div class="user-stat-label">New (Last 30 Days)</div>
+                </div>
+                <i class="fas fa-user-plus user-stat-icon" style="color: var(--danger-color);"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Card -->
+    <div class="user-content-card">
+        <!-- Toolbar -->
+        <div class="user-toolbar">
+            <div class="user-search-wrapper">
+                <input 
+                    type="text" 
+                    class="user-search-input" 
+                    id="userSearchInput" 
+                    placeholder="Search users by name or email..."
+                >
+                <i class="fas fa-search user-search-icon"></i>
+            </div>
+
+            <div class="user-toolbar-actions">
+                <button class="user-btn user-btn-primary" onclick="userManagement.exportUsers()">
+                    <i class="fas fa-download"></i>
+                    Export CSV
+                </button>
+                <button class="user-btn user-btn-secondary" onclick="userManagement.refreshData()">
+                    <i class="fas fa-sync-alt"></i>
+                    Refresh
+                </button>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="user-filters">
+            <select class="user-filter-select" id="roleFilter">
+                <option value="">All Roles</option>
+                <option value="parent">Parent</option>
+                <option value="teacher">Teacher</option>
+                <option value="vendor">Vendor</option>
+                <option value="admin">Admin</option>
+            </select>
+
+            <select class="user-filter-select" id="statusFilter">
+                <option value="">All Status</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+            </select>
+
+            <select class="user-filter-select" id="verifiedFilter">
+                <option value="">All Verification</option>
+                <option value="true">Verified</option>
+                <option value="false">Unverified</option>
+            </select>
+
+            <select class="user-filter-select" id="sortByFilter">
+                <option value="created_at">Sort by: Created Date</option>
+                <option value="name">Sort by: Name</option>
+                <option value="email">Sort by: Email</option>
+                <option value="last_login">Sort by: Last Login</option>
+            </select>
+
+            <select class="user-filter-select" id="sortOrderFilter">
+                <option value="desc">Descending</option>
+                <option value="asc">Ascending</option>
+            </select>
+        </div>
+
+        <!-- Bulk Actions -->
+        <div class="user-bulk-actions" id="userBulkActions">
+            <span class="user-selected-count" id="selectedCount">0 selected</span>
+            <button class="user-btn user-btn-sm user-btn-success" onclick="userManagement.bulkActivate()">
+                <i class="fas fa-check-circle"></i>
+                Activate
+            </button>
+            <button class="user-btn user-btn-sm user-btn-warning" onclick="userManagement.bulkDeactivate()">
+                <i class="fas fa-ban"></i>
+                Deactivate
+            </button>
+            <button class="user-btn user-btn-sm user-btn-primary" onclick="userManagement.bulkVerify()">
+                <i class="fas fa-certificate"></i>
+                Verify
+            </button>
+            <button class="user-btn user-btn-sm user-btn-secondary" onclick="userManagement.clearSelection()">
+                <i class="fas fa-times"></i>
+                Clear
+            </button>
+        </div>
+
+        <!-- Table -->
+        <div class="user-table-wrapper">
+            <table class="user-table">
+                <thead>
+                    <tr>
+                        <th style="width: 40px;">
+                            <input type="checkbox" class="user-checkbox" id="selectAllCheckbox" onchange="userManagement.toggleSelectAll(this)">
+                        </th>
+                        <th>User</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Verified</th>
+                        <th>Created</th>
+                        <th>Last Login</th>
+                        <th style="width: 150px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody">
+                    <!-- Content will be loaded dynamically -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="user-pagination" id="userPagination">
+            <div class="user-pagination-info" id="paginationInfo">
+                Showing 0 of 0 users
+            </div>
+            <div class="user-pagination-controls" id="paginationControls">
+                <!-- Pagination buttons will be generated dynamically -->
+            </div>
+        </div>
+    </div>
+</div>

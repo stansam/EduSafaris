@@ -1,0 +1,93 @@
+<!-- Statistics Modal -->
+<div id="edusafariStatsModal" class="edusafari-modal" style="display: none;">
+    <div class="edusafari-modal-overlay"></div>
+    <div class="edusafari-modal-container edusafari-modal-large">
+        <div class="edusafari-modal-header">
+            <h2><i class="fas fa-chart-bar"></i> Trip Statistics</h2>
+            <button class="edusafari-modal-close" id="edusafariStatsCloseBtn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="edusafari-modal-body">
+            <div id="edusafariStatsLoading" class="edusafari-modal-loading">
+                <div class="edusafari-spinner"></div>
+                <p>Loading statistics...</p>
+            </div>
+
+            <div id="edusafariStatsContent" style="display: none;">
+                <!-- Period Selector -->
+                <div class="edusafari-period-selector">
+                    <button class="edusafari-period-btn edusafari-period-active" data-period="month">
+                        This Month
+                    </button>
+                    <button class="edusafari-period-btn" data-period="quarter">
+                        This Quarter
+                    </button>
+                    <button class="edusafari-period-btn" data-period="year">
+                        This Year
+                    </button>
+                    <button class="edusafari-period-btn" data-period="all">
+                        All Time
+                    </button>
+                </div>
+
+                <!-- Overview Stats -->
+                <div class="edusafari-stats-overview">
+                    <div class="edusafari-stat-card-large">
+                        <i class="fas fa-plane"></i>
+                        <div>
+                            <h3 id="edusafariStatsTotalTrips">0</h3>
+                            <p>Total Trips</p>
+                        </div>
+                    </div>
+                    <div class="edusafari-stat-card-large">
+                        <i class="fas fa-users"></i>
+                        <div>
+                            <h3 id="edusafariStatsTotalParticipants">0</h3>
+                            <p>Total Participants</p>
+                        </div>
+                    </div>
+                    <div class="edusafari-stat-card-large">
+                        <i class="fas fa-dollar-sign"></i>
+                        <div>
+                            <h3 id="edusafariStatsTotalRevenue">KES 0</h3>
+                            <p>Total Revenue</p>
+                        </div>
+                    </div>
+                    <div class="edusafari-stat-card-large">
+                        <i class="fas fa-percentage"></i>
+                        <div>
+                            <h3 id="edusafariStatsCapacity">0%</h3>
+                            <p>Avg Capacity</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Placeholder -->
+                <div class="edusafari-charts-section">
+                    <div class="edusafari-chart-card">
+                        <h4>Trips by Category</h4>
+                        <canvas id="edusafariCategoryChart"></canvas>
+                    </div>
+                    <div class="edusafari-chart-card">
+                        <h4>Trips by Status</h4>
+                        <canvas id="edusafariStatusChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Top Destinations -->
+                <div class="edusafari-top-destinations">
+                    <h4>Top Destinations</h4>
+                    <div id="edusafariTopDestinationsContent"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="edusafari-modal-footer">
+            <button class="edusafari-btn edusafari-btn-secondary" id="edusafariStatsCloseFooterBtn">
+                Close
+            </button>
+        </div>
+    </div>
+</div>
