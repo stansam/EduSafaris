@@ -1,0 +1,29 @@
+<div class="vendor-edit-modal-overlay" id="vendorEditModalOverlay" onclick="closeVendorEditModal(event)">
+    <div class="vendor-edit-modal" onclick="event.stopPropagation()">
+        <div class="vendor-edit-modal-header">
+            <h2 class="vendor-edit-modal-title">
+                <i class="fas fa-edit"></i>
+                <span>Edit Vendor</span>
+            </h2>
+            <button class="vendor-edit-modal-close" onclick="closeVendorEditModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="vendor-edit-modal-body" id="vendorEditModalContent">
+            <div class="vendor-edit-loading">
+                <div class="vendor-edit-spinner"></div>
+                <p>Loading vendor data...</p>
+            </div>
+        </div>
+
+        <div class="vendor-edit-modal-footer">
+            <button class="vendor-edit-btn vendor-edit-btn-secondary" onclick="closeVendorEditModal()">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+            <button class="vendor-edit-btn vendor-edit-btn-primary" id="vendorEditSaveBtn" onclick="saveVendorChanges()" disabled>
+                <i class="fas fa-save"></i> Save Changes
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,53 @@
+<div class="vendor-docs-modal-overlay" id="vendorDocsModalOverlay" onclick="closeVendorDocumentsModal(event)">
+    <div class="vendor-docs-modal" onclick="event.stopPropagation()">
+        <div class="vendor-docs-modal-header">
+            <h2 class="vendor-docs-modal-title">
+                <i class="fas fa-file-alt"></i>
+                <span id="vendorDocsModalTitle">Vendor Documents</span>
+            </h2>
+            <button class="vendor-docs-modal-close" onclick="closeVendorDocumentsModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="vendor-docs-modal-body">
+            <div class="vendor-docs-filter-bar">
+                <select class="vendor-docs-filter-select" id="vendorDocsTypeFilter" onchange="filterVendorDocuments()">
+                    <option value="">All Document Types</option>
+                    <option value="vendor_license">Vendor License</option>
+                    <option value="insurance">Insurance</option>
+                    <option value="verification">Verification Document</option>
+                    <option value="other">Other</option>
+                </select>
+                <select class="vendor-docs-filter-select" id="vendorDocsStatusFilter" onchange="filterVendorDocuments()">
+                    <option value="">All Statuses</option>
+                    <option value="verified">Verified</option>
+                    <option value="pending">Pending</option>
+                </select>
+            </div>
+
+            <div id="vendorDocsContent">
+                <div class="vendor-docs-loading">
+                    <div class="vendor-docs-spinner"></div>
+                    <p>Loading documents...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="vendor-docs-modal-footer">
+            <div class="vendor-docs-stats" id="vendorDocsStats">
+                Loading...
+            </div>
+            <button class="vendor-docs-close-btn" onclick="closeVendorDocumentsModal()">
+                <i class="fas fa-times"></i> Close
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+
+</script>
+
+</body>
+</html>

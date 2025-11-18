@@ -1,0 +1,48 @@
+<!-- Modal HTML -->
+<div class="vendor-activity-modal-overlay" id="vendorActivityModalOverlay" onclick="closeVendorActivityLogModal(event)">
+    <div class="vendor-activity-modal" onclick="event.stopPropagation()">
+        <div class="vendor-activity-modal-header">
+            <h2 class="vendor-activity-modal-title">
+                <i class="fas fa-history"></i>
+                <span id="vendorActivityModalTitle">Activity Log</span>
+            </h2>
+            <button class="vendor-activity-modal-close" onclick="closeVendorActivityLogModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="vendor-activity-modal-body">
+            <div class="vendor-activity-filter-bar">
+                <select class="vendor-activity-filter-select" id="vendorActivityCategoryFilter" onchange="filterVendorActivity()">
+                    <option value="">All Categories</option>
+                    <option value="admin">Admin Actions</option>
+                    <option value="vendor_booking">Vendor Bookings</option>
+                    <option value="vendor_payment">Payments</option>
+                    <option value="document">Documents</option>
+                </select>
+                <select class="vendor-activity-filter-select" id="vendorActivityStatusFilter" onchange="filterVendorActivity()">
+                    <option value="">All Statuses</option>
+                    <option value="success">Success</option>
+                    <option value="failed">Failed</option>
+                    <option value="warning">Warning</option>
+                </select>
+            </div>
+
+            <div id="vendorActivityContent">
+                <div class="vendor-activity-loading">
+                    <div class="vendor-activity-spinner"></div>
+                    <p>Loading activity log...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="vendor-activity-modal-footer">
+            <div class="vendor-activity-stats" id="vendorActivityStats">
+                Loading...
+            </div>
+            <button class="vendor-activity-close-btn" onclick="closeVendorActivityLogModal()">
+                <i class="fas fa-times"></i> Close
+            </button>
+        </div>
+    </div>
+</div>

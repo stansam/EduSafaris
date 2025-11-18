@@ -1,0 +1,25 @@
+<!-- Modal HTML -->
+<div class="vendor-actions-modal-overlay" id="vendorActionsModalOverlay" onclick="closeVendorActionsModal(event)">
+    <div class="vendor-actions-modal" onclick="event.stopPropagation()">
+        <div class="vendor-actions-modal-header">
+            <h2 class="vendor-actions-modal-title">
+                <i class="fas fa-cog"></i>
+                <span>Vendor Actions</span>
+            </h2>
+            <button class="vendor-actions-modal-close" onclick="closeVendorActionsModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="vendor-actions-modal-body">
+            <div class="vendor-actions-info-card" id="vendorActionsInfoCard">
+                <div class="vendor-actions-info-name" id="vendorActionsName">Loading...</div>
+                <div class="vendor-actions-info-meta" id="vendorActionsMeta">Please wait...</div>
+            </div>
+
+            <div class="vendor-actions-grid" id="vendorActionsGrid">
+                <!-- Action buttons will be inserted here -->
+            </div>
+        </div>
+    </div>
+</div>

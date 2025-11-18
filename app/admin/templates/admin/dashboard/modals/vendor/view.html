@@ -1,0 +1,30 @@
+<!-- Modal HTML -->
+<div class="vendor-view-modal-overlay" id="vendorViewModalOverlay" onclick="closeVendorViewModal(event)">
+    <div class="vendor-view-modal" onclick="event.stopPropagation()">
+        <div class="vendor-view-modal-header">
+            <h2 class="vendor-view-modal-title">
+                <i class="fas fa-store"></i>
+                <span id="vendorViewModalTitleText">Vendor Details</span>
+            </h2>
+            <button class="vendor-view-modal-close" onclick="closeVendorViewModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="vendor-view-modal-body" id="vendorViewModalContent">
+            <div class="vendor-view-loading">
+                <div class="vendor-view-spinner"></div>
+                <p>Loading vendor details...</p>
+            </div>
+        </div>
+
+        <div class="vendor-view-modal-footer">
+            <button class="vendor-view-btn vendor-view-btn-primary" onclick="editVendorFromView()">
+                <i class="fas fa-edit"></i> Edit Vendor
+            </button>
+            <button class="vendor-view-btn vendor-view-btn-secondary" onclick="closeVendorViewModal()">
+                <i class="fas fa-times"></i> Close
+            </button>
+        </div>
+    </div>
+</div>

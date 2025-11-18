@@ -10,4 +10,4 @@ from app.api.teacher import trip, participants, vendors
 from app.api.teacher.participant import fetch
 from app.api.parent import children, trips, payment, extra_payment
 from app.api.vendor import booking, financials, dash, profile
-from app.api.admin import user, trips
+from app.api.admin import user, trips, vendor

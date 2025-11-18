@@ -1,0 +1,522 @@
+.edusafari-report-content {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.edusafari-report-content pre {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid var(--edusafari-border);
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-x: auto;
+}
+
+/* Summary Report Styles */
+.edusafari-report-summary {
+    background: white;
+    padding: 0;
+}
+
+.edusafari-report-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--edusafari-dark);
+}
+
+.edusafari-report-header h2 {
+    margin: 0 0 10px 0;
+    color: var(--edusafari-dark);
+    font-size: 28px;
+}
+
+.edusafari-report-date {
+    color: #7f8c8d;
+    margin: 0;
+    font-size: 14px;
+}
+
+.edusafari-report-section {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.edusafari-report-section h3 {
+    color: var(--edusafari-primary);
+    border-bottom: 2px solid var(--edusafari-border);
+    padding-bottom: 10px;
+    margin: 0 0 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+}
+
+.edusafari-report-section h3 i {
+    font-size: 18px;
+}
+
+.edusafari-report-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.edusafari-report-table tr {
+    border-bottom: 1px solid var(--edusafari-border);
+}
+
+.edusafari-report-table tr:last-child {
+    border-bottom: none;
+}
+
+.edusafari-report-table td {
+    padding: 12px 15px;
+}
+
+.edusafari-report-table td:first-child {
+    width: 40%;
+    font-weight: 600;
+    color: var(--edusafari-dark);
+    background: #f8f9fa;
+}
+
+.edusafari-report-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.edusafari-report-stat {
+    text-align: center;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    border: 2px solid var(--edusafari-border);
+}
+
+.edusafari-report-stat-value {
+    display: block;
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.edusafari-report-stat-label {
+    display: block;
+    color: #7f8c8d;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.edusafari-report-stat.edusafari-stat-success {
+    border-color: var(--edusafari-success);
+}
+
+.edusafari-report-stat.edusafari-stat-success .edusafari-report-stat-value {
+    color: var(--edusafari-success);
+}
+
+.edusafari-report-stat.edusafari-stat-warning {
+    border-color: var(--edusafari-warning);
+}
+
+.edusafari-report-stat.edusafari-stat-warning .edusafari-report-stat-value {
+    color: var(--edusafari-warning);
+}
+
+.edusafari-report-stat.edusafari-stat-info {
+    border-color: var(--edusafari-primary);
+}
+
+.edusafari-report-stat.edusafari-stat-info .edusafari-report-stat-value {
+    color: var(--edusafari-primary);
+}
+
+.edusafari-report-stat.edusafari-stat-danger {
+    border-color: var(--edusafari-danger);
+}
+
+.edusafari-report-stat.edusafari-stat-danger .edusafari-report-stat-value {
+    color: var(--edusafari-danger);
+}
+
+/* ============================================================================
+   STATISTICS MODAL STYLES
+   ============================================================================ */
+
+.edusafari-period-selector {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.edusafari-period-btn {
+    padding: 10px 20px;
+    border: 2px solid var(--edusafari-border);
+    background: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--edusafari-dark);
+    transition: all 0.3s;
+}
+
+.edusafari-period-btn:hover {
+    border-color: var(--edusafari-primary);
+    color: var(--edusafari-primary);
+}
+
+.edusafari-period-btn.edusafari-period-active {
+    background: var(--edusafari-primary);
+    border-color: var(--edusafari-primary);
+    color: white;
+}
+
+/* Stats Overview Cards */
+.edusafari-stats-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.edusafari-stat-card-large {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px var(--edusafari-shadow);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: transform 0.3s;
+}
+
+.edusafari-stat-card-large:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 16px var(--edusafari-shadow);
+}
+
+.edusafari-stat-card-large > i {
+    font-size: 48px;
+    color: var(--edusafari-primary);
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(52, 152, 219, 0.1);
+    border-radius: 50%;
+}
+
+.edusafari-stat-card-large > div h3 {
+    font-size: 36px;
+    margin: 0 0 5px 0;
+    color: var(--edusafari-dark);
+}
+
+.edusafari-stat-card-large > div p {
+    margin: 0;
+    color: #7f8c8d;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Charts Section */
+.edusafari-charts-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.edusafari-chart-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px var(--edusafari-shadow);
+}
+
+.edusafari-chart-card h4 {
+    margin: 0 0 20px 0;
+    color: var(--edusafari-dark);
+    font-size: 18px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--edusafari-border);
+}
+
+.edusafari-chart-card canvas {
+    max-height: 300px;
+}
+
+/* Top Destinations */
+.edusafari-top-destinations {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px var(--edusafari-shadow);
+}
+
+.edusafari-top-destinations h4 {
+    margin: 0 0 20px 0;
+    color: var(--edusafari-dark);
+    font-size: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--edusafari-border);
+}
+
+.edusafari-destination-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--edusafari-border);
+}
+
+.edusafari-destination-item:last-child {
+    border-bottom: none;
+}
+
+.edusafari-destination-rank {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--edusafari-primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.edusafari-destination-info {
+    flex: 1;
+}
+
+.edusafari-destination-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.edusafari-destination-name {
+    font-weight: 600;
+    color: var(--edusafari-dark);
+    font-size: 15px;
+}
+
+.edusafari-destination-count {
+    color: #7f8c8d;
+    font-size: 14px;
+}
+
+.edusafari-destination-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--edusafari-light);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.edusafari-destination-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--edusafari-primary), var(--edusafari-success));
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .edusafari-period-selector {
+        flex-direction: column;
+    }
+    
+    .edusafari-period-btn {
+        width: 100%;
+    }
+
+    .edusafari-stats-overview {
+        grid-template-columns: 1fr;
+    }
+
+    .edusafari-charts-section {
+        grid-template-columns: 1fr;
+    }
+
+    .edusafari-report-stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .edusafari-report-table td:first-child {
+        width: 50%;
+    }
+}
+
+@media (max-width: 480px) {
+    .edusafari-report-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .edusafari-stat-card-large {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .edusafari-destination-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .edusafari-destination-rank {
+        align-self: center;
+    }
+}
+
+/* Print Styles for Report */
+@media print {
+    .edusafari-modal-header,
+    .edusafari-modal-footer {
+        display: none !important;
+    }
+
+    .edusafari-modal-container {
+        max-width: 100%;
+        max-height: none;
+        box-shadow: none;
+    }
+
+    .edusafari-report-content {
+        max-height: none;
+    }
+
+    .edusafari-report-section {
+        page-break-inside: avoid;
+    }
+}
+
+/* Scrollbar Styling for Report Content */
+.edusafari-report-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.edusafari-report-content::-webkit-scrollbar-track {
+    background: var(--edusafari-light);
+    border-radius: 4px;
+}
+
+.edusafari-report-content::-webkit-scrollbar-thumb {
+    background: #95a5a6;
+    border-radius: 4px;
+}
+
+.edusafari-report-content::-webkit-scrollbar-thumb:hover {
+    background: #7f8c8d;
+}
+
+/* Animation for Charts */
+@keyframes edusafariChartFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.edusafari-chart-card canvas {
+    animation: edusafariChartFadeIn 0.5s ease;
+}
+
+/* Loading State for Charts */
+.edusafari-chart-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    color: #7f8c8d;
+}
+
+.edusafari-chart-loading i {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+/* Empty State Styling */
+.edusafari-stats-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: #7f8c8d;
+}
+
+.edusafari-stats-empty i {
+    font-size: 64px;
+    margin-bottom: 20px;
+    display: block;
+    color: #bdc3c7;
+}
+
+.edusafari-stats-empty h3 {
+    margin: 0 0 10px 0;
+    color: var(--edusafari-dark);
+}
+
+.edusafari-stats-empty p {
+    margin: 0;
+}
+
+/* Highlight Animations */
+@keyframes edusafariHighlight {
+    0% {
+        background: rgba(52, 152, 219, 0.1);
+    }
+    50% {
+        background: rgba(52, 152, 219, 0.2);
+    }
+    100% {
+        background: rgba(52, 152, 219, 0.1);
+    }
+}
+
+.edusafari-highlight {
+    animation: edusafariHighlight 2s ease infinite;
+}
+
+/* Tooltip Styles (if needed for custom tooltips) */
+.edusafari-tooltip {
+    position: absolute;
+    background: var(--edusafari-dark);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    pointer-events: none;
+    z-index: 10001;
+    white-space: nowrap;
+}
+
+.edusafari-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: var(--edusafari-dark) transparent transparent transparent;
+}

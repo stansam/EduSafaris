@@ -1,55 +1,269 @@
-<h3 class="safari-chart-title" style="margin-bottom: 20px;">
-    <i class="fa-solid fa-handshake"></i>
-    Vendor Management
-</h3>
-<table class="safari-table">
-    <thead>
-        <tr>
-            <th>Vendor Name</th>
-            <th>Service Type</th>
-            <th>Location</th>
-            <th>Rating</th>
-            <th>Active Trips</th>
-            <th>Status</th>
-            <th>Contact</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Safari Guides Co.</td>
-            <td>Professional Guides</td>
-            <td>Nairobi</td>
-            <td>⭐ 4.8</td>
-            <td>3</td>
-            <td><span class="safari-status-badge safari-status-active">Active</span></td>
-            <td>+254 712 345 678</td>
-        </tr>
-        <tr>
-            <td>Luxury Camps Ltd</td>
-            <td>Accommodation</td>
-            <td>Serengeti</td>
-            <td>⭐ 4.6</td>
-            <td>2</td>
-            <td><span class="safari-status-badge safari-status-active">Active</span></td>
-            <td>+255 654 321 098</td>
-        </tr>
-        <tr>
-            <td>Vehicle Rentals</td>
-            <td>Transportation</td>
-            <td>Mombasa</td>
-            <td>⭐ 4.4</td>
-            <td>1</td>
-            <td><span class="safari-status-badge safari-status-active">Active</span></td>
-            <td>+254 789 123 456</td>
-        </tr>
-        <tr>
-            <td>Nature Photography</td>
-            <td>Photography Services</td>
-            <td>Nationwide</td>
-            <td>⭐ 4.9</td>
-            <td>4</td>
-            <td><span class="safari-status-badge safari-status-active">Active</span></td>
-            <td>+254 705 987 321</td>
-        </tr>
-    </tbody>
-</table>
+<!-- Admin Vendors Management Template -->
+<div class="admin-vendors-container">
+    <!-- Header Section -->
+    <div class="vendors-header-section">
+        <div class="vendors-title-area">
+            <h2 class="vendors-main-title">
+                <i class="fas fa-store"></i> Vendor Management
+            </h2>
+            <p class="vendors-subtitle">Manage and verify service providers</p>
+        </div>
+        <div class="vendors-actions-area">
+            <button class="btn-vendors-export" onclick="exportVendorsData()">
+                <i class="fas fa-file-export"></i> Export
+            </button>
+            <button class="btn-vendors-refresh" onclick="loadVendorsData()">
+                <i class="fas fa-sync-alt"></i> Refresh
+            </button>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="vendors-stats-grid">
+        <div class="vendor-stat-card stat-total">
+            <div class="stat-icon">
+                <i class="fas fa-store"></i>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-value" id="vendorStatTotal">0</h3>
+                <p class="stat-label">Total Vendors</p>
+            </div>
+        </div>
+        <div class="vendor-stat-card stat-verified">
+            <div class="stat-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-value" id="vendorStatVerified">0</h3>
+                <p class="stat-label">Verified</p>
+            </div>
+        </div>
+        <div class="vendor-stat-card stat-active">
+            <div class="stat-icon">
+                <i class="fas fa-toggle-on"></i>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-value" id="vendorStatActive">0</h3>
+                <p class="stat-label">Active</p>
+            </div>
+        </div>
+        <div class="vendor-stat-card stat-pending">
+            <div class="stat-icon">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-value" id="vendorStatPending">0</h3>
+                <p class="stat-label">Pending Verification</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="vendors-filters-section">
+        <div class="filters-row">
+            <div class="filter-group">
+                <label for="vendorSearchInput">
+                    <i class="fas fa-search"></i> Search
+                </label>
+                <input 
+                    type="text" 
+                    id="vendorSearchInput" 
+                    class="filter-input"
+                    placeholder="Search by name, email, phone..."
+                    onkeyup="handleVendorSearch()"
+                >
+            </div>
+
+            <div class="filter-group">
+                <label for="vendorTypeFilter">
+                    <i class="fas fa-filter"></i> Business Type
+                </label>
+                <select id="vendorTypeFilter" class="filter-select" onchange="applyVendorFilters()">
+                    <option value="">All Types</option>
+                    <option value="transportation">Transportation</option>
+                    <option value="accommodation">Accommodation</option>
+                    <option value="activities">Activities</option>
+                    <option value="catering">Catering</option>
+                    <option value="tour_guide">Tour Guide</option>
+                    <option value="equipment_rental">Equipment Rental</option>
+                    <option value="insurance">Insurance</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="vendorStatusFilter">
+                    <i class="fas fa-check-circle"></i> Verification
+                </label>
+                <select id="vendorStatusFilter" class="filter-select" onchange="applyVendorFilters()">
+                    <option value="">All</option>
+                    <option value="true">Verified</option>
+                    <option value="false">Unverified</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="vendorActiveFilter">
+                    <i class="fas fa-toggle-on"></i> Status
+                </label>
+                <select id="vendorActiveFilter" class="filter-select" onchange="applyVendorFilters()">
+                    <option value="">All</option>
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="vendorCityFilter">
+                    <i class="fas fa-map-marker-alt"></i> City
+                </label>
+                <input 
+                    type="text" 
+                    id="vendorCityFilter" 
+                    class="filter-input"
+                    placeholder="Filter by city"
+                    onkeyup="applyVendorFilters()"
+                >
+            </div>
+
+            <div class="filter-group">
+                <label for="vendorRatingFilter">
+                    <i class="fas fa-star"></i> Min Rating
+                </label>
+                <select id="vendorRatingFilter" class="filter-select" onchange="applyVendorFilters()">
+                    <option value="">All Ratings</option>
+                    <option value="4.5">4.5+ Stars</option>
+                    <option value="4.0">4.0+ Stars</option>
+                    <option value="3.5">3.5+ Stars</option>
+                    <option value="3.0">3.0+ Stars</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="filters-actions">
+            <button class="btn-filter-clear" onclick="clearVendorFilters()">
+                <i class="fas fa-times"></i> Clear Filters
+            </button>
+            <div class="filter-results-count">
+                Showing <span id="vendorResultsCount">0</span> vendors
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Actions -->
+    <div class="vendors-bulk-actions" id="vendorBulkActionsBar" style="display: none;">
+        <div class="bulk-actions-left">
+            <span class="bulk-selected-count">
+                <span id="vendorBulkSelectedCount">0</span> selected
+            </span>
+        </div>
+        <div class="bulk-actions-right">
+            <button class="btn-bulk-action btn-bulk-verify" onclick="bulkVerifyVendors()">
+                <i class="fas fa-check-circle"></i> Verify Selected
+            </button>
+            <button class="btn-bulk-action btn-bulk-deactivate" onclick="bulkDeactivateVendors()">
+                <i class="fas fa-ban"></i> Deactivate Selected
+            </button>
+            <button class="btn-bulk-action btn-bulk-cancel" onclick="clearVendorSelection()">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+        </div>
+    </div>
+
+    <!-- Vendors Table -->
+    <div class="vendors-table-container">
+        <div class="table-loading" id="vendorsTableLoading">
+            <div class="spinner-border"></div>
+            <p>Loading vendors...</p>
+        </div>
+
+        <div class="table-error" id="vendorsTableError" style="display: none;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <p id="vendorsErrorMessage">Error loading vendors</p>
+            <button class="btn-retry" onclick="loadVendorsData()">
+                <i class="fas fa-redo"></i> Retry
+            </button>
+        </div>
+
+        <div class="table-responsive" id="vendorsTableWrapper">
+            <table class="vendors-table" id="vendorsTable">
+                <thead>
+                    <tr>
+                        <th class="col-checkbox">
+                            <input 
+                                type="checkbox" 
+                                id="vendorSelectAll" 
+                                onchange="toggleAllVendorSelection()"
+                            >
+                        </th>
+                        <th class="col-sortable" onclick="sortVendorsBy('business_name')">
+                            Business Name
+                            <i class="fas fa-sort sort-icon"></i>
+                        </th>
+                        <th>Type</th>
+                        <th>Contact</th>
+                        <th>Location</th>
+                        <th class="col-sortable" onclick="sortVendorsBy('average_rating')">
+                            Rating
+                            <i class="fas fa-sort sort-icon"></i>
+                        </th>
+                        <th>Status</th>
+                        <th>Verification</th>
+                        <th class="col-sortable" onclick="sortVendorsBy('created_at')">
+                            Joined
+                            <i class="fas fa-sort sort-icon"></i>
+                        </th>
+                        <th class="col-actions">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="vendorsTableBody">
+                    <!-- Vendor rows will be inserted here -->
+                </tbody>
+            </table>
+
+            <div class="table-empty" id="vendorsTableEmpty" style="display: none;">
+                <i class="fas fa-store-slash"></i>
+                <p>No vendors found</p>
+                <small>Try adjusting your filters</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="vendors-pagination" id="vendorsPagination">
+        <div class="pagination-info">
+            <span id="vendorPaginationInfo">Showing 0 of 0 vendors</span>
+        </div>
+        <div class="pagination-controls">
+            <button class="btn-page" id="vendorBtnFirst" onclick="goToVendorPage(1)" disabled>
+                <i class="fas fa-angle-double-left"></i>
+            </button>
+            <button class="btn-page" id="vendorBtnPrev" onclick="previousVendorPage()" disabled>
+                <i class="fas fa-angle-left"></i>
+            </button>
+            <div class="page-numbers" id="vendorPageNumbers">
+                <!-- Page numbers will be inserted here -->
+            </div>
+            <button class="btn-page" id="vendorBtnNext" onclick="nextVendorPage()">
+                <i class="fas fa-angle-right"></i>
+            </button>
+            <button class="btn-page" id="vendorBtnLast" onclick="goToVendorPage('last')">
+                <i class="fas fa-angle-double-right"></i>
+            </button>
+        </div>
+        <div class="pagination-size">
+            <label for="vendorPageSize">Show:</label>
+            <select id="vendorPageSize" class="page-size-select" onchange="changeVendorPageSize()">
+                <option value="10">10</option>
+                <option value="20" selected>20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<!-- Include Modal Templates -->
+<div id="vendorModalsContainer">
+    <!-- Modals will be dynamically loaded here -->
+</div>
